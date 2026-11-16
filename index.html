@@ -37,6 +37,26 @@ main{max-width:720px;margin:0 auto;padding-block:16px 48px;padding-left:max(16px
 .bigbtn b{font-family:var(--display);font-size:24px;font-weight:600}
 .bigbtn span{font-size:14px;color:var(--muted)}
 .bigbtn.main{border-color:var(--accent)}
+:root{--mmat:#fdeee3;--mmatb:#f6c7a8;--mmatt:#5c2f19;--mava:#e6f2df;--mavab:#b9dba3;--mavat:#1f4d23;--mrec:#fdf3d4;--mrecb:#f2d78a;--mrect:#5e430a;--mres:#e9eef5;--mresb:#c3d0e2;--mrest:#22385a}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--mmat:#3a2a20;--mmatb:#6b4632;--mmatt:#f6c7a8;--mava:#1f3324;--mavab:#3f6a46;--mavat:#b9dba3;--mrec:#3a3219;--mrecb:#6e5c22;--mrect:#f2d78a;--mres:#222c3a;--mresb:#3d4d66;--mrest:#c3d0e2}}
+:root[data-theme="dark"]{--mmat:#3a2a20;--mmatb:#6b4632;--mmatt:#f6c7a8;--mava:#1f3324;--mavab:#3f6a46;--mavat:#b9dba3;--mrec:#3a3219;--mrecb:#6e5c22;--mrect:#f2d78a;--mres:#222c3a;--mresb:#3d4d66;--mrest:#c3d0e2}
+.igrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.bigbtn.mm{border-width:2px;border-style:solid;border-radius:20px;padding:14px;min-height:118px;justify-content:flex-start}
+.bigbtn.mm b{font-size:20px;line-height:1.1;margin-top:4px}.bigbtn.mm span{font-size:13px}
+.bigbtn.mm.prim{grid-column:1/3;flex-direction:row;align-items:center;gap:14px;min-height:0;padding:16px}.bigbtn.mm.prim b{font-size:24px;margin:0}
+.bigbtn.mm .mtx{display:flex;flex-direction:column;gap:2px}
+.bigbtn.mmat{background:var(--mmat);border-color:var(--mmatb);color:var(--mmatt)}.mmat b,.mmat span{color:var(--mmatt)}
+.bigbtn.mava{background:var(--mava);border-color:var(--mavab);color:var(--mavat)}.mava b,.mava span{color:var(--mavat)}
+.bigbtn.mrec{background:var(--mrec);border-color:var(--mrecb);color:var(--mrect)}.mrec b,.mrec span{color:var(--mrect)}
+.bigbtn.mres{background:var(--mres);border-color:var(--mresb);color:var(--mrest)}.mres b,.mres span{color:var(--mrest)}
+.mico{display:block;width:34px;height:34px;flex:none}.mico svg{width:34px;height:34px}
+.admlink{align-self:center;background:none;border:0;color:var(--muted);font:inherit;font-size:14px;padding:8px;cursor:pointer}
+#iniHero .hero{background:var(--top);border-radius:20px;padding:16px 16px 44px;position:relative;overflow:visible}
+#iniHero .hola{color:#fff;font-size:24px;font-weight:600;font-family:var(--display)}#iniHero .fe{color:var(--topt);font-size:13px}
+#iniHero .perro{position:absolute;right:8px;bottom:-26px;width:96px;height:96px}
+#iniHero .hoy{margin:-30px 0 0 12px;width:64%;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:10px 14px;position:relative}
+#iniHero .hoy .k{font-size:11px;font-weight:700;letter-spacing:.06em;color:var(--mmatt)}#iniHero .hoy .v{font-size:14px;line-height:1.55;margin-top:2px}
+#iniHero .hoy b{font-size:16px}
 .bigbtn:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 h2{font-family:var(--display);font-weight:600;font-size:18px;margin:4px 0 0;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
 .chips{display:flex;flex-wrap:wrap;gap:8px}
@@ -252,14 +272,17 @@ body::before{background:var(--top)}
   <!-- INICIO -->
   <section id="v-inicio" class="big">
     
-    <div class="cap2" id="quien"></div>
-    <div class="cap2" id="verApp" style="opacity:.7">Tepi Control VLV · versión V2 (instalable, base V1.16) · 16 nov 2026</div>
     <div class="note" id="vacio" hidden>Todavía no hay datos guardados en la nube. <button class="small" id="cargarPrueba">Cargar datos de prueba</button></div>
-    <button class="bigbtn main" data-go="mat"><b>Materiales</b><span id="iniMat">Fichas por depto</span></button>
-    <button class="bigbtn" data-go="ava"><b>Avance</b><span>Marcar lo terminado y ver la semana</span></button>
-    <button class="bigbtn" data-go="rec"><b>Recepción de etapa</b><span>Revisiones, observaciones y PDF</span></button>
-    <button class="bigbtn" data-go="res"><b>Resumen</b><span>Indicadores e informes</span></button>
-    <button class="bigbtn" data-go="adm" id="btnAdm" hidden><b>Administración</b><span>Programa, OC, vales, fichas y usuarios</span></button>
+    <div id="iniHero"></div>
+    <div class="igrid">
+    <button class="bigbtn mm mmat" data-go="mat"><i class="mico"></i><b>Materiales</b><span id="iniMat">Fichas por depto</span></button>
+    <button class="bigbtn mm mava" data-go="ava"><i class="mico"></i><b>Avance</b><span id="iniAva">Recorrido y grilla</span></button>
+    <button class="bigbtn mm mrec" data-go="rec"><i class="mico"></i><b>Recepción de etapa</b><span id="iniRec">Revisiones y observaciones</span></button>
+    <button class="bigbtn mm mres" data-go="res"><i class="mico"></i><b>Resumen</b><span>Indicadores</span></button>
+    </div>
+    <button class="admlink" data-go="adm" id="btnAdm" hidden>Administración ⚙</button>
+    <div class="cap2" id="quien" style="text-align:center"></div>
+    <div class="cap2" id="verApp" style="opacity:.7;text-align:center">Tepi Control VLV · versión V2 (instalable, base V1.17) · 16 nov 2026</div>
   </section>
 
   <!-- MATERIALES: selección -->
@@ -665,7 +688,35 @@ async function flush(){if(writing||!dirty)return;writing=true;dirty=false;const 
   try{await escribir(db.doc("obra/estado"),sSync,snap);sSync=snap;setSync("Guardado en la nube")}catch(e){setSync("No se guardó en la nube");dirty=true;setTimeout(flush,5000)}
   writing=false;if(dirty)flush();else refrescarEstado()}
 async function refrescarEstado(){try{const sn=await db.doc("obra/estado").get();if(dirty||writing||!sn.exists)return;S=norm(limpiar(JSON.parse(JSON.stringify(sn.data()))));sSync=JSON.parse(JSON.stringify(S));refrescar()}catch(e){}}
-function pintarInicio(){const e=$("iniMat");if(!e)return;let u=0,a=0;Object.entries(S.reg||{}).forEach(([k,r])=>{if(r&&r.dis>0&&!(r.con>0)){u++;const p=k.split("|"),I=ins(p[1]);if(I&&I.part&&hecho(p[0],I.part))a++}});e.innerHTML=u?u+(u===1?" ficha en uso":" fichas en uso")+(a?` <span class="pill" style="background:var(--bad-soft);color:var(--bad)">${a} ${a===1?"alerta":"alertas"}</span>`:""):"Sin fichas en uso"}
+const ICO_M={mat:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l9-5 9 5v8l-9 5-9-5z"/><path d="M3 8l9 5 9-5M12 13v8"/></svg>',
+  ava:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 20V11M11 20V4M17 20v-7M22 20H2"/></svg>',
+  rec:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 9l2 2 4-4M9 16h6"/></svg>',
+  res:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a9 9 0 1 0 9 9h-9z"/><path d="M15 3.5A9 9 0 0 1 20.5 9H15z"/></svg>'};
+const PERRO=extra=>`<svg class="perro" viewBox="0 0 100 100" aria-hidden="true"><path d="M78 34q9-6 6-15" stroke="#c9965f" stroke-width="6" fill="none" stroke-linecap="round"/><path d="M24 44q-6 14 4 22l6-18z" fill="#7a5236"/><path d="M76 44q6 14-4 22l-6-18z" fill="#7a5236"/><ellipse cx="50" cy="60" rx="24" ry="22" fill="#c9965f"/><ellipse cx="50" cy="68" rx="13" ry="10" fill="#f3dcc0"/><path d="M37 56q4-4 8 0" stroke="#123f37" stroke-width="3" fill="none" stroke-linecap="round"/><circle cx="59" cy="56" r="3.4" fill="#123f37"/><ellipse cx="50" cy="64" rx="5" ry="3.6" fill="#3d2818"/><path d="M45 71q5 5 10 0" stroke="#3d2818" stroke-width="2.4" fill="#e8737a" stroke-linecap="round"/><path d="M28 42a22 18 0 0 1 44 0z" fill="#f6c7a8"/><rect x="24" y="40" width="52" height="5" rx="2.5" fill="#f6c7a8"/><path d="M32 80h36" stroke="#d6453a" stroke-width="5" stroke-linecap="round"/>${extra||""}</svg>`;
+const PERRO_X={SUP:'<rect x="62" y="70" width="18" height="12" rx="2" fill="#e38b5c"/><path d="M62 76h18M71 70v6" stroke="#c2683d" stroke-width="1.4"/>',PT:'<rect x="64" y="66" width="14" height="18" rx="2" fill="#fff"/><path d="M67 71h8M67 75h8M67 79h5" stroke="#123f37" stroke-width="1.5"/>',EC:'<circle cx="72" cy="74" r="7" fill="none" stroke="#f7c948" stroke-width="3"/><path d="M77 79l6 6" stroke="#f7c948" stroke-width="3" stroke-linecap="round"/>',ADM:""};
+let iniCache={t:0,v:null};
+function datosHoy(){const now=Date.now();if(iniCache.v&&now-iniCache.t<15000)return iniCache.v;const h=hoy();let u=0,a=0,obs=0,dObs=0,atr=0,fot=0;
+  Object.entries(S.reg||{}).forEach(([k,r])=>{if(r&&r.dis>0&&!(r.con>0)){u++;const p=k.split("|"),I=ins(p[1]);if(I&&I.part&&hecho(p[0],I.part))a++}});
+  const PR=PROG.filter(p=>!autoEt(p.id)&&!esFun(p));let dAtr=0;
+  DEPTOS.forEach(d=>{let n=0;ETAPAS.forEach(k=>{if((S.etapa[d.id]??-1)>=k)return;const rv=revs(d.id,k);if(rv.length)n+=pendCount(rv[rv.length-1])});obs+=n;if(n)dObs++;
+    const av=(avT(d.t).av||{})[d.id]||{};let m=0;PR.forEach(p=>{if(av[p.id])return;const pf=progD(p,d.id);if(pf&&pf<h)m++});atr+=m;if(m)dAtr++});
+  Object.values(LEV||{}).forEach(x=>{if(x&&x.estado==="enviada")fot++});
+  return iniCache={t:now,v:{u,a,obs,dObs,atr,dAtr,fot}},iniCache.v}
+function pintarInicio(){const e=$("iniMat");if(!e)return;const r=rol(),D=datosHoy(),pl=(n,a,b)=>n+" "+(n===1?a:b);
+  e.innerHTML=D.u?pl(D.u,"ficha en uso","fichas en uso")+(D.a?` <span class="pill" style="background:var(--bad-soft);color:var(--bad)">${pl(D.a,"alerta","alertas")}</span>`:""):"Sin fichas en uso";
+  $("iniRec").textContent=D.obs?pl(D.obs,"observación abierta","observaciones abiertas"):"Sin observaciones abiertas";$("iniAva").textContent=D.dAtr?pl(D.dAtr,"depto con atrasos","deptos con atrasos"):"Al día con el programa";
+  const prim={SUP:"mat",PT:"ava",EC:"rec"}[r]||"",vis={ADM:["mat","ava","rec","res"],SUP:["mat","rec","ava"],PT:["ava","rec","mat"],EC:["rec"]}[r]||["mat","ava","rec"];
+  document.querySelectorAll(".igrid .mm").forEach(b=>{const g=b.dataset.go,i=vis.indexOf(g);b.hidden=i<0;b.style.order=i<0?99:i;b.classList.toggle("prim",g===prim);
+    const ic=b.querySelector(".mico");if(ic&&!ic.innerHTML)ic.innerHTML=ICO_M[g];
+    if(g===prim&&!b.querySelector(".mtx")){const w=document.createElement("span");w.className="mtx";[...b.querySelectorAll(":scope>b,:scope>span:not(.mtx)")].forEach(x=>w.appendChild(x));b.appendChild(w)}});
+  const L={ADM:[[D.a,"fichas para cerrar","ficha para cerrar","bad"],[D.obs,"observaciones abiertas","observación abierta","acc"],[D.dAtr,"deptos con partidas atrasadas","depto con partidas atrasadas","acc"],[D.fot,"fotos de levantamiento por revisar","foto de levantamiento por revisar","acc"]],
+    SUP:[[D.a,"fichas para cerrar","ficha para cerrar","bad"],[D.u,"fichas en uso","ficha en uso","acc"],[D.obs,"observaciones abiertas","observación abierta","acc"]],
+    PT:[[D.dAtr,"deptos con partidas atrasadas","depto con partidas atrasadas","bad"],[D.dObs,"deptos con observaciones","depto con observaciones","acc"]],
+    EC:[[D.obs,"observaciones abiertas","observación abierta","bad"],[D.dObs,"deptos con observaciones","depto con observaciones","acc"],[D.fot,"fotos por revisar","foto por revisar","acc"]]}[r]||[];
+  const li=L.filter(x=>x[0]>0).slice(0,3);let nom=(ME.nombre||"").trim().split(/\s+/)[0]||"";
+  const f=new Date(),dia=f.toLocaleDateString("es-CL",{weekday:"long",day:"numeric",month:"long"});
+  $("iniHero").innerHTML=`<div class="hero"><div class="hola">¡Hola${nom?", "+esc(nom):""}!</div><div class="fe">${esc(dia.charAt(0).toUpperCase()+dia.slice(1))} · ${esc(ROLN[r]||"")}</div>${PERRO(PERRO_X[r])}</div>
+    <div class="hoy"><div class="k">HOY EN OBRA</div><div class="v">${li.length?li.map(x=>`<b style="color:${x[3]==="bad"?"var(--bad)":"var(--accent)"}">${x[0]}</b> ${x[0]===1?x[2]:x[1]}`).join("<br>"):"Todo al día"}</div></div>`}
 function refrescar(){syncIns();try{pintarInicio()}catch(e){}$("vacio").hidden=true;if(cur==="fichas"||(cur==="rec"&&draft))return;({mat:drawSel,ava:drawAva,res:drawRes,rec:drawRec,adm:drawAdm})[cur]?.()}
 async function iniciar(){
   try{db=await window.claude?.use?.("db")}catch(e){db=null}
@@ -1764,7 +1815,7 @@ async function nombres(ids){const out={};ids.forEach(i=>out[i]=i==="local"?"Prue
   if(ME.nombre&&!out[ME.uid])out[ME.uid]=ME.nombre;return out}
 function pintarPerfil(){const q=$("quien");if(q)q.textContent=(ME.nombre?ME.nombre+". ":"")+"Entraste con perfil "+ROLN[ME.rol]+(verComo?". Estás probando la app como "+ROLN[verComo]+".":".");
   const b=$("vcBan");if(b){b.hidden=!verComo;b.textContent=verComo?"Estás viendo la app como "+ROLN[verComo]+". Vuelve a tu perfil en Administración, sección Perfiles.":""}
-  $("btnAdm").hidden=ME.rol!=="ADM";const br=document.querySelector('.bigbtn[data-go="res"]');if(br)br.hidden=ME.rol!=="ADM"}
+  $("btnAdm").hidden=ME.rol!=="ADM";iniCache.v=null;try{pintarInicio()}catch(e){}}
 let perT=null;
 async function drawPerf(){const box=$("admPerf");if(!box)return;const R=ADM.roles||{lista:{},ecAutoriza:false},L=R.lista||{},ids=Object.keys(L),nm=await nombres(ids);
   box.innerHTML=`<div style="font-size:14px">Tu perfil: <b>${ROLN[ME.rol]}</b>${ME.dueno?" (dueña de la app)":""}</div>
