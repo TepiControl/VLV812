@@ -474,7 +474,7 @@ window.addEventListener("error",function(e){ver((e.message||"Error")+(e.lineno?"
   <h2>Tepi Control VLV</h2><div class="ay">Obra 812 Vive La Vara</div>
   <label for="tpU">RUT o iniciales</label><input id="tpU" name="username" autocomplete="username" placeholder="12.345.678-9" autocapitalize="characters">
   <label for="tpC">Clave</label><input id="tpC" name="password" type="password" autocomplete="current-password" inputmode="numeric" placeholder="4 primeros dígitos del RUT">
-  <div class="ay">La clave son los 4 primeros dígitos de tu RUT. Si no puedes entrar, pídele a la administradora que te agregue. La primera vez necesitas señal; después funciona sin señal.</div>
+  <div class="ay">La clave son los 4 primeros dígitos de tu RUT. Si no puedes entrar, pídele a la administradora que te agregue. La primera vez necesitas señal; después funciona sin señal. En Android, instálala siempre desde Google Chrome.</div>
   <button id="tpB" type="submit">Entrar</button><div class="er" id="tpE"></div>
 </form></div>
 <div id="tpToast" hidden><span id="tpTt"></span><span id="tpTa"></span></div>
@@ -606,7 +606,7 @@ window.addEventListener("error",function(e){ver((e.message||"Error")+(e.lineno?"
   function botonInstalar(){const h=document.querySelector("header.top");if(!h||$("tpInst"))return;const st=window.matchMedia&&matchMedia("(display-mode: standalone)").matches||navigator.standalone;if(st)return;
     const b=document.createElement("button");b.id="tpInst";b.textContent="Instalar app";b.style.cssText="margin-left:8px;font-size:13px;background:#f6c7a8;color:#8a4a2c;border:0;border-radius:8px;padding:5px 10px;font-weight:600";
     b.onclick=async()=>{if(promptInst){promptInst.prompt();try{await promptInst.userChoice}catch(e){}promptInst=null;b.remove();return}
-      toast(/iphone|ipad/i.test(navigator.userAgent)?"En iPhone: toca Compartir (cuadro con flecha) y luego \"Agregar a inicio\".":"En Chrome: menú ⋮ y luego \"Instalar app\" o \"Agregar a la pantalla principal\".")};h.appendChild(b)}
+      toast(/iphone|ipad/i.test(navigator.userAgent)?"En iPhone: toca Compartir (cuadro con flecha) y luego \"Agregar a inicio\".":"Usa Google Chrome: menú ⋮ y luego \"Instalar app\" o \"Agregar a la pantalla principal\". Otros navegadores pueden quedar bloqueados por Play Protect.")};h.appendChild(b)}
   window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();promptInst=e;botonInstalar()});
   window.addEventListener("appinstalled",()=>{const b=$("tpInst");if(b)b.remove()});
   document.addEventListener("DOMContentLoaded",()=>setTimeout(botonInstalar,1500));
