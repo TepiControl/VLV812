@@ -253,7 +253,7 @@ body::before{background:var(--top)}
   <section id="v-inicio" class="big">
     
     <div class="cap2" id="quien"></div>
-    <div class="cap2" id="verApp" style="opacity:.7">Tepi Control VLV · versión V2 (instalable, base V1.15) · 16 nov 2026</div>
+    <div class="cap2" id="verApp" style="opacity:.7">Tepi Control VLV · versión V2 (instalable, base V1.16) · 16 nov 2026</div>
     <div class="note" id="vacio" hidden>Todavía no hay datos guardados en la nube. <button class="small" id="cargarPrueba">Cargar datos de prueba</button></div>
     <button class="bigbtn main" data-go="mat"><b>Materiales</b><span id="iniMat">Fichas por depto</span></button>
     <button class="bigbtn" data-go="ava"><b>Avance</b><span>Marcar lo terminado y ver la semana</span></button>
@@ -264,6 +264,9 @@ body::before{background:var(--top)}
 
   <!-- MATERIALES: selección -->
   <section id="v-mat" hidden style="display:flex;flex-direction:column;gap:16px">
+    <div class="seg" id="matTabs"><button data-t="reg">Registrar</button><button data-t="tip">Fichas por tipología</button></div>
+    <div id="matTip" hidden style="display:flex;flex-direction:column;gap:12px"></div>
+    <div id="matReg" style="display:flex;flex-direction:column;gap:16px">
     <h2>1. Deptos</h2>
     <div class="pick" id="chDeptos"></div>
     <div class="cap2" id="selInfo"></div>
@@ -274,6 +277,7 @@ body::before{background:var(--top)}
     <button class="go sec" id="verLote">Reparto rápido: varios deptos de una vez</button>
     <button class="go sec" id="verCierre">Cierre rápido: cerrar fichas en uso</button>
     <div class="cap2" style="text-align:center">El reparto rápido llena las mismas fichas. Úsalo cuando entregas un total a varios deptos juntos.</div>
+    </div>
   </section>
 
   <!-- MATERIALES: fichas -->
@@ -784,7 +788,24 @@ function drawLote(){const box=$("v-lote"),D=[...selD].sort(),L=[...selI];box.inn
 function estDep(d){const is=selI.size?[...selI]:INS.map(x=>x.id);let ab=0,ce=0,al=0;
   is.forEach(i=>{const r=S.reg[d+"|"+i];if(!r||!(r.dis>0||r.con>0))return;if(r.con>0)ce++;else if(r.dis>0){ab++;const I=ins(i);if(I&&I.part&&hecho(d,I.part))al++}});
   return al?"al":ab?"ab":ce?"ce":""}
+let matTab="reg",TIPV={t:null,q:""};try{matTab=localStorage.getItem("matTab")||"reg"}catch(e){}
+function drawTip(f){const box=$("matTip"),TP=Object.keys(FICHA);if(!f&&box.contains(document.activeElement)&&document.activeElement.tagName==="INPUT")return;if(!TIPV.t)TIPV.t=TP[0];const nD=t=>DEPTOS.filter(d=>d.tipo===t).length,t=TIPV.t,q=nrm(TIPV.q||"");
+  const L=INS.filter(I=>(ficT(t,I.id)||repT(t,I.id))&&(!q||nrm(I.n+" "+(I.c||"")).includes(q)));
+  const nf=v=>v==null?"–":dec(v,v%1?(Number.isInteger(Math.round(v*1000)/100)?1:2):0),grp=[...new Set(L.map(I=>I.g))];
+  box.innerHTML=`<div class="card" style="padding:12px 14px"><div class="fila" style="gap:8px;align-items:center"><input class="txt" id="tipDep" inputmode="numeric" placeholder="Depto, ej. 4205" style="flex:1"><button class="small" id="tipBus">Ver su tipología</button></div><div class="err" id="tipErr" style="text-align:left"></div></div>
+    <div class="chips" id="tipCh"></div>
+    <div class="card" style="padding:12px 14px"><div class="card-h" style="border:none;padding:0"><b style="font-size:18px">Tipología ${esc(t)}</b><span class="cap2">${nD(t)} deptos</span></div>
+      <input class="txt" id="tipQ" placeholder="Buscar insumo" value="${esc(TIPV.q||"")}" style="margin-top:8px"></div>
+    ${grp.map(g=>`<div class="card" style="padding:10px 14px"><div class="lbl" style="margin-bottom:4px">${esc(g)}</div>
+      <div class="fila cap2" style="justify-content:space-between;padding:2px 0 4px"><span>Insumo</span><span style="display:flex;gap:14px"><span style="width:62px;text-align:right">Teórico</span><span style="width:104px;text-align:right">Sugerido</span></span></div>
+      ${L.filter(I=>I.g===g).map(I=>{const T=ficT(t,I.id),S=repT(t,I.id);return`<div class="fila" style="justify-content:space-between;gap:8px;padding:7px 0;border-top:1px solid var(--line)"><span style="font-size:14px">${esc(I.c||I.n)}</span><span style="display:flex;gap:14px;font-variant-numeric:tabular-nums"><span style="width:62px;text-align:right;color:var(--muted)">${nf(T)}</span><b style="width:104px;text-align:right;font-size:16px;white-space:nowrap">${nf(S)} <span class="cap2" style="font-weight:400">${esc(I.u)}</span></b></span></div>`}).join("")}</div>`).join("")||'<div class="cap2" style="text-align:center">No hay insumos con ese nombre.</div>'}`;
+  chips($("tipCh"),TP.map(x=>({id:x,label:x+" ("+nD(x)+")"})),it=>it.id===t,it=>{TIPV.t=it.id;drawTip(1)});
+  const qi=$("tipQ");qi.oninput=()=>{TIPV.q=qi.value;clearTimeout(drawTip.tq);drawTip.tq=setTimeout(()=>{const pos=qi.selectionStart;drawTip(1);const n=$("tipQ");n.focus();try{n.setSelectionRange(pos,pos)}catch(e){}},250)};
+  const bus=()=>{const v=String($("tipDep").value).replace(/\D/g,""),d=DEPTOS.find(x=>x.id===v);if(!d){$("tipErr").textContent=v?"No encuentro el depto "+v+". Escribe torre y número juntos, por ejemplo 4205.":"Escribe el número del depto";return}TIPV.t=d.tipo;drawTip(1);$("tipErr").className="ok";$("tipErr").textContent="Depto "+d.id.slice(1)+" de la torre "+d.t+" es tipología "+d.tipo+"."};
+  $("tipBus").onclick=bus;$("tipDep").onkeydown=e=>{if(e.key==="Enter")bus()}}
 function drawSel(){
+  document.querySelectorAll("#matTabs button").forEach(b=>{b.classList.toggle("on",b.dataset.t===matTab);b.classList.toggle("okb",b.dataset.t===matTab);b.onclick=()=>{matTab=b.dataset.t;try{localStorage.setItem("matTab",matTab)}catch(e){}drawSel()}});
+  $("matReg").hidden=matTab!=="reg";$("matTip").hidden=matTab!=="tip";if(matTab==="tip"){drawTip();return}
   if(!pkSel.t)pkSel.t=TORRES[0];const box=$("chDeptos"),dt=DEPTOS.filter(d=>d.t===pkSel.t),pisos=[...new Set(dt.map(d=>d.piso))].sort((a,b)=>b-a);
   const ES={};DEPTOS.forEach(d=>ES[d.id]=estDep(d.id));const cnt=(t,e)=>DEPTOS.filter(d=>d.t===t&&(e==="uso"?(ES[d.id]==="ab"||ES[d.id]==="al"):ES[d.id]===e)).length;
   box.innerHTML=`<div class="selT"><label for="selTorre">Torre</label><select id="selTorre">${TORRES.map(t=>{const n=DEPTOS.filter(d=>d.t===t&&selD.has(d.id)).length;const na=cnt(t,"al");return`<option value="${t}"${t===pkSel.t?" selected":""}>Torre ${t} · ${DEPTOS.find(d=>d.t===t).ed}${n?" · "+n+" elegidos":""}${na?" · "+na+" alertas":""}</option>`}).join("")}</select></div>
