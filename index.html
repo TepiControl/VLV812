@@ -37,6 +37,12 @@ main{max-width:720px;margin:0 auto;padding-block:16px 48px;padding-left:max(16px
 .bigbtn b{font-family:var(--display);font-size:24px;font-weight:600}
 .bigbtn span{font-size:14px;color:var(--muted)}
 .bigbtn.main{border-color:var(--accent)}
+:root{--cal:#1f6fd1;--cal-soft:#e3eefc}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--cal:#6fb1ff;--cal-soft:#16263d}}:root[data-theme="dark"]{--cal:#6fb1ff;--cal-soft:#16263d}
+.seg button.calb{background:var(--cal);color:#fff;border-color:var(--cal)}
+.avb{background:#fff4cc;color:#5e430a;border:1px solid #f2d78a;border-radius:10px;padding:8px 10px;font-size:14px;margin:4px 0 8px}
+.dp.qc{box-shadow:0 0 0 2px #fff,0 0 0 4px var(--cal),0 0 8px 2px var(--cal)}
+.dp .avi{position:absolute;left:-5px;top:-6px;font-size:11px;line-height:1}
 :root{--mmat:#fdeee3;--mmatb:#f6c7a8;--mmatt:#5c2f19;--mava:#e6f2df;--mavab:#b9dba3;--mavat:#1f4d23;--mrec:#fdf3d4;--mrecb:#f2d78a;--mrect:#5e430a;--mres:#e9eef5;--mresb:#c3d0e2;--mrest:#22385a}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--mmat:#3a2a20;--mmatb:#6b4632;--mmatt:#f6c7a8;--mava:#1f3324;--mavab:#3f6a46;--mavat:#b9dba3;--mrec:#3a3219;--mrecb:#6e5c22;--mrect:#f2d78a;--mres:#222c3a;--mresb:#3d4d66;--mrest:#c3d0e2}}
 :root[data-theme="dark"]{--mmat:#3a2a20;--mmatb:#6b4632;--mmatt:#f6c7a8;--mava:#1f3324;--mavab:#3f6a46;--mavat:#b9dba3;--mrec:#3a3219;--mrecb:#6e5c22;--mrect:#f2d78a;--mres:#222c3a;--mresb:#3d4d66;--mrest:#c3d0e2}
@@ -166,7 +172,9 @@ tr.tot td{font-weight:600;background:var(--bg)}
 .seg button{flex:1;min-width:130px;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:8px;padding:10px;font:inherit;font-size:15px;cursor:pointer}
 .seg button.on.okb{background:var(--good-soft);border-color:var(--good);color:var(--good)}
 .seg button.on.bad{background:var(--bad-soft);border-color:var(--bad);color:var(--bad)}
-.obs{display:flex;flex-direction:column;gap:8px;padding:10px;border:1px dashed var(--line);border-radius:8px}
+.obs{display:flex;flex-direction:column;gap:8px;padding:12px 12px 12px 14px;border:1px solid var(--line);border-left:5px solid var(--bad);border-radius:10px;background:var(--surface);box-shadow:0 1px 0 var(--line)}
+.obs.lv{border-left-color:var(--good);opacity:.8}.obs.en{border-left-color:#e0a12a}.obs .on{display:inline-flex;align-items:center;justify-content:center;min-width:24px;height:24px;border-radius:12px;background:var(--bad-soft);color:var(--bad);font-weight:700;font-size:13px;margin-right:8px}
+.obs .rc{display:inline-block;font-size:12px;background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:1px 8px;margin-left:6px;color:var(--muted)}
 textarea,input.txt,.obs select{font:inherit;font-size:15px;width:100%;padding:8px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink)}
 textarea{min-height:64px;resize:vertical}
 .thumb{width:240px;max-width:100%;border-radius:6px;border:1px solid var(--line);display:block}
@@ -282,7 +290,7 @@ body::before{background:var(--top)}
     </div>
     <button class="admlink" data-go="adm" id="btnAdm" hidden>Administración ⚙</button>
     <div class="cap2" id="quien" style="text-align:center"></div>
-    <div class="cap2" id="verApp" style="opacity:.7;text-align:center">Tepi Control VLV · versión V2 (instalable, base V1.17) · 16 nov 2026</div>
+    <div class="cap2" id="verApp" style="opacity:.7;text-align:center">Tepi Control VLV · versión V2 (instalable, base V1.18) · 17 nov 2026</div>
   </section>
 
   <!-- MATERIALES: selección -->
@@ -617,10 +625,15 @@ window.addEventListener("error",function(e){ver((e.message||"Error")+(e.lineno?"
   const downloads={save:async({filename,data})=>{
     const tipo=/\.pdf$/i.test(filename)?"application/pdf":/\.xlsx$/i.test(filename)?"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet":/\.csv$/i.test(filename)?"text/csv":"application/octet-stream";
     const blob=data instanceof Blob?data:new Blob([data],{type:tipo});
-    try{const u=URL.createObjectURL(blob),a=document.createElement("a");a.href=u;a.download=filename;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),60000)}catch(e){}
-    const bt=document.createElement("button");bt.textContent="¿No se descargó? Guardar en Drive";
-    bt.onclick=async()=>{bt.textContent="Guardando…";try{const r=await run("guardarArchivo",SES.token,filename,await b64(blob),tipo);const l=document.createElement("a");l.href=r.url;l.target="_blank";l.rel="noopener";l.textContent="Abrir archivo";$("tpTa").innerHTML="";$("tpTa").appendChild(l)}catch(e){bt.textContent="No se pudo, intenta otra vez"}};
-    toast(filename,bt)}};
+    const movil=/android|iphone|ipad/i.test(navigator.userAgent);
+    if(!movil)try{const u=URL.createObjectURL(blob),a=document.createElement("a");a.href=u;a.download=filename;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),60000)}catch(e){}
+    toast("Guardando "+filename+" en Drive…");
+    const subir=async()=>{try{const r=await run("guardarArchivo",SES.token,filename,await b64(blob),tipo),m=/id=([\w-]+)/.exec(r.url||""),vu=m?"https://drive.google.com/file/d/"+m[1]+"/view":r.url;const l=document.createElement("a");l.href=vu;l.target="_blank";l.rel="noopener";l.textContent="Abrir";l.style.cssText="font-weight:700;color:#f6c7a8";
+        toast("Guardado en Drive: "+filename,l);if(movil)try{window.open(vu,"_blank","noopener")}catch(e){}}
+      catch(e){const bt=document.createElement("button");bt.textContent="Intentar de nuevo";bt.onclick=subir;
+        if(movil){try{const u=URL.createObjectURL(blob),a=document.createElement("a");a.href=u;a.download=filename;document.body.appendChild(a);a.click();a.remove()}catch(x){}}
+        toast("Sin señal: no se pudo guardar en Drive. "+(movil?"Se intentó descargar al celular.":""),bt)}};
+    subir()}};
 
   /* ---- usuario ---- */
   const user={me:async()=>({id:SES.yo.rut,name:SES.yo.nombre,isOwner:SES.yo.perfil==="ADM"}),id:async()=>SES.yo.rut,
@@ -671,7 +684,7 @@ function seed(){const reg={};SEED.forEach(([d,i,dis,con,mot,f])=>reg[d+"|"+i]={d
  mov:[{f:"06-11",ins:"yeso",de:"4103",a:"4107",q:10},{f:"27-10",ins:"pst15",de:"4203",a:"4201",q:4}]};}
 const hoy=()=>fstr(new Date());
 const $=id=>document.getElementById(id);
-const norm=x=>{x=x||{};x.reg=x.reg||{};x.etapa=x.etapa||{};x.etapaF=x.etapaF||{};x.mov=x.mov||[];x.causas=x.causas||[];x.sem=x.sem||{};x.restr=x.restr||[];x.ePend=x.ePend||{};x.cRP=x.cRP||[];return x};
+const norm=x=>{x=x||{};x.reg=x.reg||{};x.etapa=x.etapa||{};x.etapaF=x.etapaF||{};x.mov=x.mov||[];x.causas=x.causas||[];x.sem=x.sem||{};x.restr=x.restr||[];x.ePend=x.ePend||{};x.cRP=x.cRP||[];x.cal=x.cal||{};x.avisos=x.avisos||{};return x};
 let S=norm({}),db=null,assets=null,REC={},modo="cargando",vacio=false;
 try{const c=JSON.parse(localStorage.getItem(KEY));if(c)S=norm(c)}catch(e){}
 let wT=null,writing=false,dirty=false;
@@ -700,19 +713,19 @@ function datosHoy(){const now=Date.now();if(iniCache.v&&now-iniCache.t<15000)ret
   const PR=PROG.filter(p=>!autoEt(p.id)&&!esFun(p));let dAtr=0;
   DEPTOS.forEach(d=>{let n=0;ETAPAS.forEach(k=>{if((S.etapa[d.id]??-1)>=k)return;const rv=revs(d.id,k);if(rv.length)n+=pendCount(rv[rv.length-1])});obs+=n;if(n)dObs++;
     const av=(avT(d.t).av||{})[d.id]||{};let m=0;PR.forEach(p=>{if(av[p.id])return;const pf=progD(p,d.id);if(pf&&pf<h)m++});atr+=m;if(m)dAtr++});
-  Object.values(LEV||{}).forEach(x=>{if(x&&x.estado==="enviada")fot++});
-  return iniCache={t:now,v:{u,a,obs,dObs,atr,dAtr,fot}},iniCache.v}
+  Object.values(LEV||{}).forEach(x=>{if(x&&x.estado==="enviada")fot++});const avi=Object.keys(S.avisos||{}).length;
+  return iniCache={t:now,v:{u,a,obs,dObs,atr,dAtr,fot,avi}},iniCache.v}
 function pintarInicio(){const e=$("iniMat");if(!e)return;const r=rol(),D=datosHoy(),pl=(n,a,b)=>n+" "+(n===1?a:b);
   e.innerHTML=D.u?pl(D.u,"ficha en uso","fichas en uso")+(D.a?` <span class="pill" style="background:var(--bad-soft);color:var(--bad)">${pl(D.a,"alerta","alertas")}</span>`:""):"Sin fichas en uso";
   $("iniRec").textContent=D.obs?pl(D.obs,"observación abierta","observaciones abiertas"):"Sin observaciones abiertas";$("iniAva").textContent=D.dAtr?pl(D.dAtr,"depto con atrasos","deptos con atrasos"):"Al día con el programa";
-  const prim={SUP:"mat",PT:"ava",EC:"rec"}[r]||"",vis={ADM:["mat","ava","rec","res"],SUP:["mat","rec","ava"],PT:["ava","rec","mat"],EC:["rec"]}[r]||["mat","ava","rec"];
+  const prim={SUP:"mat",PT:"ava",EC:"rec"}[r]||"",vis={ADM:["mat","ava","rec","res"],SUP:["mat","rec","ava"],PT:["ava","rec","mat"],EC:["rec","ava","mat"]}[r]||["mat","ava","rec"];
   document.querySelectorAll(".igrid .mm").forEach(b=>{const g=b.dataset.go,i=vis.indexOf(g);b.hidden=i<0;b.style.order=i<0?99:i;b.classList.toggle("prim",g===prim);
     const ic=b.querySelector(".mico");if(ic&&!ic.innerHTML)ic.innerHTML=ICO_M[g];
     if(g===prim&&!b.querySelector(".mtx")){const w=document.createElement("span");w.className="mtx";[...b.querySelectorAll(":scope>b,:scope>span:not(.mtx)")].forEach(x=>w.appendChild(x));b.appendChild(w)}});
-  const L={ADM:[[D.a,"fichas para cerrar","ficha para cerrar","bad"],[D.obs,"observaciones abiertas","observación abierta","acc"],[D.dAtr,"deptos con partidas atrasadas","depto con partidas atrasadas","acc"],[D.fot,"fotos de levantamiento por revisar","foto de levantamiento por revisar","acc"]],
+  const L={ADM:[[D.avi,"deptos listos para revisar","depto listo para revisar","bad"],[D.a,"fichas para cerrar","ficha para cerrar","bad"],[D.obs,"observaciones abiertas","observación abierta","acc"],[D.dAtr,"deptos con partidas atrasadas","depto con partidas atrasadas","acc"],[D.fot,"fotos de levantamiento por revisar","foto de levantamiento por revisar","acc"]],
     SUP:[[D.a,"fichas para cerrar","ficha para cerrar","bad"],[D.u,"fichas en uso","ficha en uso","acc"],[D.obs,"observaciones abiertas","observación abierta","acc"]],
     PT:[[D.dAtr,"deptos con partidas atrasadas","depto con partidas atrasadas","bad"],[D.dObs,"deptos con observaciones","depto con observaciones","acc"]],
-    EC:[[D.obs,"observaciones abiertas","observación abierta","bad"],[D.dObs,"deptos con observaciones","depto con observaciones","acc"],[D.fot,"fotos por revisar","foto por revisar","acc"]]}[r]||[];
+    EC:[[D.avi,"deptos listos para revisar","depto listo para revisar","bad"],[D.obs,"observaciones abiertas","observación abierta","bad"],[D.dObs,"deptos con observaciones","depto con observaciones","acc"],[D.fot,"fotos por revisar","foto por revisar","acc"]]}[r]||[];
   const li=L.filter(x=>x[0]>0).slice(0,3);let nom=(ME.nombre||"").trim().split(/\s+/)[0]||"";
   const f=new Date(),dia=f.toLocaleDateString("es-CL",{weekday:"long",day:"numeric",month:"long"});
   $("iniHero").innerHTML=`<div class="hero"><div class="hola">¡Hola${nom?", "+esc(nom):""}!</div><div class="fe">${esc(dia.charAt(0).toUpperCase()+dia.slice(1))} · ${esc(ROLN[r]||"")}</div>${PERRO(PERRO_X[r])}</div>
@@ -1357,11 +1370,12 @@ const RKEY="rec812prueba";
 function cargarRecLocal(){try{REC=JSON.parse(localStorage.getItem(RKEY))||{}}catch(e){REC={}}}
 async function guardarRec(id,doc){if(db){await db.collection("recepciones").doc(id).set(doc);REC[id]=doc}
   else{REC[id]=doc;try{localStorage.setItem(RKEY,JSON.stringify(REC))}catch(e){delete REC[id];throw{code:"lleno"}}}}
-const revs=(d,k)=>Object.values(REC).filter(r=>r.depto===d&&r.etapa===k).sort((a,b)=>a.rev-b.rev);
+const revs=(d,k,q)=>Object.values(REC).filter(r=>r.depto===d&&r.etapa===k&&!!r.cal===!!q).sort((a,b)=>a.rev-b.rev);
 function estadoEt(d,k){const e=S.etapa[d]??-1;if(e>=k)return{t:"Aprobada",c:"good"};if(k>e+1)return{t:"Bloqueada",c:"neu"};
   const rv=revs(d,k),l=rv[rv.length-1];if(!l)return{t:"Sin revisión",c:"neu"};
   const pc=pendCount(l);return pc?{t:"Rev. "+l.rev+": "+pc+" pendientes",c:"bad"}:{t:"Sin pendientes, falta aprobar",c:"good"}}
-let recD=null,recK=null,draft=null,recAviso="";
+let recD=null,recK=null,draft=null,recAviso="",recQ=false;
+const calOk=(d,k)=>!!((S.cal||{})[d]||{})[k],aprK=(d,k)=>recQ?calOk(d,k):(S.etapa[d]??-1)>=k;
 const rid=()=>Math.random().toString(36).slice(2,10);
 function comprimir(file,max=1280,q=.72){return new Promise((ok,no)=>{const img=new Image();img.onload=()=>{const s=Math.min(1,max/Math.max(img.width,img.height)),c=document.createElement("canvas");
   c.width=Math.round(img.width*s);c.height=Math.round(img.height*s);c.getContext("2d").drawImage(img,0,0,c.width,c.height);URL.revokeObjectURL(img.src);c.toBlob(b=>b?ok(b):no(new Error("img")),"image/jpeg",q)};
@@ -1377,35 +1391,58 @@ function drawRec(){
   if(!recD){ce.innerHTML='<div class="cap2">Toca un depto en el esquema.</div>';$("recHist").innerHTML="";$("recForm").innerHTML="";return}
   ETAPAS.forEach(k=>{const es=estadoEt(recD,k),b=document.createElement("button");b.className="chip"+(recK===k?" on":"");b.textContent="E"+k+" · "+es.t;
     b.disabled=es.t==="Bloqueada";b.onclick=()=>{if(draft&&!confirmarSalir())return;recK=k;draft=null;recAviso="";drawRec()};ce.appendChild(b)});
-  const rv=revs(recD,recK),l=rv[rv.length-1],es=estadoEt(recD,recK);
-  {const apr=(S.etapa[recD]??-1)>=recK,PNk=(S.ePend[recD]||{})[recK],its=l?l.items:[],pc=pendCount(l);
+  const aprC=(S.etapa[recD]??-1)>=recK,hayQ=revs(recD,recK,true).length>0,verQ=aprC&&(puede("calidad")||hayQ||rol()==="ADM");if(!verQ)recQ=false;
+  const rv=revs(recD,recK,recQ),l=rv[rv.length-1],es=estadoEt(recD,recK),avK=avisoK(recD,recK),AVI=S.avisos[avK];
+  {const apr=aprK(recD,recK),PNk=recQ?null:(S.ePend[recD]||{})[recK],its=l?l.items:[],pc=pendCount(l),AZ="var(--cal)";
+    const avBan=!apr&&AVI?`<div class="avb"><b>🔔 Listo para revisar</b> · avisó ${esc(AVI.por||"alguien")} el ${fCL(AVI.f)}${AVI.n?": "+esc(AVI.n):""}${puede("avisar")||rol()==="ADM"?` <button class="lnk" id="avQ">Quitar aviso</button>`:""}</div>`:"";
+    const avBtn=!apr&&!AVI&&["SUP","PT"].includes(rol())&&(l?pc>0:!recQ)?`<details class="avd"><summary class="small" style="display:inline-block;cursor:pointer">🔔 Avisar: depto listo para revisar</summary><div class="fila" style="gap:8px;margin-top:8px"><input class="txt" id="avN" placeholder="Nota (opcional)" style="flex:1"><button class="small" id="avG">Enviar aviso</button></div></details>`:"";
+    const calTxt=recQ?calAvance(recD,recK):"";
     let pz;
-    if(apr)pz=`<div class="card" style="border:2px solid var(--good)"><div class="card-h" style="border:none;padding-bottom:0"><b style="font-size:16px">${PNk?"Etapa cerrada con pendientes no restrictivos":"Etapa aprobada"}</b><span class="pill good">${fCL((S.etapaF[recD]||{})[recK])}</span></div>${rv.length?'<button class="small" id="recActa" style="margin-top:10px">PDF de cierre de la etapa</button>':""}<div id="recExt"></div></div>`;
-    else if(!l)pz=`<div class="card"><div class="card-h"><b style="font-size:16px">Aún no se revisa esta etapa</b></div><div class="cap2" style="padding:4px 0 10px">Al iniciar la revisión 1 se revisan todas las partidas de la etapa.</div><div id="recBtns"></div><div id="recExt"></div></div>`;
+    if(apr&&recQ)pz=`<div class="card" style="border:2px solid ${AZ}"><div class="card-h" style="border:none;padding-bottom:0"><b style="font-size:16px">Etapa cerrada para calidad</b><span class="pill" style="background:var(--cal-soft);color:${AZ}">${fCL(((S.cal||{})[recD]||{})[recK])}</span></div></div>`;
+    else if(recQ&&!l)pz=`<div class="card" style="border:2px solid ${AZ}"><div class="card-h"><b style="font-size:16px">Sin revisión de calidad</b></div><div class="cap2" style="padding:4px 0 10px">${calTxt}</div><div id="recBtns"></div></div>`;
+    else if(recQ)pz=`<div class="card" style="border:2px solid ${AZ}"><div class="card-h"><b style="font-size:16px;color:${AZ}">Calidad · pendientes de la revisión ${l.rev}</b><span class="pill ${pc?"bad":"good"}">${pc?pc+(pc===1?" abierto":" abiertos"):"sin pendientes"}</span></div>
+      <div class="cap2" style="padding:2px 0 6px">Revisión de calidad del ${fCL(l.fecha)} · ${esc(l.por)} · ${calTxt}</div>${avBan}
+      ${its.length?levHtml(l):'<div class="cap2" style="padding:6px 0">Todo quedó levantado. Falta cerrar la etapa para calidad.</div>'}${avBtn}
+      <div id="recBtns" style="margin-top:10px"></div></div>`;
+    else if(apr)pz=`<div class="card" style="border:2px solid var(--good)"><div class="card-h" style="border:none;padding-bottom:0"><b style="font-size:16px">${PNk?"Etapa cerrada con pendientes no restrictivos":"Etapa aprobada"}</b><span class="pill good">${fCL((S.etapaF[recD]||{})[recK])}</span></div>${rv.length?'<button class="small" id="recActa" style="margin-top:10px">PDF de cierre de la etapa</button>':""}<div id="recExt"></div></div>`;
+    else if(!l)pz=`<div class="card"><div class="card-h"><b style="font-size:16px">Aún no se revisa esta etapa</b></div><div class="cap2" style="padding:4px 0 10px">Al iniciar la revisión 1 se revisan todas las partidas de la etapa.</div>${avBan}${avBtn}<div id="recBtns"></div><div id="recExt"></div></div>`;
     else pz=`<div class="card" style="border:2px solid ${pc?"var(--bad)":"var(--good)"}"><div class="card-h"><b style="font-size:16px">Pendientes de la revisión ${l.rev}</b><span class="pill ${pc?"bad":"good"}">${pc?pc+(pc===1?" abierto":" abiertos"):"sin pendientes"}</span></div>
-      <div class="cap2" style="padding:2px 0 6px">Revisión del ${fCL(l.fecha)} · ${esc(l.por)}${l.ext?" · hecha antes de la app":""}</div>
-      ${its.length?levHtml(l):'<div class="cap2" style="padding:6px 0">Todo quedó levantado. Falta aprobar la etapa.</div>'}
+      <div class="cap2" style="padding:2px 0 6px">Revisión del ${fCL(l.fecha)} · ${esc(l.por)}${l.ext?" · hecha antes de la app":""}</div>${avBan}
+      ${its.length?levHtml(l):'<div class="cap2" style="padding:6px 0">Todo quedó levantado. Falta aprobar la etapa.</div>'}${avBtn}
       <div id="recBtns" style="margin-top:10px"></div><div id="recExt"></div></div>`;
-    $("recHist").innerHTML=`<div class="card" style="background:var(--top);border-color:var(--top)"><div class="card-h" style="border:none;padding-bottom:0"><b style="color:#fff;font-size:18px">${dNom(recD)}</b>${etChip(recK)}</div><div style="color:var(--topt);font-size:13px;padding-top:4px">${apr?"Etapa aprobada":l?"En curso · revisión "+l.rev:"Sin revisión todavía"}</div></div>
+    $("recHist").innerHTML=`<div class="card" style="background:var(--top);border-color:var(--top)"><div class="card-h" style="border:none;padding-bottom:0"><b style="color:#fff;font-size:18px">${dNom(recD)}</b>${etChip(recK)}</div><div style="color:var(--topt);font-size:13px;padding-top:4px">${recQ?"Control: etapa aprobada · Calidad: "+(apr?"cerrada":l?"revisión "+l.rev:"sin revisión"):apr?"Etapa aprobada":l?"En curso · revisión "+l.rev:"Sin revisión todavía"}</div></div>
+      ${verQ?`<div class="seg" id="recModo" style="margin-top:8px"><button data-q="0"${recQ?"":' class="on okb"'}>Control de obra</button><button data-q="1"${recQ?' class="on calb"':""}>Calidad EC</button></div>`:""}
       <div class="ok" id="recMsg" style="text-align:left;margin:6px 0">${esc(recAviso)}</div>${pz}
       ${rv.length?`<details class="card rvs" style="margin-top:10px;padding:10px 14px"${RVSAB?" open":""}><summary style="list-style:none;cursor:pointer"><div class="card-h" style="padding:0"><b style="font-size:15px">Revisiones y PDF</b><span class="cap2">${rv.length} revisi${rv.length===1?"ón":"ones"} ▾</span></div></summary>
         ${rv.map(r=>r.ext?`<div class="hrow" style="flex-wrap:wrap;gap:6px"><div><div>Revisión ${r.rev} · ${fCL(r.fecha)}</div><div class="cap2">Hecha antes de la app · ${esc(r.por)}${r.nota?" · "+esc(r.nota):""}</div></div><div style="display:flex;gap:6px;flex-wrap:wrap">${(r.archivos||[]).map(a=>`<a class="small" style="text-decoration:none;display:inline-block;padding:6px 10px;border:1px solid var(--line);border-radius:8px;color:var(--accent)" href="${archUrl(a.id)}" target="_blank" rel="noopener">${esc(a.n.length>22?a.n.slice(0,20)+"…":a.n)}</a>`).join("")}</div></div>`:`<div class="hrow"><div><div>Revisión ${r.rev} · ${fCL(r.fecha)}</div><div class="cap2">${r.items.length} pendientes${r.rev>1?" · "+r.levantadas.length+" levantadas":""} · ${esc(r.por)}</div></div><button class="small" data-pdf="${r.depto}-E${r.etapa}-R${r.rev}">PDF</button></div>`).join("")}
-        ${!apr?'<button class="small" id="recActa" style="margin-top:10px">PDF de cierre de la etapa: todas las partidas y su historia</button>':""}</details>`:""}`;
-    {const r=$("recHist").querySelector("details.rvs");if(r)r.ontoggle=()=>{RVSAB=r.open}}drawRecExt(l)}
-  {const PP=Object.entries(S.ePend[recD]||{});if(PP.length){const h=PP.map(([k,P])=>{const ab=P.items.filter(x=>!x.res).length;return`<details class="card pnr" data-pk="${recD}|${k}" style="margin-top:10px;padding:10px 14px;${etBorde(k)}"${PNRAB.has(recD+"|"+k)?" open":""}><summary style="list-style:none;cursor:pointer"><div style="margin:0;font-weight:700;font-size:15px">Pendientes no restrictivos</div><div class="card-h" style="padding:4px 0 0"><b style="font-size:15px">${etChip(k)}</b><span class="pill ${ab?"bad":"good"}">${ab?ab+(ab===1?" abierto":" abiertos"):"todos resueltos"}</span></div><div class="cap2 pnrT" style="padding-top:2px">Toca para ver las observaciones ▾</div></summary>
+        ${!apr&&!recQ?'<button class="small" id="recActa" style="margin-top:10px">PDF de cierre de la etapa: todas las partidas y su historia</button>':""}</details>`:""}`;
+    {const r=$("recHist").querySelector("details.rvs");if(r)r.ontoggle=()=>{RVSAB=r.open}}if(!recQ)drawRecExt(l);
+    $("recHist").querySelectorAll("#recModo button").forEach(b=>b.onclick=()=>{if(draft&&!confirmarSalir())return;recQ=b.dataset.q==="1";draft=null;recAviso="";drawRec()});
+    {const g=$("avG");if(g)g.onclick=()=>{S.avisos[avK]={f:hoy(),por:(ME.nombre||ROLN[rol()]||"").trim(),n:$("avN").value.trim()};persist();registrar("Revisiones",dNom(recD)+" etapa "+recK+(recQ?" (calidad)":"")+": avisaron que está listo para revisar",null);recAviso="Aviso enviado. Lo verá quien revisa.";drawRec()};
+     const qq=$("avQ");if(qq)qq.onclick=()=>{delete S.avisos[avK];S.avisos={...S.avisos};persist();drawRec()}}}
+  {const PP=recQ?[]:Object.entries(S.ePend[recD]||{});if(PP.length){const h=PP.map(([k,P])=>{const ab=P.items.filter(x=>!x.res).length;return`<details class="card pnr" data-pk="${recD}|${k}" style="margin-top:10px;padding:10px 14px;${etBorde(k)}"${PNRAB.has(recD+"|"+k)?" open":""}><summary style="list-style:none;cursor:pointer"><div style="margin:0;font-weight:700;font-size:15px">Pendientes no restrictivos</div><div class="card-h" style="padding:4px 0 0"><b style="font-size:15px">${etChip(k)}</b><span class="pill ${ab?"bad":"good"}">${ab?ab+(ab===1?" abierto":" abiertos"):"todos resueltos"}</span></div><div class="cap2 pnrT" style="padding-top:2px">Toca para ver las observaciones ▾</div></summary>
       <div class="cap2" style="padding:8px 0 4px">Cerrada el ${fCL(P.f)}${P.tipo||P.nota?" · "+esc([P.tipo,P.nota].filter(Boolean).join(" · ")):""}</div>${P.items.map(x=>`<div class="fila" style="justify-content:space-between;gap:8px;padding:6px 0;border-bottom:1px solid var(--line)"><span style="font-size:14px">${esc(tituloIt(x))}: ${esc(x.texto)}${x.res?` <span class="cap2">· resuelto el ${fCL(x.res)}</span>`:""}</span>${!x.res&&puede("revision")?`<button class="small" data-pr="${k}|${x.id}">Resuelto</button>`:""}</div>`).join("")}</details>`}).join("");
     $("recHist").insertAdjacentHTML("beforeend",h);
     $("recHist").querySelectorAll("details.pnr").forEach(e=>e.ontoggle=()=>{e.open?PNRAB.add(e.dataset.pk):PNRAB.delete(e.dataset.pk)});
     $("recHist").querySelectorAll("[data-pr]").forEach(b=>b.onclick=()=>{const [k,id]=b.dataset.pr.split("|"),P=S.ePend[recD][k],x=P.items.find(z=>z.id===id),prev=clon(S.ePend[recD]);x.res=hoy();persist();
       registrar("Etapas",dNom(recD)+": pendiente resuelto de etapa "+k+": "+x.texto,{k:"pnr",d:recD,prev});recAviso="Pendiente marcado como resuelto.";drawRec()})}}
-  if(l&&(S.etapa[recD]??-1)<recK&&l.items.length)atarLev(l);
+  if(l&&!aprK(recD,recK)&&l.items.length)atarLev(l);
   $("recHist").querySelectorAll("[data-pdf]").forEach(b=>b.onclick=()=>pdfRevision(REC[b.dataset.pdf]));if($("recActa"))$("recActa").onclick=()=>pdfActa(recD,recK);
   drawForm(l)}
 function confirmarSalir(){return true}
+function botonesCamara(root){(root||document).querySelectorAll('input[type=file][accept="image/*"]:not([data-cam])').forEach(inp=>{inp.dataset.cam="1";const lb=inp.closest("label");if(!lb||!/android|iphone|ipad/i.test(navigator.userAgent))return;
+  const b=document.createElement("button");b.type="button";b.className="small fb";b.textContent="📷 Cámara";b.style.marginRight="6px";
+  b.onclick=e=>{e.preventDefault();inp.setAttribute("capture","environment");inp.click();setTimeout(()=>inp.removeAttribute("capture"),1500)};lb.parentNode.insertBefore(b,lb);
+  const t=[...lb.childNodes].find(n=>n.nodeType===3&&n.textContent.trim());if(t)t.textContent="🖼 Galería"})}
+try{new MutationObserver(()=>botonesCamara()).observe(document.documentElement,{childList:true,subtree:true})}catch(e){}
+const avisoK=(d,k,q=recQ)=>d+"|"+k+(q?"|Q":"");
+function calAvance(d,k){const t=d[0],dt=DEPTOS.filter(x=>x.t===t&&(S.etapa[x.id]??-1)>=k),con=dt.filter(x=>revs(x.id,k,true).length).length,meta=Math.max(1,Math.ceil(dt.length*.1));
+  return`Torre ${t} · E${k}: ${con} de ${dt.length} deptos cerrados con revisión de calidad (meta 10% = ${meta})`}
+function marcarCal(d,k){S.cal[d]={...(S.cal[d]||{}),[k]:hoy()};persist();registrar("Revisiones",dNom(d)+": etapa "+k+" cerrada para calidad",null)}
 const IDB=(()=>{let pr;const op=()=>pr=pr||new Promise((ok,ko)=>{try{const r=indexedDB.open("tepi812",1);r.onupgradeneeded=()=>r.result.createObjectStore("b");r.onsuccess=()=>ok(r.result);r.onerror=()=>ko(r.error)}catch(e){ko(e)}});
   const tx=(m,f)=>op().then(db=>new Promise((ok,ko)=>{const t=db.transaction("b",m),q=f(t.objectStore("b"));t.oncomplete=()=>ok(q&&q.result);t.onerror=()=>ko(t.error)}));
   return{get:k=>tx("readonly",x=>x.get(k)).catch(()=>null),set:(k,v)=>tx("readwrite",x=>x.put(v,k)).catch(()=>null),del:k=>tx("readwrite",x=>x.delete(k)).catch(()=>null)}})();
-const bKey=(d,k,n)=>"rev-"+d+"-E"+k+"-R"+n;
+const bKey=(d,k,n)=>"rev-"+d+"-E"+k+(recQ?"-Q":"-R")+n;
 const sinUrl=o=>Array.isArray(o)?o.map(sinUrl):o&&typeof o==="object"&&!(o instanceof Blob)?Object.fromEntries(Object.entries(o).filter(([k])=>k!=="url").map(([k,v])=>[k,sinUrl(v)])):o;
 const conUrl=o=>{if(Array.isArray(o))o.forEach(conUrl);else if(o&&typeof o==="object"&&!(o instanceof Blob)){if(o.blob instanceof Blob)o.url=URL.createObjectURL(o.blob);Object.values(o).forEach(conUrl)}return o};
 let bT=null;function guardarBorrador(){if(!draft||!recD)return;const D=draft,k=bKey(recD,recK,D.n),d=recD,e=recK;clearTimeout(bT);bT=setTimeout(()=>{IDB.set(k,{t:new Date().toISOString(),d,k:e,D:sinUrl(D)});const m=$("recBorr");if(m)m.textContent="Borrador guardado en este equipo "+new Date().toLocaleTimeString("es-CL",{hour:"2-digit",minute:"2-digit"})},500)}
@@ -1417,27 +1454,28 @@ function pendD(d){const k=(S.etapa[d]??-1)+1;if(k>4)return 0;const rv=revs(d,k),
 let rcT="todo",rcE="todas";
 function drawEdif(){
   chips($("rcFT"),[{id:"todo",label:"Todas"},...TORRES.map(t=>({id:t,label:"T"+t}))],it=>rcT===it.id,it=>{rcT=it.id;drawRec()});
-  chips($("rcFE"),[{id:"todas",label:"Todas"},...EST.map(k=>({id:k,label:k})),{id:"obs",label:"Con observaciones"}],it=>rcE===it.id,it=>{rcE=it.id;drawRec()});
+  chips($("rcFE"),[{id:"todas",label:"Todas"},...EST.map(k=>({id:k,label:k})),{id:"obs",label:"Con observaciones"},{id:"avi",label:"🔔 Listos para revisar"},{id:"cal",label:"Calidad EC"}],it=>rcE===it.id,it=>{rcE=it.id;drawRec()});
   const ts=rcT==="todo"?TORRES:[rcT],ds=DEPTOS.filter(d=>ts.includes(d.t)),N=ds.length;
-  const ok=d=>rcE==="todas"||(rcE==="obs"?pendD(d.id)>0:estD(d.id)===rcE),nOk=ds.filter(ok).length,cnt=EST.map(k=>ds.filter(d=>estD(d.id)===k).length),nObs=ds.filter(d=>pendD(d.id)>0).length;
+  const avD=d=>Object.keys(S.avisos||{}).some(k=>k.split("|")[0]===d),qD=d=>Object.values(REC).some(r=>r.cal&&r.depto===d);
+  const ok=d=>rcE==="todas"||(rcE==="obs"?pendD(d.id)>0:rcE==="avi"?avD(d.id):rcE==="cal"?qD(d.id):estD(d.id)===rcE),nOk=ds.filter(ok).length,cnt=EST.map(k=>ds.filter(d=>estD(d.id)===k).length),nObs=ds.filter(d=>pendD(d.id)>0).length;
   $("rcRes").innerHTML=`<div class="barra">${EST.map((k,i)=>cnt[i]?`<div style="flex:${cnt[i]};background:${ECOL[k]};color:${ETXT[k]}" title="${ENOM[k]}: ${cnt[i]}">${cnt[i]/N>.06?k+" "+cnt[i]:""}</div>`:"").join("")}</div>
     <div class="cap2">${N} deptos · ${EST.map((k,i)=>k+": "+cnt[i]).join(" · ")} · con observaciones pendientes: ${nObs}${rcE!=="todas"?" · se destacan "+nOk:""}</div>`;
   $("rcGrid").innerHTML=ts.map(t=>{const dt=DEPTOS.filter(d=>d.t===t),pisos=[...new Set(dt.map(d=>d.piso))].sort((a,b)=>b-a);
     return`<div class="edif"><div class="card-h" style="padding-bottom:6px"><b>Torre ${t} · ${dt[0].ed}</b><span class="tag">${dt.filter(d=>estD(d.id)==="RF").length} de ${dt.length} en RF</span></div><div class="eg">${pisos.map(p=>`<span class="pl">P${p}</span>`+[1,2,3,4,5,6,7,8].map(n=>{
       const d=dt.find(x=>x.piso===p&&+x.id.slice(1)===p*100+n);if(!d)return'<span class="emp"></span>';const e=estD(d.id),o=pendD(d.id),pn=pendNR(d.id);
-      return`<button class="dp${ok(d)?"":" dim"}${recD===d.id?" sel":""}" data-d="${d.id}" style="background:${ECOL[e]};color:${ETXT[e]}" title="Depto ${d.id.slice(1)} · ${ENOM[e]}${o?" · "+o+" observaciones pendientes":""}${pn?" · "+pn+" pendientes no restrictivos":""}">${d.id.slice(1)}${o?`<span class="ob">${o}</span>`:""}${pn?`<span class="obn">${pn}</span>`:""}</button>`}).join("")).join("")}</div></div>`}).join("");
+      const av=avD(d.id),q=qD(d.id);return`<button class="dp${ok(d)?"":" dim"}${recD===d.id?" sel":""}${q?" qc":""}" data-d="${d.id}" style="background:${ECOL[e]};color:${ETXT[e]}" title="Depto ${d.id.slice(1)} · ${ENOM[e]}${o?" · "+o+" observaciones pendientes":""}${pn?" · "+pn+" pendientes no restrictivos":""}${av?" · listo para revisar":""}${q?" · con revisión de calidad EC":""}">${av?'<span class="avi">🔔</span>':""}${d.id.slice(1)}${o?`<span class="ob">${o}</span>`:""}${pn?`<span class="obn">${pn}</span>`:""}</button>`}).join("")).join("")}</div></div>`}).join("");
   $("rcGrid").querySelectorAll(".dp").forEach(b=>b.onclick=()=>{if(draft&&!confirmarSalir())return;const d=b.dataset.d;recD=d;recK=Math.min(4,(S.etapa[d]??-1)+1);draft=null;recAviso="";drawRec();
     try{$("chRecEt").scrollIntoView({behavior:"smooth",block:"start"})}catch(e){}});
-  $("rcLey").innerHTML=EST.map(k=>`<span><i style="background:${ECOL[k]}"></i>${ENOM[k]}</span>`).join("")+'<span><i class="obl">2</i>Observaciones pendientes</span>'}
+  $("rcLey").innerHTML=EST.map(k=>`<span><i style="background:${ECOL[k]}"></i>${ENOM[k]}</span>`).join("")+'<span><i class="obl">2</i>Observaciones pendientes</span><span>🔔 Listo para revisar</span><span><i style="background:transparent;box-shadow:0 0 0 2px var(--cal),0 0 5px var(--cal)"></i>Revisión de calidad EC</span>'}
 
 const mkGrupos=(modo)=>(modo==="recinto"?recList():partRec(recK)).map(n=>({nombre:n,estado:null,obs:[]}));
 function drawForm(l){const box=$("recForm");box.innerHTML="";const rb=$("recBtns");if(rb)rb.innerHTML="";if(!recD||recK==null)return;
-  if((S.etapa[recD]??-1)>=recK)return;
+  if(aprK(recD,recK))return;if(recQ&&(S.etapa[recD]??-1)<recK)return;
   if(!draft){const n=l?l.rev+1:1,wrap=document.createElement("div");wrap.style.cssText="display:flex;flex-direction:column;gap:10px";
-    if(!puede("revision")){box.innerHTML='<div class="note">Crear revisiones y aprobar etapas es solo para el administrador, o para EC (encargado de calidad) si el administrador lo autoriza. Tu perfil puede ver las revisiones'+(puede("subirFoto")?" y subir fotos de levantamiento cuando estén permitidas.":".")+'</div>';return}
-    if(l&&!pendCount(l)){const ap=document.createElement("button");ap.className="go";ap.textContent="Aprobar etapa "+recK;
-      ap.onclick=async()=>{marcarEtapa(recD,recK);syncObsAv(recD,recK);recAviso=dNom(recD)+": etapa "+recK+" aprobada.";drawRec()};wrap.appendChild(ap)}
-    else{if(l&&pendCount(l)&&puede("aprobar")){const pc=document.createElement("details");pc.className="acc";const rI=revIdOf(l),its=l.items.filter(it=>!levAcept(rI,it.id));let tipo="";
+    if(!(recQ?puede("calidad"):puede("revision"))){box.innerHTML='<div class="note">'+(recQ?"La revisión de calidad la hacen el administrador y el EC (10% de recepción por etapa).":"Crear revisiones y aprobar etapas: administrador y EC (10% de recepción por etapa).")+(puede("avisar")?" Tu perfil puede ver revisiones, subir fotos de levantamientos y avisar deptos listos para revisar.":" Tu perfil puede ver revisiones.")+'</div>';return}
+    if(l&&!pendCount(l)){const ap=document.createElement("button");ap.className="go";ap.textContent=recQ?"Cerrar etapa "+recK+" para calidad":"Aprobar etapa "+recK;
+      ap.onclick=async()=>{if(recQ){marcarCal(recD,recK);recAviso=dNom(recD)+": etapa "+recK+" cerrada para calidad."}else{marcarEtapa(recD,recK);syncObsAv(recD,recK);recAviso=dNom(recD)+": etapa "+recK+" aprobada."}if(S.avisos[avisoK(recD,recK)]){delete S.avisos[avisoK(recD,recK)];S.avisos={...S.avisos};persist()}drawRec()};wrap.appendChild(ap)}
+    else{if(l&&pendCount(l)&&puede("aprobar")&&!recQ){const pc=document.createElement("details");pc.className="acc";const rI=revIdOf(l),its=l.items.filter(it=>!levAcept(rI,it.id));let tipo="";
         pc.innerHTML=`<summary><span class="axn">Cerrar la etapa con pendientes no restrictivos</span><span class="axc">${its.length} pendientes</span></summary><div class="axl" style="gap:8px">
           <div class="cap2">Para cuando lo que falta no impide pasar a la etapa siguiente y no depende de la cuadrilla. Los pendientes quedan anotados en el depto hasta que se resuelvan.</div>
           ${its.map(it=>`<div style="font-size:14px;padding:4px 0;border-bottom:1px solid var(--line)"><b>${esc(tituloIt(it))}</b>: ${esc(it.texto)}</div>`).join("")}
@@ -1449,7 +1487,7 @@ function drawForm(l){const box=$("recForm");box.innerHTML="";const rb=$("recBtns
           const d=recD,k=recK;S.ePend[d]=S.ePend[d]||{};S.ePend[d][k]={tipo,nota,f:hoy(),rev:rI,items:its.map(it=>({id:it.id,partida:it.partida,recinto:it.recinto||"",texto:it.texto,res:null}))};
           marcarEtapa(d,k," con "+its.length+" pendientes no restrictivos ("+[tipo,nota].filter(Boolean).join(": ")+")");syncObsAv(d,k);recAviso=dNom(d)+": etapa "+k+" cerrada con "+its.length+" pendientes no restrictivos.";draft=null;drawRec()};
         wrap.__pc=pc}
-      const b=document.createElement("button");b.className="go";b.textContent=n===1?"Iniciar revisión 1":"Iniciar revisión "+n+": levantar estos pendientes";
+      const b=document.createElement("button");b.className="go";b.textContent=(recQ?"Iniciar revisión de calidad ":"Iniciar revisión ")+n+(n===1?"":": levantar estos pendientes");if(recQ)b.style.cssText="background:var(--cal);border-color:var(--cal);color:#fff";
       b.onclick=()=>{draft=n===1?{n,modo:"partida",grupos:mkGrupos("partida")}
         :{n,prev:l.items.map(it=>{const ac=levAcept(revIdOf(l),it.id);return{...it,estado:ac?"lv":null,viaFoto:ac,comentario:"",blob:null,url:null}}),nuevas:[]};drawForm(l)};wrap.appendChild(b);if(wrap.__pc)wrap.appendChild(wrap.__pc)}
     (rb||box).appendChild(wrap);{const kk=bKey(recD,recK,n),d0=recD,k0=recK;IDB.get(kk).then(B=>{if(!B||recD!==d0||recK!==k0||draft)return;const c=document.createElement("div");c.className="note";
@@ -1518,10 +1556,10 @@ async function guardarRevision(l){const D=draft,box=$("recForm"),err=t=>{box.que
         if(it.blob){const f=await subirFoto(it.blob);if(f.foto)base.fotoNueva=f.foto;if(f.fotoData)base.fotoNuevaData=f.fotoData}
         items.push(base)}
       for(const o of D.nuevas){const iid=rid();if(o.hab)habs.push(iid);items.push({id:iid,partida:o.partida,recinto:o.recinto||"",texto:o.texto.trim(),desde:D.n,...(o.blob?await subirFoto(o.blob):{})})}}
-    const doc={depto:recD,etapa:recK,rev:D.n,fecha:hoy(),por,modo:D.n===1?D.modo:(l&&l.modo)||"partida",items,levantadas:lev,okPartidas:okP,noAplica:na};
-    const id=recD+"-E"+recK+"-R"+D.n;await guardarRec(id,doc);for(const h of habs)await guardarLev(levId(id,h),{rev:id,item:h,d:recD,etapa:recK,hab:true});
-    await registrar("Revisiones",dNom(recD)+" etapa "+recK+": revisión "+D.n+" guardada ("+items.length+" pendientes)",{k:"rev",id});
-    syncObsAv(recD,recK);IDB.del(bKey(recD,recK,D.n));draft=null;
+    const doc={depto:recD,etapa:recK,rev:D.n,fecha:hoy(),por,modo:D.n===1?D.modo:(l&&l.modo)||"partida",items,levantadas:lev,okPartidas:okP,noAplica:na,...(recQ?{cal:true}:{})};
+    const id=revIdOf(doc);if(S.avisos[avisoK(recD,recK)]){delete S.avisos[avisoK(recD,recK)];S.avisos={...S.avisos};persist()}await guardarRec(id,doc);for(const h of habs)await guardarLev(levId(id,h),{rev:id,item:h,d:recD,etapa:recK,hab:true});
+    await registrar("Revisiones",dNom(recD)+" etapa "+recK+": revisión "+(recQ?"de calidad ":"")+D.n+" guardada ("+items.length+" pendientes)",{k:"rev",id});
+    if(!recQ)syncObsAv(recD,recK);IDB.del(bKey(recD,recK,D.n));draft=null;
     recAviso="Revisión "+doc.rev+" guardada: "+items.length+" pendientes."+(items.length?" Descarga el PDF desde el historial.":" Ya puedes aprobar la etapa.");drawRec()}
   catch(x){btn.disabled=false;btn.textContent="Guardar revisión "+D.n;
     err(x&&x.code==="lleno"?"Este dispositivo no tiene espacio para más fotos. Abre la app desde claude.ai para guardarlas en la nube.":x&&x.code==="quota_or_state"?"Se llenó el espacio de fotos de la app.":"No se pudo guardar. Revisa la conexión e intenta de nuevo.")}}
@@ -1804,6 +1842,8 @@ const rol=()=>verComo||ME.rol;
 const ecOk=()=>!!(ADM.roles&&ADM.roles.ecAutoriza);
 function puede(a){const r=rol();if(r==="ADM")return true;
   if(a==="revision"||a==="aprobar")return r==="EC"&&ecOk();
+  if(a==="calidad")return r==="EC"&&!!(ADM.roles&&ADM.roles.ecCal);
+  if(a==="avisar")return r==="SUP"||r==="PT";
   if(a==="avance"||a==="materiales"||a==="subirFoto")return r==="SUP"||r==="PT";
   return false}
 function resolverRol(){if(!db){ME.rol="ADM";ME.dueno=true;return}if(window.TEPI&&TEPI.perfil){ME.rol=TEPI.perfil;ME.dueno=ME.rol==="ADM";return}const L=(ADM.roles&&ADM.roles.lista)||{};ME.rol=ME.dueno?"ADM":(L[ME.uid]||"PT")}
@@ -1820,7 +1860,8 @@ let perT=null;
 async function drawPerf(){const box=$("admPerf");if(!box)return;const R=ADM.roles||{lista:{},ecAutoriza:false},L=R.lista||{},ids=Object.keys(L),nm=await nombres(ids);
   box.innerHTML=`<div style="font-size:14px">Tu perfil: <b>${ROLN[ME.rol]}</b>${ME.dueno?" (dueña de la app)":""}</div>
     <div style="font-size:14px;padding-top:10px">Probar la app como</div><div class="chips" id="vcChips"></div>
-    <label class="fila" style="gap:8px;font-size:14px;padding-top:10px;cursor:pointer"><input type="checkbox" id="ecAut"${R.ecAutoriza?" checked":""}> Autorizar a EC (encargado de calidad) para crear revisiones de etapa y cerrar etapas</label>
+    <label class="fila" style="gap:8px;font-size:14px;padding-top:10px;cursor:pointer"><input type="checkbox" id="ecAut"${R.ecAutoriza?" checked":""}> Habilitar a EC (encargado de calidad) como revisor general: crear revisiones de control y aprobar etapas</label>
+    <label class="fila" style="gap:8px;font-size:14px;padding-top:8px;cursor:pointer"><input type="checkbox" id="ecCal"${R.ecCal?" checked":""}> Habilitar a EC el cierre de etapamiento de calidad: revisión de calidad (10% por torre y etapa) sobre deptos con la etapa cerrada</label>
     <div style="font-size:14px;padding-top:12px">Personas con perfil asignado</div>
     <div>${ids.length?ids.map(i=>`<div class="hrow"><span data-nm="${esc(i)}"></span><div class="fila"><select data-rol="${esc(i)}">${["PT","SUP","EC"].map(r=>`<option value="${r}"${L[i]===r?" selected":""}>${ROLN[r]}</option>`).join("")}</select><button class="lnk" data-quita="${esc(i)}">Quitar</button></div></div>`).join(""):'<div class="cap2">Nadie todavía. Quien entre sin perfil asignado queda como PT (profesional de terreno).</div>'}</div>
     ${window.TEPI?'<div class="cap2" style="padding-top:8px">Las personas, perfiles y claves se manejan en la hoja Usuarios del Google Sheet de la app. El perfil de la hoja manda sobre esta lista.</div>':USR?`<input class="txt" id="perBus" placeholder="Buscar persona por nombre para agregarla" style="margin-top:10px"><div id="perRes"></div>`:'<div class="cap2" style="padding-top:8px">Para agregar personas, abre la app desde claude.ai.</div>'}
@@ -1828,6 +1869,7 @@ async function drawPerf(){const box=$("admPerf");if(!box)return;const R=ADM.role
   box.querySelectorAll("[data-nm]").forEach(s=>s.textContent=nm[s.dataset.nm]||"Persona sin nombre visible");
   chips($("vcChips"),[{id:null,label:"Mi perfil"},...["EC","SUP","PT"].map(r=>({id:r,label:ROLN[r]}))],it=>verComo===it.id,it=>{verComo=it.id;pintarPerfil();drawPerf()});
   const guardarR=async(nuevo,desc)=>{try{await guardarAdm("roles",nuevo);await registrar("Administración",desc,null);drawPerf()}catch(e){$("perMsg").textContent="No se pudo guardar el perfil."}};
+  $("ecCal").onchange=e=>guardarR({...R,lista:L,ecCal:e.target.checked},e.target.checked?"Se habilitó a EC para la revisión de calidad":"Se quitó a EC la revisión de calidad");
   $("ecAut").onchange=e=>guardarR({...R,lista:L,ecAutoriza:e.target.checked},e.target.checked?"Se autorizó a EC para revisiones y cierre de etapas":"Se quitó la autorización a EC");
   box.querySelectorAll("[data-rol]").forEach(s=>s.onchange=e=>guardarR({...R,lista:{...L,[s.dataset.rol]:e.target.value}},"Perfil cambiado a "+ROLN[e.target.value]));
   box.querySelectorAll("[data-quita]").forEach(b=>b.onclick=()=>{const n={...L};delete n[b.dataset.quita];guardarR({...R,lista:n},"Se quitó un perfil asignado")});
@@ -1853,7 +1895,7 @@ async function deshacer(id){const e=BIT.find(x=>x.id===id),m=$("bitMsg");if(!e||
   try{
     if(u.k==="av"){const T=avT(u.d[0]);T.av[u.d]=T.av[u.d]||{};T.nc[u.d]=T.nc[u.d]||{};if(u.prev.av)T.av[u.d][u.pid]=u.prev.av;else delete T.av[u.d][u.pid];if(u.prev.nc)T.nc[u.d][u.pid]=u.prev.nc;else delete T.nc[u.d][u.pid];if("hc" in u.prev){T.hc=T.hc||{};T.hc[u.d]=T.hc[u.d]||{};if(u.prev.hc)T.hc[u.d][u.pid]=u.prev.hc;else delete T.hc[u.d][u.pid]}persistAv(u.d[0])}
     else if(u.k==="etapa"){if(u.prev.e==null)delete S.etapa[u.d];else S.etapa[u.d]=u.prev.e;if(u.prev.F)S.etapaF[u.d]=u.prev.F;else delete S.etapaF[u.d];if("P" in u.prev){if(u.prev.P)S.ePend[u.d]=u.prev.P;else delete S.ePend[u.d]}persist();ETAPAS.forEach(k=>syncObsAv(u.d,k))}
-    else if(u.k==="rev"){const r=REC[u.id];if(r){const rv=revs(r.depto,r.etapa);if(rv[rv.length-1].rev!==r.rev)throw{msg:"Primero deshaz las revisiones posteriores de ese depto y etapa."};
+    else if(u.k==="rev"){const r=REC[u.id];if(r){const rv=revs(r.depto,r.etapa,r.cal);if(rv[rv.length-1].rev!==r.rev)throw{msg:"Primero deshaz las revisiones posteriores de ese depto y etapa."};
       if((S.etapa[r.depto]??-1)>=r.etapa)throw{msg:"Esa etapa ya fue aprobada: deshaz primero la aprobación."}}await borrarRec(u.id)}
     else if(u.k==="reg"){if(u.prev)S.reg[u.key]=u.prev;else delete S.reg[u.key];persist()}
     else if(u.k==="lote"){Object.entries(u.prev).forEach(([k,v])=>{if(v)S.reg[k]=v;else delete S.reg[k]});persist()}
@@ -1886,7 +1928,7 @@ async function borrarPrueba(){const sel=[...document.querySelectorAll("[data-bor
 
 /* ---------- levantamiento con foto ---------- */
 let LEV={};const LKEY="lev812";
-const levId=(r,i)=>r+"-"+i,revIdOf=r=>r.depto+"-E"+r.etapa+"-R"+r.rev;
+const levId=(r,i)=>r+"-"+i,revIdOf=r=>r.depto+"-E"+r.etapa+(r.cal?"-Q":"-R")+r.rev;
 const levAcept=(r,i)=>{const x=LEV[levId(r,i)];return!!(x&&x.estado==="aceptada")};
 const pendCount=l=>l?l.items.filter(it=>!levAcept(revIdOf(l),it.id)).length:0;
 const tituloIt=it=>(it.partida||"")+(it.recinto?" · "+it.recinto:"");
@@ -1895,17 +1937,17 @@ async function guardarLev(id,doc){if(doc)LEV[id]=doc;else delete LEV[id];syncId(
   else{try{localStorage.setItem(LKEY,JSON.stringify(LEV))}catch(e){throw{code:"lleno"}}}}
 async function cambiarLev(id,doc,desc){const prev=clon(LEV[id]||null);await guardarLev(id,doc);await registrar("Fotos",desc,{k:"lev",id,prev})}
 function levHtml(l){const rI=revIdOf(l);
-  const one=it=>{const id=levId(rI,it.id),x=LEV[id]||{},st=x.estado;
+  const one=(it,ix)=>{const id=levId(rI,it.id),x=LEV[id]||{},st=x.estado;
     const chip=st==="aceptada"?`<span class="pill good">Levantada con foto el ${fCL(x.fr)}</span>`:st==="enviada"?`<span class="pill neu">Foto enviada, por revisar</span>`:st==="rechazada"?`<span class="pill bad">Foto rechazada</span>`:x.hab?`<span class="pill neu">Se puede levantar con foto</span>`:`<span class="pill neu">Se levanta en terreno</span>`;
     const fl=x.foto?(window.TEPI?TEPI.fotoUrl(x.foto):"/_blob/"+x.foto):x.fotoData||"";
-    return`<div class="obs"><div class="fila" style="justify-content:space-between"><b style="font-size:14px">${esc(tituloIt(it))}</b>${chip}</div><div style="font-size:14px">${esc(it.texto)}</div>
+    return`<div class="obs${st==="aceptada"?" lv":st==="enviada"?" en":""}"><div class="fila" style="justify-content:space-between;gap:8px;align-items:flex-start"><span style="display:flex;align-items:center;flex-wrap:wrap"><span class="on">${ix+1}</span><b style="font-size:15px">${esc(it.partida||tituloIt(it))}</b>${it.recinto?`<span class="rc">${esc(it.recinto)}</span>`:""}</span>${chip}</div><div style="font-size:15px;line-height:1.4">${esc(it.texto)}</div>
       ${fotoSrc(it)?`<img class="thumb" src="${fotoSrc(it)}" alt="Foto de la observación">`:""}
       ${fl?`<div class="cap2">Foto de levantamiento del ${fCL(x.fe)}</div><img class="thumb" src="${fl}" alt="Foto de levantamiento">`:""}
       ${st==="rechazada"&&x.mot?`<div class="cap2" style="color:var(--bad)">Motivo del rechazo: ${esc(x.mot)}</div>`:""}
       <div class="fila">${rol()==="ADM"&&st!=="aceptada"&&st!=="enviada"?`<button class="small" data-hab="${id}" data-it="${it.id}">${x.hab?"Quitar permiso de foto":"Permitir levantar con foto"}</button>`:""}
       ${x.hab&&puede("subirFoto")&&st!=="aceptada"&&st!=="enviada"?`<label class="small fb">Subir foto de levantamiento<input type="file" accept="image/*" data-fl="${id}" hidden></label>`:""}
       ${st==="enviada"&&rol()==="ADM"?`<button class="small hecho" data-acep="${id}">Aceptar levantamiento</button><input class="txt" data-mot="${id}" placeholder="Motivo si rechazas" style="flex:1;min-width:150px"><button class="small" data-rech="${id}">Rechazar</button>`:""}</div></div>`},N3=3,its=l.items;
-  return`<div style="display:flex;flex-direction:column;gap:8px">${its.slice(0,N3).map(one).join("")}${its.length>N3?`<details class="vtodo"><summary class="lnk" style="padding:4px 0;cursor:pointer;list-style:none">Ver ${its.length-N3} pendiente${its.length-N3>1?"s":""} más ▾</summary><div style="display:flex;flex-direction:column;gap:8px;padding-top:8px">${its.slice(N3).map(one).join("")}</div></details>`:""}<div class="err" id="levErr"></div></div>`}
+  return`<div style="display:flex;flex-direction:column;gap:8px">${its.slice(0,N3).map((it,i)=>one(it,i)).join("")}${its.length>N3?`<details class="vtodo"><summary class="lnk" style="padding:4px 0;cursor:pointer;list-style:none">Ver ${its.length-N3} pendiente${its.length-N3>1?"s":""} más ▾</summary><div style="display:flex;flex-direction:column;gap:8px;padding-top:8px">${its.slice(N3).map((it,i)=>one(it,i+N3)).join("")}</div></details>`:""}<div class="err" id="levErr"></div></div>`}
 function atarLev(l){const box=$("recHist"),rI=revIdOf(l),nom=dNom(recD)+" etapa "+recK,err=t=>{const e=$("levErr");if(e)e.textContent=t};
   const it=id=>l.items.find(x=>levId(rI,x.id)===id);
   box.querySelectorAll("[data-hab]").forEach(b=>b.onclick=async()=>{const id=b.dataset.hab,x=LEV[id]||{rev:rI,item:b.dataset.it,d:recD,etapa:recK};
@@ -2110,7 +2152,7 @@ let dl=null;(async()=>{try{dl=await window.claude?.use?.("downloads")}catch(e){d
 const ERR={declined:"Descarga cancelada.",rate_limited:"Ya hay una descarga abierta, espera un momento."};
 async function guardar(filename,data,e=$("errExp")){e.style.color="";e.textContent="";
   if(!dl){e.textContent="La descarga no está disponible en esta vista.";return}
-  try{await dl.save({filename,data});e.style.color="var(--good)";e.textContent="Archivo entregado: "+filename+". Búscalo en Descargas (PC) o en el menú Compartir o Archivos (celular)."}
+  try{await dl.save({filename,data});e.style.color="var(--good)";e.textContent=window.TEPI?"Se guarda en tu Drive: "+filename+". Mira el aviso de abajo para abrirlo.":"Archivo entregado: "+filename+". Búscalo en Descargas (PC) o en el menú Compartir o Archivos (celular)."}
   catch(x){e.textContent=ERR[x&&x.code]||"No se pudo descargar en esta vista."}}
 const fechaHoy=()=>new Date().toLocaleDateString("es-CL");
 const nomArch=ext=>"Informe obra 812 "+hoy()+"."+ext;
