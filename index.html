@@ -290,7 +290,7 @@ body::before{background:var(--top)}
     </div>
     <button class="admlink" data-go="adm" id="btnAdm" hidden>Administración ⚙</button>
     <div class="cap2" id="quien" style="text-align:center"></div>
-    <div class="cap2" id="verApp" style="opacity:.7;text-align:center">Tepi Control VLV · versión V2 (instalable, base V1.18) · 17 nov 2026</div>
+    <div class="cap2" id="verApp" style="opacity:.7;text-align:center">Tepi Control VLV · versión V2 (instalable, base V1.19) · 17 nov 2026</div>
   </section>
 
   <!-- MATERIALES: selección -->
@@ -1494,9 +1494,10 @@ function drawForm(l){const box=$("recForm");box.innerHTML="";const rb=$("recBtns
       c.innerHTML=`<b>Tienes un borrador de la revisión ${n}</b> guardado el ${new Date(B.t).toLocaleString("es-CL",{day:"2-digit",month:"2-digit",hour:"2-digit",minute:"2-digit"})} (${nGrupos(B.D)} ${B.D.n===1?"partidas o recintos marcados":"ítems marcados"}).<div class="fila" style="margin-top:10px;gap:10px"><button class="go" style="flex:1">Continuar borrador</button><button class="small">Descartar</button></div>`;
       const [bc,bd]=c.querySelectorAll("button");bc.onclick=()=>{draft=conUrl(B.D);drawForm(l)};bd.onclick=()=>{if(!bd.dataset.ok){bd.dataset.ok=1;bd.textContent="Toca de nuevo para descartar";return}IDB.del(kk);c.remove()};wrap.prepend(c)})}return}
   const D=draft,RC=recList(),PA=partRec(recK);let html=`<h2>Revisión ${D.n} ${etChip(recK)}${D.n>1?" · solo pendientes de la revisión "+(D.n-1):""}</h2><div class="cap2" id="recBorr">Lo que marques se guarda solo en este equipo como borrador hasta que guardes la revisión.</div>`;
-  const selP=(key,v)=>`<select id="${key}-p"><option value="">Partida…</option>${PA.map(p=>`<option${p===v?" selected":""}>${esc(p)}</option>`).join("")}</select>`;
-  const selR=(key,v)=>`<select id="${key}-r"><option value="">Recinto (opcional)</option>${RC.map(p=>`<option${p===v?" selected":""}>${esc(p)}</option>`).join("")}</select>`;
-  const obsHtml=(o,key,dim)=>`<div class="obs"><div class="fila">${dim!=="rec"?selP(key,o.partida):""}${dim!=="par"?selR(key,o.recinto):""}</div>
+  const selX=(key,suf,v,L,ph,ot,pho)=>{const otra=ot||(v&&!L.includes(v));return`<select id="${key}-${suf}"><option value="">${ph}</option>${L.map(p=>`<option${!otra&&p===v?" selected":""}>${esc(p)}</option>`).join("")}<option value="__otra"${otra?" selected":""}>Otra…</option></select>${otra?`<input class="txt" id="${key}-${suf}o" placeholder="${pho}" value="${esc(v||"")}" style="flex:1;min-width:140px">`:""}`};
+  const selP=(key,v,o)=>selX(key,"p",v,PA,"Partida…",o&&o.pOtra,"Escribe la partida");
+  const selR=(key,v,o)=>selX(key,"r",v,RC,"Recinto (opcional)",o&&o.rOtra,"Escribe el recinto");
+  const obsHtml=(o,key,dim)=>`<div class="obs"><div class="fila" style="flex-wrap:wrap;gap:6px">${dim!=="rec"?selP(key,o.partida,o):""}${dim!=="par"?selR(key,o.recinto,o):""}</div>
     <textarea id="${key}-t" placeholder="Describe la observación">${esc(o.texto)}</textarea>
     <label class="ai" style="border:none;padding:2px 0"><input type="checkbox" id="${key}-h"${o.hab?" checked":""}><span>Se puede levantar con foto</span></label>
     <div class="fila"><label class="small fb">${o.url?"Cambiar foto":"Tomar o subir foto"}<input type="file" accept="image/*" id="${key}-f" hidden></label><button class="lnk" id="${key}-x">Quitar</button></div>
@@ -1504,7 +1505,9 @@ function drawForm(l){const box=$("recForm");box.innerHTML="";const rb=$("recBtns
   if(D.n===1){html+=`<div class="card"><div style="font-size:14px">Revisar por</div><div class="seg" style="padding-top:6px"><button id="mPar" class="${D.modo==="partida"?"on okb":""}">Partida</button><button id="mRec" class="${D.modo==="recinto"?"on okb":""}">Recinto</button></div><div class="cap2" style="padding-top:6px">Cada observación guarda su partida y su recinto. Cambiar el orden borra lo marcado en esta revisión.</div></div>`;
     D.grupos.forEach((g,gi)=>{html+=`<div class="card"><div class="card-h"><b>${esc(g.nombre)}</b></div><div class="seg" style="padding-top:10px">
       <button id="g${gi}-ok" class="${g.estado==="ok"?"on okb":""}">Sin observación</button><button id="g${gi}-ob" class="${g.estado==="ob"?"on bad":""}">Con observación</button>${D.modo==="recinto"?`<button id="g${gi}-na" class="${g.estado==="na"?"on okb":""}">No aplica</button>`:""}</div>
-      ${g.estado==="ob"?`<div style="display:flex;flex-direction:column;gap:8px;padding-top:10px">${g.obs.map((o,oi)=>obsHtml(o,"g"+gi+"o"+oi,D.modo==="partida"?"rec":"par")).join("")}<button class="small" id="g${gi}-add" style="align-self:flex-start">+ Otra observación ${D.modo==="partida"?"en esta partida":"en este recinto"}</button></div>`:""}</div>`})}
+      ${g.estado==="ob"?`<div style="display:flex;flex-direction:column;gap:8px;padding-top:10px">${g.obs.map((o,oi)=>obsHtml(o,"g"+gi+"o"+oi,D.modo==="partida"?"rec":"par")).join("")}<button class="small" id="g${gi}-add" style="align-self:flex-start">+ Otra observación ${D.modo==="partida"?"en esta partida":"en este recinto"}</button></div>`:""}</div>`});
+    D.nuevas=D.nuevas||[];D.nuevas.forEach((o,oi)=>html+=`<div class="card"><div class="card-h"><b>Otra observación</b><span class="cap2">fuera de la lista</span></div>${obsHtml(o,"n"+oi,"ambos")}</div>`);
+    html+=`<button class="small" id="addNueva" style="align-self:flex-start">+ Otra observación (fuera de la lista)</button>`}
   else{D.prev.forEach((it,ii)=>{html+=`<div class="card"><div class="card-h"><b>${esc(tituloIt(it))}</b><span class="tag">Desde revisión ${it.desde}</span></div>
       <div style="padding:8px 0;font-size:15px">${esc(it.texto)}</div>${fotoSrc(it)?`<img class="thumb" src="${fotoSrc(it)}" alt="Foto anterior">`:""}
       ${it.viaFoto?'<div class="ok" style="text-align:left">Levantada con foto, aceptada por el administrador.</div>':`<div class="seg" style="padding-top:10px"><button id="v${ii}-lv" class="${it.estado==="lv"?"on okb":""}">Levantada</button><button id="v${ii}-pe" class="${it.estado==="pe"?"on bad":""}">Sigue pendiente</button></div>`}
@@ -1519,7 +1522,9 @@ function drawForm(l){const box=$("recForm");box.innerHTML="";const rb=$("recBtns
     <div class="err" id="recErr"></div><button class="go" id="recSave">Guardar revisión ${D.n}</button><button class="lnk" id="recCancel" style="align-self:center">Cancelar revisión</button>`;
   box.innerHTML=`<div style="display:flex;flex-direction:column;gap:12px">${html}</div>`;
   const q=id=>box.querySelector("#"+id),err=t=>{q("recErr").textContent=t};
-  const ataObs=(o,key,onX)=>{q(key+"-t").oninput=e=>{o.texto=e.target.value;err("")};if(q(key+"-h"))q(key+"-h").onchange=e=>{o.hab=e.target.checked};if(q(key+"-p"))q(key+"-p").onchange=e=>{o.partida=e.target.value;err("")};if(q(key+"-r"))q(key+"-r").onchange=e=>o.recinto=e.target.value;
+  const ataObs=(o,key,onX)=>{q(key+"-t").oninput=e=>{o.texto=e.target.value;err("")};if(q(key+"-h"))q(key+"-h").onchange=e=>{o.hab=e.target.checked};if(q(key+"-p"))q(key+"-p").onchange=e=>{const v=e.target.value;if(v==="__otra"){o.pOtra=true;o.partida="";drawForm(l);const i=q(key+"-po");if(i)i.focus();return}o.pOtra=false;o.partida=v;err("");drawForm(l)};
+    if(q(key+"-r"))q(key+"-r").onchange=e=>{const v=e.target.value;if(v==="__otra"){o.rOtra=true;o.recinto="";drawForm(l);const i=q(key+"-ro");if(i)i.focus();return}o.rOtra=false;o.recinto=v;drawForm(l)};
+    if(q(key+"-po"))q(key+"-po").oninput=e=>{o.partida=e.target.value.trim();err("")};if(q(key+"-ro"))q(key+"-ro").oninput=e=>{o.recinto=e.target.value.trim()};
     q(key+"-f").onchange=async e=>{const f=e.target.files[0];if(!f)return;try{o.blob=await comprimir(f);if(o.url)URL.revokeObjectURL(o.url);o.url=URL.createObjectURL(o.blob);drawForm(l)}catch(x){err("No se pudo leer la foto. Prueba con otra imagen.")}};
     q(key+"-x").onclick=onX};
   const cambiaModo=m=>{if(D.modo===m)return;D.porModo=D.porModo||{};D.porModo[D.modo]=D.grupos;D.modo=m;D.grupos=D.porModo[m]||mkGrupos(m);guardarBorrador();drawForm(l)};
@@ -1527,7 +1532,8 @@ function drawForm(l){const box=$("recForm");box.innerHTML="";const rb=$("recBtns
     const nueva=g=>D.modo==="partida"?{texto:"",partida:g.nombre,recinto:"",blob:null,url:null}:{texto:"",partida:"",recinto:g.nombre,blob:null,url:null};
     D.grupos.forEach((g,gi)=>{q("g"+gi+"-ok").onclick=()=>{g.estado="ok";g.obs=[];err("");drawForm(l)};if(q("g"+gi+"-na"))q("g"+gi+"-na").onclick=()=>{g.estado="na";g.obs=[];err("");drawForm(l)};
       q("g"+gi+"-ob").onclick=()=>{g.estado="ob";if(!g.obs.length)g.obs.push(nueva(g));err("");drawForm(l)};
-      if(g.estado==="ob"){g.obs.forEach((o,oi)=>ataObs(o,"g"+gi+"o"+oi,()=>{g.obs.splice(oi,1);if(!g.obs.length)g.estado=null;drawForm(l)}));q("g"+gi+"-add").onclick=()=>{g.obs.push(nueva(g));drawForm(l)}}})}
+      if(g.estado==="ob"){g.obs.forEach((o,oi)=>ataObs(o,"g"+gi+"o"+oi,()=>{g.obs.splice(oi,1);if(!g.obs.length)g.estado=null;drawForm(l)}));q("g"+gi+"-add").onclick=()=>{g.obs.push(nueva(g));drawForm(l)}}});
+    D.nuevas.forEach((o,oi)=>ataObs(o,"n"+oi,()=>{D.nuevas.splice(oi,1);drawForm(l)}));q("addNueva").onclick=()=>{D.nuevas.push({partida:"",recinto:"",texto:"",blob:null,url:null});drawForm(l)}}
   else{D.prev.forEach((it,ii)=>{if(!it.viaFoto){q("v"+ii+"-lv").onclick=()=>{it.estado="lv";err("");drawForm(l)};q("v"+ii+"-pe").onclick=()=>{it.estado="pe";err("");drawForm(l)}}
       if(it.estado==="pe"){q("v"+ii+"-c").oninput=e=>it.comentario=e.target.value;q("v"+ii+"-f").onchange=async e=>{const f=e.target.files[0];if(!f)return;try{it.blob=await comprimir(f);it.url=URL.createObjectURL(it.blob);drawForm(l)}catch(x){err("No se pudo leer la foto.")}}}});
     D.nuevas.forEach((o,oi)=>ataObs(o,"n"+oi,()=>{D.nuevas.splice(oi,1);drawForm(l)}));
@@ -1541,7 +1547,8 @@ async function guardarRevision(l){const D=draft,box=$("recForm"),err=t=>{box.que
   const por=(D.por??box.querySelector("#recPor").value).trim();
   if(D.n===1){if(D.grupos.some(g=>!g.estado))return err(D.modo==="partida"?"Marca todas las partidas como sin o con observación":"Marca todos los recintos: sin observación, con observación o no aplica");
     if(D.grupos.some(g=>g.estado==="ob"&&g.obs.some(o=>!o.texto.trim())))return err("Escribe el texto de cada observación");
-    if(D.modo==="recinto"&&D.grupos.some(g=>g.estado==="ob"&&g.obs.some(o=>!o.partida)))return err("Elige la partida de cada observación")}
+    if(D.modo==="recinto"&&D.grupos.some(g=>g.estado==="ob"&&g.obs.some(o=>!o.partida)))return err("Elige la partida de cada observación");
+    if((D.nuevas||[]).some(o=>!o.texto.trim()))return err("Escribe el texto de cada observación fuera de la lista");if((D.nuevas||[]).some(o=>!o.partida))return err("Elige o escribe la partida de cada observación fuera de la lista")}
   else{if(D.prev.some(it=>!it.estado))return err("Marca cada pendiente como levantada o sigue pendiente");
     if(D.nuevas.some(o=>!o.texto.trim()))return err("Escribe el texto de cada observación nueva");if(D.nuevas.some(o=>!o.partida))return err("Elige la partida de cada observación nueva")}
   if(!por)return err("Escribe quién hace la revisión");
@@ -1549,7 +1556,8 @@ async function guardarRevision(l){const D=draft,box=$("recForm"),err=t=>{box.que
   const btn=box.querySelector("#recSave");btn.disabled=true;btn.textContent="Guardando fotos y revisión…";
   try{const items=[],lev=[],okP=[],na=[],habs=[];
     if(D.n===1){for(const g of D.grupos){if(g.estado==="ok"){okP.push(g.nombre);continue}if(g.estado==="na"){na.push(g.nombre);continue}
-        for(const o of g.obs){const iid=rid();if(o.hab)habs.push(iid);items.push({id:iid,partida:o.partida,recinto:o.recinto||"",texto:o.texto.trim(),desde:1,...(o.blob?await subirFoto(o.blob):{})})}}}
+        for(const o of g.obs){const iid=rid();if(o.hab)habs.push(iid);items.push({id:iid,partida:o.partida,recinto:o.recinto||"",texto:o.texto.trim(),desde:1,...(o.blob?await subirFoto(o.blob):{})})}}
+      for(const o of D.nuevas||[]){const iid=rid();if(o.hab)habs.push(iid);items.push({id:iid,partida:o.partida,recinto:o.recinto||"",texto:o.texto.trim(),desde:1,...(o.blob?await subirFoto(o.blob):{})})}}
     else{for(const it of D.prev){const base={id:it.id,partida:it.partida,recinto:it.recinto||"",texto:it.texto,desde:it.desde};if(it.foto)base.foto=it.foto;if(it.fotoData)base.fotoData=it.fotoData;
         if(it.estado==="lv"){lev.push({partida:it.partida,recinto:it.recinto||"",texto:it.texto,desde:it.desde,via:it.viaFoto?"foto":"terreno"});continue}
         if(it.comentario.trim())base.comentario=it.comentario.trim();
