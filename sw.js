@@ -1,6 +1,6 @@
 /* Tepi Control VLV · trabajador sin señal
    Guarda la app en el celular para que abra aunque no haya señal. */
-const VERSION = "v2-34a6878f1a";
+const VERSION = "v2-2b8a86b645";
 const APP = ["./", "index.html", "manifest.json", "perro-192.png", "perro-512.png"];
 const EXT = ["https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js", "https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"];
 self.addEventListener("install", e => {
