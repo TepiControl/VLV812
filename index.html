@@ -56,6 +56,12 @@ main{max-width:720px;margin:0 auto;padding-block:16px 48px;padding-left:max(16px
 .bigbtn.mrec{background:var(--mrec);border-color:var(--mrecb);color:var(--mrect)}.mrec b,.mrec span{color:var(--mrect)}
 .bigbtn.mres{background:var(--mres);border-color:var(--mresb);color:var(--mrest)}.mres b,.mres span{color:var(--mrest)}
 .mico{display:block;width:34px;height:34px;flex:none}.mico svg{width:34px;height:34px}
+.rpf{display:grid;grid-template-columns:26px repeat(8,minmax(0,1fr));gap:4px;align-items:center;padding:3px 0}.rpd{position:relative;min-width:0;height:44px;padding:0;border:1px solid var(--line);background:var(--bg);border-radius:10px;font:inherit;font-size:15px;font-weight:600;color:var(--ink);cursor:pointer}.rpd.al{border:2px solid var(--bad)}
+#rpT{gap:6px}#rpT .chip{padding:7px 12px;min-width:0}
+.rpcab{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:12px 14px}
+.rpl{padding:0 12px}.rpi{display:flex;justify-content:space-between;align-items:center;width:100%;background:none;border:0;border-top:1px solid var(--line);padding:12px 2px;font:inherit;color:var(--ink);text-align:left;cursor:pointer}.rpi:first-child{border-top:0}.rpi b{display:block;font-size:16px}.rpa{font-size:24px;color:var(--muted)}
+.rpq{display:flex;align-items:center;gap:8px}.rpq input{flex:1;min-width:0;font-size:28px;font-weight:700;text-align:center;padding:10px;border:2px solid var(--line);border-radius:12px;background:var(--surface);color:var(--ink)}.rpm{width:54px;height:54px;border-radius:12px;border:1px solid var(--line);background:var(--bg);font-size:28px;color:var(--ink);cursor:pointer}.rpu{font-size:14px;color:var(--muted);min-width:44px}
+.rpok{text-align:left;padding:10px 12px;border-radius:10px;background:var(--good-soft,#e6f2df)}
 .admlink{align-self:center;background:none;border:0;color:var(--muted);font:inherit;font-size:14px;padding:8px;cursor:pointer}
 #iniHero .hero{background:var(--top);border-radius:20px;padding:16px 16px 44px;position:relative;overflow:visible}
 #iniHero .hola{color:#fff;font-size:24px;font-weight:600;font-family:var(--display)}#iniHero .fe{color:var(--topt);font-size:13px}
@@ -290,12 +296,13 @@ body::before{background:var(--top)}
     </div>
     <button class="admlink" data-go="adm" id="btnAdm" hidden>Administración ⚙</button>
     <div class="cap2" id="quien" style="text-align:center"></div>
-    <div class="cap2" id="verApp" style="opacity:.7;text-align:center">Tepi Control VLV · versión V2 (instalable, base V1.19) · 17 nov 2026</div>
+    <div class="cap2" id="verApp" style="opacity:.7;text-align:center">Tepi Control VLV · versión V2 (instalable, base V1.20) · 19 nov 2026</div>
   </section>
 
   <!-- MATERIALES: selección -->
   <section id="v-mat" hidden style="display:flex;flex-direction:column;gap:16px">
-    <div class="seg" id="matTabs"><button data-t="reg">Registrar</button><button data-t="tip">Fichas por tipología</button></div>
+    <div class="seg" id="matTabs"><button data-t="rap">Rápido</button><button data-t="reg">Varios deptos</button><button data-t="tip">Tipologías</button></div>
+    <div id="matRap" hidden style="display:flex;flex-direction:column;gap:12px"></div>
     <div id="matTip" hidden style="display:flex;flex-direction:column;gap:12px"></div>
     <div id="matReg" style="display:flex;flex-direction:column;gap:16px">
     <h2>1. Deptos</h2>
@@ -849,10 +856,63 @@ function drawLote(){const box=$("v-lote"),D=[...selD].sort(),L=[...selI];box.inn
     const draw2=msg=>{Object.assign(x,{ent:{},sob:{},tot:"",tsob:"",mot:"",listo:msg});draw()};
     draw();if(!puede("materiales")){c.querySelectorAll("input,button").forEach(z=>z.disabled=true)}box.appendChild(c)});
   const b=document.createElement("button");b.className="go sec";b.textContent="Ver las fichas de estos deptos";b.onclick=()=>show("fichas");box.appendChild(b)}
-function estDep(d){const is=selI.size?[...selI]:INS.map(x=>x.id);let ab=0,ce=0,al=0;
+function estDep(d,all){const is=!all&&selI.size?[...selI]:INS.map(x=>x.id);let ab=0,ce=0,al=0;
   is.forEach(i=>{const r=S.reg[d+"|"+i];if(!r||!(r.dis>0||r.con>0))return;if(r.con>0)ce++;else if(r.dis>0){ab++;const I=ins(i);if(I&&I.part&&hecho(d,I.part))al++}});
   return al?"al":ab?"ab":ce?"ce":""}
-let matTab="reg",TIPV={t:null,q:""};try{matTab=localStorage.getItem("matTab")||"reg"}catch(e){}
+let matTab="rap",TIPV={t:null,q:""};try{matTab=localStorage.getItem("matTab2")||"rap"}catch(e){}
+let RP={t:null,d:null,i:null,q:"",fin:null,mot:"",av:true,bus:"",msg:""};
+function drawRap(f){const box=$("matRap");if(!f&&box.contains(document.activeElement)&&document.activeElement.tagName==="INPUT")return;
+  const nf=v=>dec(v,v%1?(Number.isInteger(Math.round(v*1000)/100)?1:2):0),uso=(d,i)=>{const r=S.reg[d+"|"+i];return r&&r.dis>0&&!(r.con>0)?r:null};
+  const msg=RP.msg?`<div class="ok rpok">${esc(RP.msg)}</div>`:"";
+  if(!RP.t)RP.t=pkSel.t||TORRES[0];
+  // paso 1 y 2: torre y depto
+  if(!RP.d){const P=[...new Set(DEPTOS.filter(d=>d.t===RP.t).map(d=>d.piso))].sort((a,b)=>b-a);
+    box.innerHTML=`${msg}<div class="lbl">Torre</div><div class="chips" id="rpT"></div><div class="lbl">Depto</div>
+      <div class="card" style="padding:10px">${P.map(z=>`<div class="rpf"><span class="cap2" style="width:24px">P${z}</span>${DEPTOS.filter(d=>d.t===RP.t&&d.piso===z).sort((a,b)=>numD(a)-numD(b)).map(d=>{const e=estDep(d.id,true);return`<button class="rpd${e==="al"?" al":""}" data-d="${d.id}">${d.id.slice(1)}${e==="ab"||e==="al"?`<i class="mse e-${e}"></i>`:""}</button>`}).join("")}</div>`).join("")}</div>
+      <div class="cap2" style="text-align:center"><i class="mse e-ab" style="position:static;display:inline-block"></i> ficha en uso · contorno rojo: avance listo y ficha sin cerrar</div>`;
+    chips($("rpT"),TORRES.map(t=>({id:t,label:"T"+t})),it=>it.id===RP.t,it=>{RP.t=it.id;RP.msg="";drawRap(1)});
+    box.querySelectorAll(".rpd").forEach(b=>b.onclick=()=>{RP.d=b.dataset.d;RP.i=null;RP.bus="";RP.msg="";drawRap(1);const s=$("rpBus");if(s)s.focus()});return}
+  const de=depO(RP.d),esRep=i=>{const o=(admConf().rep||{})[de.tipo];return(o&&o[i]!=null)||repBase(de.tipo,i)!=null},cab=`<div class="card rpcab"><div><b style="font-size:18px">Depto ${RP.d.slice(1)} · Torre ${de.t}</b><div class="cap2">Tipología ${esc(de.tipo)}</div></div><button class="small" id="rpCd">Cambiar depto</button></div>`;
+  // paso 3: insumo
+  if(!RP.i){const q=nrm(RP.bus||""),enUso=INS.filter(I=>uso(RP.d,I.id)),frec=INS.filter(I=>esRep(I.id)&&!uso(RP.d,I.id)),
+      res=q?INS.filter(I=>nrm(I.n+" "+(I.c||"")+" "+I.g).includes(q)&&(ficha(RP.d,I.id)||uso(RP.d,I.id))).slice(0,12):[];
+    const fila=I=>{const r=S.reg[RP.d+"|"+I.id],T=ficha(RP.d,I.id),Sg=esRep(I.id)?repT(de.tipo,I.id):0;return`<button class="rpi" data-i="${I.id}"><span><b>${esc(I.c||I.n)}</b><span class="cap2">${r&&r.con>0?"Cerrada · "+nf(r.con)+" "+esc(I.u):r&&r.dis>0?"En uso · "+nf(r.dis)+" "+esc(I.u)+" entregados":Sg?"Sugerido "+nf(Sg)+" "+esc(I.u):"Teórico "+nf(T)+" "+esc(I.u)}</span></span><span class="rpa">›</span></button>`};
+    box.innerHTML=`${msg}${cab}<input class="txt" id="rpBus" placeholder="Escribe el insumo, por ejemplo yeso" value="${esc(RP.bus)}" autocomplete="off" style="font-size:17px;padding:14px">
+      ${q?`<div class="card rpl">${res.length?res.map(fila).join(""):'<div class="cap2" style="padding:10px">No encuentro ese insumo en la ficha de este depto.</div>'}</div>`:
+      `${enUso.length?`<div class="lbl">En uso en este depto</div><div class="card rpl">${enUso.map(fila).join("")}</div>`:""}${frec.length?`<div class="lbl">Frecuentes</div><div class="card rpl">${frec.map(fila).join("")}</div>`:""}`}`;
+    const sb=$("rpBus");sb.oninput=()=>{RP.bus=sb.value;clearTimeout(drawRap.t);drawRap.t=setTimeout(()=>{const pos=sb.selectionStart;drawRap(1);const n=$("rpBus");n.focus();try{n.setSelectionRange(pos,pos)}catch(e){}},200)};
+    $("rpCd").onclick=()=>{RP.d=null;RP.msg="";drawRap(1)};
+    box.querySelectorAll(".rpi").forEach(b=>b.onclick=()=>{RP.i=b.dataset.i;RP.q="";RP.fin=null;RP.mot="";RP.av=true;RP.msg="";drawRap(1)});return}
+  // paso 4: cantidad y si se terminó
+  const I=ins(RP.i),r=S.reg[RP.d+"|"+RP.i]||{dis:0,con:0},T=ficha(RP.d,RP.i),Sg=esRep(RP.i)?repT(de.tipo,RP.i):0,st=PASO(I.u),q=+RP.q||0,tot=r1((r.con>0?0:r.dis)+q),cerr=r.con>0;
+  const pN=I.part&&(PROG.find(p=>p.id===I.part)||{}).n,faltaAv=pN&&!hecho(RP.d,I.part)&&puede("avance"),sobre=RP.fin==="si"&&tot>T,dv=desv(T,tot);
+  box.innerHTML=`${msg}${cab}<div class="card"><div class="card-h"><b style="font-size:18px">${esc(I.n)}</b><button class="lnk" id="rpCi">Cambiar insumo</button></div>
+    <div class="cap2" style="padding:4px 0 10px">${cerr?`Esta ficha ya está cerrada con ${nf(r.con)} ${esc(I.u)}. Si se usó más, regístralo en "Varios deptos" como consumo extra.`:r.dis>0?`Ya entregado: <b>${nf(r.dis)} ${esc(I.u)}</b>. Lo que escribas se suma.`:"Primera entrega en este depto."} ${Sg?"Sugerido "+nf(Sg)+" · ":""}Teórico ${nf(T)} ${esc(I.u)}</div>
+    ${cerr?"":`<div class="lbl">¿Cuánto fue a este depto hoy?</div>
+    <div class="rpq"><button class="rpm" data-s="-1" aria-label="Menos">−</button><input type="number" id="rpQ" min="0" step="${st}" data-q4="1" inputmode="decimal" placeholder="0" value="${esc(RP.q)}"><span class="rpu">${esc(I.u)}</span><button class="rpm" data-s="1" aria-label="Más">+</button></div>
+    <div class="chips" style="margin-top:8px">${Sg&&!r.dis?`<button class="chip sm" data-v="${Sg}">Sugerido ${nf(Sg)}</button>`:""}${!r.dis?`<button class="chip sm" data-v="${T}">Teórico ${nf(T)}</button>`:""}${r.dis>0&&T>r.dis?`<button class="chip sm" data-v="${r1(T-r.dis)}">Lo que falta para el Teórico: ${nf(r1(T-r.dis))}</button>`:""}</div>
+    <div class="lbl" style="margin-top:14px">¿Se terminó este insumo en el depto?</div>
+    <div class="seg" id="rpFin"><button data-f="no" class="${RP.fin==="no"?"on okb":""}">No, sigue en uso</button><button data-f="si" class="${RP.fin==="si"?"on okb":""}">Sí, se terminó</button></div>
+    ${RP.fin==="si"?`<div class="cap2" style="padding-top:8px">Consumido: <b>${nf(tot)} ${esc(I.u)}</b> <span class="pill ${dv.cls}">${dv.txt}</span> · Si hubo traspaso a otro depto, usa "Varios deptos".</div>`:""}
+    ${sobre?`<div class="motivo" style="margin-top:8px"><div class="lbl">Queda sobre el Teórico: elige el motivo</div><div class="chips" id="rpMot"></div></div>`:""}
+    ${RP.fin==="si"&&faltaAv?`<label class="ai" style="border:none"><input type="checkbox" id="rpAv"${RP.av?" checked":""}><span>Marcar también "${esc(pN)}" terminado en Avance</span></label>`:""}
+    <div class="err" id="rpErr"></div><button class="save" id="rpG">Guardar</button>`}</div>`;
+  $("rpCd").onclick=()=>{RP.d=null;RP.i=null;RP.msg="";drawRap(1)};$("rpCi").onclick=()=>{RP.i=null;RP.bus="";RP.msg="";drawRap(1)};if(cerr)return;
+  const qi=$("rpQ");qi.oninput=()=>{RP.q=qi.value};qi.onchange=()=>{RP.q=qi.value};
+  box.querySelectorAll(".rpm").forEach(b=>b.onclick=()=>{RP.q=String(Math.max(0,r1((+RP.q||0)+(+b.dataset.s)*st)));drawRap(1)});
+  box.querySelectorAll("[data-v]").forEach(b=>b.onclick=()=>{RP.q=String(redPaso(+b.dataset.v,st));drawRap(1)});
+  box.querySelectorAll("#rpFin button").forEach(b=>b.onclick=()=>{RP.fin=b.dataset.f;drawRap(1)});
+  if($("rpMot"))motivoUI($("rpMot"),()=>RP.mot,v=>{RP.mot=v});if($("rpAv"))$("rpAv").onchange=e=>RP.av=e.target.checked;
+  $("rpG").onclick=()=>{RP.q=qi.value;const q=+RP.q||0,er=t=>$("rpErr").textContent=t;
+    if(q<0)return er("La cantidad no puede ser negativa");if(!RP.fin)return er("Responde si se terminó el insumo en el depto");
+    if(!q&&RP.fin==="no")return er("Escribe cuánto fue al depto");if(!q&&!r.dis)return er("Escribe cuánto fue al depto");
+    const tot2=r1(r.dis+q);if(RP.fin==="si"&&tot2>T&&motErr(RP.mot))return er(motErr(RP.mot));
+    const key=RP.d+"|"+RP.i,prev=S.reg[key]?clon(S.reg[key]):null,R2=rec(RP.d,RP.i);R2.dis=tot2;if(!R2.fd)R2.fd=hoy();
+    if(RP.fin==="si"){R2.con=tot2;R2.f=hoy();R2.mot=tot2>T?RP.mot:""}
+    persist();registrar("Materiales",I.n+", "+lblD(de)+": "+(q?"entregados "+nf(q)+" "+I.u:"sin entrega nueva")+(RP.fin==="si"?" · ficha cerrada con "+nf(tot2):" · en uso ("+nf(tot2)+")"),{k:"reg",key,prev});
+    if(RP.fin==="si"&&faltaAv&&RP.av)setHecho(RP.d,I.part,hoy());
+    RP.msg="Guardado: "+(I.c||I.n)+" "+(q?nf(q)+" "+I.u+" ":"")+"en el depto "+RP.d.slice(1)+(RP.fin==="si"?" · ficha cerrada":" · sigue en uso")+". Elige otro insumo o cambia de depto.";
+    RP.i=null;RP.bus="";RP.q="";RP.fin=null;drawRap(1);try{window.scrollTo({top:0,behavior:"smooth"})}catch(e){}}}
 function drawTip(f){const box=$("matTip"),TP=Object.keys(FICHA);if(!f&&box.contains(document.activeElement)&&document.activeElement.tagName==="INPUT")return;if(!TIPV.t)TIPV.t=TP[0];const nD=t=>DEPTOS.filter(d=>d.tipo===t).length,t=TIPV.t,q=nrm(TIPV.q||"");
   const L=INS.filter(I=>(ficT(t,I.id)||repT(t,I.id))&&(!q||nrm(I.n+" "+(I.c||"")).includes(q)));
   const nf=v=>v==null?"–":dec(v,v%1?(Number.isInteger(Math.round(v*1000)/100)?1:2):0),grp=[...new Set(L.map(I=>I.g))];
@@ -868,8 +928,9 @@ function drawTip(f){const box=$("matTip"),TP=Object.keys(FICHA);if(!f&&box.conta
   const bus=()=>{const v=String($("tipDep").value).replace(/\D/g,""),d=DEPTOS.find(x=>x.id===v);if(!d){$("tipErr").textContent=v?"No encuentro el depto "+v+". Escribe torre y número juntos, por ejemplo 4205.":"Escribe el número del depto";return}TIPV.t=d.tipo;drawTip(1);$("tipErr").className="ok";$("tipErr").textContent="Depto "+d.id.slice(1)+" de la torre "+d.t+" es tipología "+d.tipo+"."};
   $("tipBus").onclick=bus;$("tipDep").onkeydown=e=>{if(e.key==="Enter")bus()}}
 function drawSel(){
-  document.querySelectorAll("#matTabs button").forEach(b=>{b.classList.toggle("on",b.dataset.t===matTab);b.classList.toggle("okb",b.dataset.t===matTab);b.onclick=()=>{matTab=b.dataset.t;try{localStorage.setItem("matTab",matTab)}catch(e){}drawSel()}});
-  $("matReg").hidden=matTab!=="reg";$("matTip").hidden=matTab!=="tip";if(matTab==="tip"){drawTip();return}
+  document.querySelectorAll("#matTabs button").forEach(b=>{b.classList.toggle("on",b.dataset.t===matTab);b.classList.toggle("okb",b.dataset.t===matTab);b.onclick=()=>{matTab=b.dataset.t;RP.msg="";try{localStorage.setItem("matTab2",matTab)}catch(e){}drawSel()}});
+  if(!puede("materiales")&&matTab==="rap")matTab="tip";
+  $("matReg").hidden=matTab!=="reg";$("matTip").hidden=matTab!=="tip";$("matRap").hidden=matTab!=="rap";if(matTab==="tip"){drawTip();return}if(matTab==="rap"){drawRap();return}
   if(!pkSel.t)pkSel.t=TORRES[0];const box=$("chDeptos"),dt=DEPTOS.filter(d=>d.t===pkSel.t),pisos=[...new Set(dt.map(d=>d.piso))].sort((a,b)=>b-a);
   const ES={};DEPTOS.forEach(d=>ES[d.id]=estDep(d.id));const cnt=(t,e)=>DEPTOS.filter(d=>d.t===t&&(e==="uso"?(ES[d.id]==="ab"||ES[d.id]==="al"):ES[d.id]===e)).length;
   box.innerHTML=`<div class="selT"><label for="selTorre">Torre</label><select id="selTorre">${TORRES.map(t=>{const n=DEPTOS.filter(d=>d.t===t&&selD.has(d.id)).length;const na=cnt(t,"al");return`<option value="${t}"${t===pkSel.t?" selected":""}>Torre ${t} · ${DEPTOS.find(d=>d.t===t).ed}${n?" · "+n+" elegidos":""}${na?" · "+na+" alertas":""}</option>`}).join("")}</select></div>
