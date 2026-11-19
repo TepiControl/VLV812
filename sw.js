@@ -1,6 +1,12 @@
+/* Notificaciones: Firebase Cloud Messaging */
+try {
+  importScripts("https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js", "https://www.gstatic.com/firebasejs/10.12.2/firebase-messaging-compat.js");
+  firebase.initializeApp({ apiKey: "AIzaSyAg3GyJuGZF6Fhw_SLDEhsJCBJLhezZwQs", authDomain: "tepi-control.firebaseapp.com", projectId: "tepi-control", storageBucket: "tepi-control.firebasestorage.app", messagingSenderId: "852187057647", appId: "1:852187057647:web:14e34c4c60801b72673a1a" });
+  firebase.messaging();
+} catch (e) {}
 /* Tepi Control VLV · trabajador sin señal
    Guarda la app en el celular para que abra aunque no haya señal. */
-const VERSION = "v2-5a0ffe7114";
+const VERSION = "v2-b7352fcfce";
 const APP = ["./", "index.html", "manifest.json", "perro-192.png", "perro-512.png"];
 const EXT = ["https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js", "https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"];
 self.addEventListener("install", e => {
