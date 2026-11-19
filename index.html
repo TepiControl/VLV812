@@ -58,6 +58,9 @@ main{max-width:720px;margin:0 auto;padding-block:16px 48px;padding-left:max(16px
 .mico{display:block;width:34px;height:34px;flex:none}.mico svg{width:34px;height:34px}
 .rpf{display:grid;grid-template-columns:26px repeat(8,minmax(0,1fr));gap:4px;align-items:center;padding:3px 0}.rpd{position:relative;min-width:0;height:44px;padding:0;border:1px solid var(--line);background:var(--bg);border-radius:10px;font:inherit;font-size:15px;font-weight:600;color:var(--ink);cursor:pointer}.rpd.al{border:2px solid var(--bad)}
 #rpT{gap:6px}#rpT .chip{padding:7px 12px;min-width:0}
+.rpd.ra{background:#fdeac2;border:2px solid #e0a12a}.rpd.rv{background:var(--bad-soft);border:2px solid var(--bad)}.rpd.rs{outline:3px solid var(--accent);outline-offset:1px}.rpd:disabled{opacity:.45;cursor:default}
+.rpn{position:absolute;top:-6px;right:-5px;min-width:17px;height:17px;border-radius:9px;background:var(--ink);color:var(--bg);font-size:10px;font-style:normal;line-height:17px;padding:0 3px}
+.rpleg{display:inline-block;width:12px;height:12px;border-radius:3px;vertical-align:-1px;margin:0 3px 0 8px}.rpleg.ra{background:#fdeac2;border:2px solid #e0a12a}.rpleg.rv{background:var(--bad-soft);border:2px solid var(--bad)}
 .rpcab{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:12px 14px}
 .rpl{padding:0 12px}.rpi{display:flex;justify-content:space-between;align-items:center;width:100%;background:none;border:0;border-top:1px solid var(--line);padding:12px 2px;font:inherit;color:var(--ink);text-align:left;cursor:pointer}.rpi:first-child{border-top:0}.rpi b{display:block;font-size:16px}.rpa{font-size:24px;color:var(--muted)}
 .rpq{display:flex;align-items:center;gap:8px}.rpq input{flex:1;min-width:0;font-size:28px;font-weight:700;text-align:center;padding:10px;border:2px solid var(--line);border-radius:12px;background:var(--surface);color:var(--ink)}.rpm{width:54px;height:54px;border-radius:12px;border:1px solid var(--line);background:var(--bg);font-size:28px;color:var(--ink);cursor:pointer}.rpu{font-size:14px;color:var(--muted);min-width:44px}
@@ -296,7 +299,7 @@ body::before{background:var(--top)}
     </div>
     <button class="admlink" data-go="adm" id="btnAdm" hidden>Administración ⚙</button>
     <div class="cap2" id="quien" style="text-align:center"></div>
-    <div class="cap2" id="verApp" style="opacity:.7;text-align:center">Tepi Control VLV · versión V2 (instalable, base V1.20) · 19 nov 2026</div>
+    <div class="cap2" id="verApp" style="opacity:.7;text-align:center">Tepi Control VLV · versión V2 (instalable, base V1.21) · 19 nov 2026</div>
   </section>
 
   <!-- MATERIALES: selección -->
@@ -716,12 +719,12 @@ const PERRO=extra=>`<svg class="perro" viewBox="0 0 100 100" aria-hidden="true">
 const PERRO_X={SUP:'<rect x="62" y="70" width="18" height="12" rx="2" fill="#e38b5c"/><path d="M62 76h18M71 70v6" stroke="#c2683d" stroke-width="1.4"/>',PT:'<rect x="64" y="66" width="14" height="18" rx="2" fill="#fff"/><path d="M67 71h8M67 75h8M67 79h5" stroke="#123f37" stroke-width="1.5"/>',EC:'<circle cx="72" cy="74" r="7" fill="none" stroke="#f7c948" stroke-width="3"/><path d="M77 79l6 6" stroke="#f7c948" stroke-width="3" stroke-linecap="round"/>',ADM:""};
 let iniCache={t:0,v:null};
 function datosHoy(){const now=Date.now();if(iniCache.v&&now-iniCache.t<15000)return iniCache.v;const h=hoy();let u=0,a=0,obs=0,dObs=0,atr=0,fot=0;
-  Object.entries(S.reg||{}).forEach(([k,r])=>{if(r&&r.dis>0&&!(r.con>0)){u++;const p=k.split("|"),I=ins(p[1]);if(I&&I.part&&hecho(p[0],I.part))a++}});
+  let vj=0;Object.entries(S.reg||{}).forEach(([k,r])=>{if(r&&r.dis>0&&!(r.con>0)){u++;if(vencida(r))vj++;const p=k.split("|"),I=ins(p[1]);if(I&&I.part&&hecho(p[0],I.part))a++}});
   const PR=PROG.filter(p=>!autoEt(p.id)&&!esFun(p));let dAtr=0;
   DEPTOS.forEach(d=>{let n=0;ETAPAS.forEach(k=>{if((S.etapa[d.id]??-1)>=k)return;const rv=revs(d.id,k);if(rv.length)n+=pendCount(rv[rv.length-1])});obs+=n;if(n)dObs++;
     const av=(avT(d.t).av||{})[d.id]||{};let m=0;PR.forEach(p=>{if(av[p.id])return;const pf=progD(p,d.id);if(pf&&pf<h)m++});atr+=m;if(m)dAtr++});
   Object.values(LEV||{}).forEach(x=>{if(x&&x.estado==="enviada")fot++});const avi=Object.keys(S.avisos||{}).length;
-  return iniCache={t:now,v:{u,a,obs,dObs,atr,dAtr,fot,avi}},iniCache.v}
+  return iniCache={t:now,v:{u,a,obs,dObs,atr,dAtr,fot,avi,vj}},iniCache.v}
 function pintarInicio(){const e=$("iniMat");if(!e)return;const r=rol(),D=datosHoy(),pl=(n,a,b)=>n+" "+(n===1?a:b);
   e.innerHTML=D.u?pl(D.u,"ficha en uso","fichas en uso")+(D.a?` <span class="pill" style="background:var(--bad-soft);color:var(--bad)">${pl(D.a,"alerta","alertas")}</span>`:""):"Sin fichas en uso";
   $("iniRec").textContent=D.obs?pl(D.obs,"observación abierta","observaciones abiertas"):"Sin observaciones abiertas";$("iniAva").textContent=D.dAtr?pl(D.dAtr,"depto con atrasos","deptos con atrasos"):"Al día con el programa";
@@ -729,8 +732,8 @@ function pintarInicio(){const e=$("iniMat");if(!e)return;const r=rol(),D=datosHo
   document.querySelectorAll(".igrid .mm").forEach(b=>{const g=b.dataset.go,i=vis.indexOf(g);b.hidden=i<0;b.style.order=i<0?99:i;b.classList.toggle("prim",g===prim);
     const ic=b.querySelector(".mico");if(ic&&!ic.innerHTML)ic.innerHTML=ICO_M[g];
     if(g===prim&&!b.querySelector(".mtx")){const w=document.createElement("span");w.className="mtx";[...b.querySelectorAll(":scope>b,:scope>span:not(.mtx)")].forEach(x=>w.appendChild(x));b.appendChild(w)}});
-  const L={ADM:[[D.avi,"deptos listos para revisar","depto listo para revisar","bad"],[D.a,"fichas para cerrar","ficha para cerrar","bad"],[D.obs,"observaciones abiertas","observación abierta","acc"],[D.dAtr,"deptos con partidas atrasadas","depto con partidas atrasadas","acc"],[D.fot,"fotos de levantamiento por revisar","foto de levantamiento por revisar","acc"]],
-    SUP:[[D.a,"fichas para cerrar","ficha para cerrar","bad"],[D.u,"fichas en uso","ficha en uso","acc"],[D.obs,"observaciones abiertas","observación abierta","acc"]],
+  const L={ADM:[[D.vj,"fichas abiertas hace más de 3 días","ficha abierta hace más de 3 días","bad"],[D.avi,"deptos listos para revisar","depto listo para revisar","bad"],[D.a,"fichas para cerrar","ficha para cerrar","bad"],[D.obs,"observaciones abiertas","observación abierta","acc"],[D.dAtr,"deptos con partidas atrasadas","depto con partidas atrasadas","acc"],[D.fot,"fotos de levantamiento por revisar","foto de levantamiento por revisar","acc"]],
+    SUP:[[D.vj,"fichas abiertas hace más de 3 días","ficha abierta hace más de 3 días","bad"],[D.a,"fichas para cerrar","ficha para cerrar","bad"],[D.u,"fichas en uso","ficha en uso","acc"],[D.obs,"observaciones abiertas","observación abierta","acc"]],
     PT:[[D.dAtr,"deptos con partidas atrasadas","depto con partidas atrasadas","bad"],[D.dObs,"deptos con observaciones","depto con observaciones","acc"]],
     EC:[[D.avi,"deptos listos para revisar","depto listo para revisar","bad"],[D.obs,"observaciones abiertas","observación abierta","bad"],[D.dObs,"deptos con observaciones","depto con observaciones","acc"],[D.fot,"fotos por revisar","foto por revisar","acc"]]}[r]||[];
   const li=L.filter(x=>x[0]>0).slice(0,3);let nom=(ME.nombre||"").trim().split(/\s+/)[0]||"";
@@ -849,7 +852,7 @@ function drawLote(){const box=$("v-lote"),D=[...selD].sort(),L=[...selI];box.inn
         if(!F.some(f=>f.e>0)&&!x.fin){draw();er().textContent=x.listo?"Ya guardaste esta entrega. Para otra, toca Registrar otra entrega y escribe lo nuevo.":"Escribe lo entregado";return}
         if(x.fin&&F.some(f=>f.cn<0)){draw();er().textContent="El sobrante no puede ser mayor que lo entregado";return}
         if(x.fin&&F.some(f=>f.cn>f.T)&&motErr(x.mot)){const me=motErr(x.mot);draw();er().textContent=me;return}
-        const prev={},avs=[];F.forEach(f=>{const key=f.d+"|"+i;prev[key]=S.reg[key]?clon(S.reg[key]):null;const r=rec(f.d,i);r.dis=f.nd;if(pz)r.est=1;if(x.fin&&f.cn>0){r.con=f.cn;r.f=hoy();r.mot=f.cn>f.T?x.mot:""}if(x.fin&&x.av&&faltaAv.includes(f.d))avs.push(f.d)});
+        const prev={},avs=[];F.forEach(f=>{const key=f.d+"|"+i;prev[key]=S.reg[key]?clon(S.reg[key]):null;const r=rec(f.d,i);if(f.nd>0&&!r.fd)r.fd=hoy();r.dis=f.nd;if(pz)r.est=1;if(x.fin&&f.cn>0){r.con=f.cn;r.f=hoy();r.mot=f.cn>f.T?x.mot:""}if(x.fin&&x.av&&faltaAv.includes(f.d))avs.push(f.d)});
         persist();const te=r1(F.reduce((a,f)=>a+f.e,0));registrar("Materiales","Reparto rápido de "+I.n+": "+te+" "+I.u+" a "+F.length+" deptos ("+(pz?"total del piso, estimado según Teórico":"depto por depto")+(x.fin?", con consumido":"")+")",{k:"lote",prev});
         avs.forEach(d=>setHecho(d,I.part,hoy()));
         const msg="Guardado en "+F.length+" fichas"+(te?": "+dec(te,te%1?1:0)+" "+I.u+" entregados":"")+(x.fin?" · consumido registrado":"")+(avs.length?" · "+avs.length+" deptos marcados en Avance":"");draw2(msg)}};
@@ -860,18 +863,33 @@ function estDep(d,all){const is=!all&&selI.size?[...selI]:INS.map(x=>x.id);let a
   is.forEach(i=>{const r=S.reg[d+"|"+i];if(!r||!(r.dis>0||r.con>0))return;if(r.con>0)ce++;else if(r.dis>0){ab++;const I=ins(i);if(I&&I.part&&hecho(d,I.part))al++}});
   return al?"al":ab?"ab":ce?"ce":""}
 let matTab="rap",TIPV={t:null,q:""};try{matTab=localStorage.getItem("matTab2")||"rap"}catch(e){}
-let RP={t:null,d:null,i:null,q:"",fin:null,mot:"",av:true,bus:"",msg:""};
+let RP={t:null,d:null,i:null,q:"",fin:null,mot:"",av:true,bus:"",msg:"",ft:null,fd:null};
+const DIAS_FICHA=3,diasDesde=f=>f?Math.floor((new Date(hoy()+"T12:00")-new Date(f+"T12:00"))/864e5):null;
+const abiertas=d=>INS.map(I=>({I,r:S.reg[d+"|"+I.id]})).filter(x=>x.r&&x.r.dis>0&&!(x.r.con>0));
+const vencida=r=>{const n=diasDesde(r.fd);return n!=null&&n>DIAS_FICHA};
 function drawRap(f){const box=$("matRap");if(!f&&box.contains(document.activeElement)&&document.activeElement.tagName==="INPUT")return;
   const nf=v=>dec(v,v%1?(Number.isInteger(Math.round(v*1000)/100)?1:2):0),uso=(d,i)=>{const r=S.reg[d+"|"+i];return r&&r.dis>0&&!(r.con>0)?r:null};
   const msg=RP.msg?`<div class="ok rpok">${esc(RP.msg)}</div>`:"";
   if(!RP.t)RP.t=pkSel.t||TORRES[0];
   // paso 1 y 2: torre y depto
-  if(!RP.d){const P=[...new Set(DEPTOS.filter(d=>d.t===RP.t).map(d=>d.piso))].sort((a,b)=>b-a);
-    box.innerHTML=`${msg}<div class="lbl">Torre</div><div class="chips" id="rpT"></div><div class="lbl">Depto</div>
-      <div class="card" style="padding:10px">${P.map(z=>`<div class="rpf"><span class="cap2" style="width:24px">P${z}</span>${DEPTOS.filter(d=>d.t===RP.t&&d.piso===z).sort((a,b)=>numD(a)-numD(b)).map(d=>{const e=estDep(d.id,true);return`<button class="rpd${e==="al"?" al":""}" data-d="${d.id}">${d.id.slice(1)}${e==="ab"||e==="al"?`<i class="mse e-${e}"></i>`:""}</button>`}).join("")}</div>`).join("")}</div>
-      <div class="cap2" style="text-align:center"><i class="mse e-ab" style="position:static;display:inline-block"></i> ficha en uso · contorno rojo: avance listo y ficha sin cerrar</div>`;
+  if(!RP.d){if(!RP.ft)RP.ft=RP.t;
+    const grilla=(t,cls,marca)=>{const P=[...new Set(DEPTOS.filter(d=>d.t===t).map(d=>d.piso))].sort((a,b)=>b-a);
+      return`<div class="card" style="padding:10px">${P.map(z=>`<div class="rpf"><span class="cap2" style="width:24px">P${z}</span>${DEPTOS.filter(d=>d.t===t&&d.piso===z).sort((a,b)=>numD(a)-numD(b)).map(d=>marca(d,cls)).join("")}</div>`).join("")}</div>`};
+    const mEnt=(d,cls)=>`<button class="rpd ${cls}" data-d="${d.id}">${d.id.slice(1)}</button>`;
+    const mAb=(d,cls)=>{const A=abiertas(d.id),v=A.some(x=>vencida(x.r));return`<button class="rpd ${cls}${A.length?v?" rv":" ra":""}${RP.fd===d.id?" rs":""}" data-d="${d.id}"${A.length?"":" disabled"}>${d.id.slice(1)}${A.length?`<i class="rpn">${A.length}</i>`:""}</button>`};
+    const nT=t=>DEPTOS.filter(d=>d.t===t).reduce((a,d)=>a+abiertas(d.id).length,0),nV=DEPTOS.reduce((a,d)=>a+abiertas(d.id).filter(x=>vencida(x.r)).length,0);
+    const det=RP.fd&&depO(RP.fd).t===RP.ft?abiertas(RP.fd):[],nf2=v=>dec(v,v%1?(Number.isInteger(Math.round(v*1000)/100)?1:2):0);
+    box.innerHTML=`${msg}<div class="lbl">Registrar entrega · Torre</div><div class="chips" id="rpT"></div>${grilla(RP.t,"re",mEnt)}
+      <h2 style="margin-top:18px">Fichas abiertas</h2>${nV?`<div class="avb" style="background:var(--bad-soft);border-color:var(--bad);color:var(--bad)"><b>${nV} ${nV===1?"ficha abierta":"fichas abiertas"} hace más de ${DIAS_FICHA} días.</b> Revisa si el material ya se usó y ciérralas.</div>`:""}
+      <div class="chips" id="rpFT"></div>${grilla(RP.ft,"rf",mAb)}
+      <div class="cap2" style="text-align:center"><i class="rpleg ra"></i> fichas abiertas <i class="rpleg rv"></i> abierta hace más de ${DIAS_FICHA} días · el número es cuántas tiene</div>
+      ${RP.fd&&det.length?`<div class="card" id="rpDet" style="border:2px solid var(--accent)"><div class="card-h"><b style="font-size:17px">Depto ${RP.fd.slice(1)} · Torre ${depO(RP.fd).t}</b><span class="cap2">${det.length} ${det.length===1?"abierta":"abiertas"}</span></div>
+        ${det.map(x=>{const n=diasDesde(x.r.fd),v=vencida(x.r);return`<button class="rpi" data-i="${x.I.id}"><span><b>${esc(x.I.c||x.I.n)}</b><span class="cap2">${nf2(x.r.dis)} ${esc(x.I.u)} entregados · ${n==null?"sin fecha de entrega":n===0?"entregado hoy":"hace "+n+(n===1?" día":" días")}${v?' · <b style="color:var(--bad)">revisar</b>':""}</span></span><span class="rpa">›</span></button>`}).join("")}</div>`:""}`;
     chips($("rpT"),TORRES.map(t=>({id:t,label:"T"+t})),it=>it.id===RP.t,it=>{RP.t=it.id;RP.msg="";drawRap(1)});
-    box.querySelectorAll(".rpd").forEach(b=>b.onclick=()=>{RP.d=b.dataset.d;RP.i=null;RP.bus="";RP.msg="";drawRap(1);const s=$("rpBus");if(s)s.focus()});return}
+    chips($("rpFT"),TORRES.map(t=>{const n=nT(t);return{id:t,label:"T"+t+(n?" ("+n+")":"")}}),it=>it.id===RP.ft,it=>{RP.ft=it.id;RP.fd=null;drawRap(1)});
+    box.querySelectorAll(".rpd.re").forEach(b=>b.onclick=()=>{RP.d=b.dataset.d;RP.i=null;RP.bus="";RP.msg="";drawRap(1);const s=$("rpBus");if(s)s.focus()});
+    box.querySelectorAll(".rpd.rf").forEach(b=>b.onclick=()=>{RP.fd=RP.fd===b.dataset.d?null:b.dataset.d;RP.msg="";drawRap(1);const d=$("rpDet");if(d)d.scrollIntoView({behavior:"smooth",block:"nearest"})});
+    box.querySelectorAll("#rpDet .rpi").forEach(b=>b.onclick=()=>{RP.d=RP.fd;RP.i=b.dataset.i;RP.q="";RP.fin=null;RP.mot="";RP.av=true;RP.desdeAb=true;drawRap(1)});return}
   const de=depO(RP.d),esRep=i=>{const o=(admConf().rep||{})[de.tipo];return(o&&o[i]!=null)||repBase(de.tipo,i)!=null},cab=`<div class="card rpcab"><div><b style="font-size:18px">Depto ${RP.d.slice(1)} · Torre ${de.t}</b><div class="cap2">Tipología ${esc(de.tipo)}</div></div><button class="small" id="rpCd">Cambiar depto</button></div>`;
   // paso 3: insumo
   if(!RP.i){const q=nrm(RP.bus||""),enUso=INS.filter(I=>uso(RP.d,I.id)),frec=INS.filter(I=>esRep(I.id)&&!uso(RP.d,I.id)),
@@ -897,7 +915,7 @@ function drawRap(f){const box=$("matRap");if(!f&&box.contains(document.activeEle
     ${sobre?`<div class="motivo" style="margin-top:8px"><div class="lbl">Queda sobre el Teórico: elige el motivo</div><div class="chips" id="rpMot"></div></div>`:""}
     ${RP.fin==="si"&&faltaAv?`<label class="ai" style="border:none"><input type="checkbox" id="rpAv"${RP.av?" checked":""}><span>Marcar también "${esc(pN)}" terminado en Avance</span></label>`:""}
     <div class="err" id="rpErr"></div><button class="save" id="rpG">Guardar</button>`}</div>`;
-  $("rpCd").onclick=()=>{RP.d=null;RP.i=null;RP.msg="";drawRap(1)};$("rpCi").onclick=()=>{RP.i=null;RP.bus="";RP.msg="";drawRap(1)};if(cerr)return;
+  $("rpCd").onclick=()=>{RP.d=null;RP.i=null;RP.msg="";RP.desdeAb=false;drawRap(1)};$("rpCi").onclick=()=>{RP.i=null;RP.bus="";RP.msg="";drawRap(1)};if(cerr)return;
   const qi=$("rpQ");qi.oninput=()=>{RP.q=qi.value};qi.onchange=()=>{RP.q=qi.value};
   box.querySelectorAll(".rpm").forEach(b=>b.onclick=()=>{RP.q=String(Math.max(0,r1((+RP.q||0)+(+b.dataset.s)*st)));drawRap(1)});
   box.querySelectorAll("[data-v]").forEach(b=>b.onclick=()=>{RP.q=String(redPaso(+b.dataset.v,st));drawRap(1)});
@@ -911,8 +929,8 @@ function drawRap(f){const box=$("matRap");if(!f&&box.contains(document.activeEle
     if(RP.fin==="si"){R2.con=tot2;R2.f=hoy();R2.mot=tot2>T?RP.mot:""}
     persist();registrar("Materiales",I.n+", "+lblD(de)+": "+(q?"entregados "+nf(q)+" "+I.u:"sin entrega nueva")+(RP.fin==="si"?" · ficha cerrada con "+nf(tot2):" · en uso ("+nf(tot2)+")"),{k:"reg",key,prev});
     if(RP.fin==="si"&&faltaAv&&RP.av)setHecho(RP.d,I.part,hoy());
-    RP.msg="Guardado: "+(I.c||I.n)+" "+(q?nf(q)+" "+I.u+" ":"")+"en el depto "+RP.d.slice(1)+(RP.fin==="si"?" · ficha cerrada":" · sigue en uso")+". Elige otro insumo o cambia de depto.";
-    RP.i=null;RP.bus="";RP.q="";RP.fin=null;drawRap(1);try{window.scrollTo({top:0,behavior:"smooth"})}catch(e){}}}
+    RP.msg="Guardado: "+(I.c||I.n)+" "+(q?nf(q)+" "+I.u+" ":"")+"en el depto "+RP.d.slice(1)+" de la torre "+de.t+(RP.fin==="si"?" · ficha cerrada":" · sigue en uso")+".";
+    if(RP.desdeAb){RP.ft=de.t;RP.fd=abiertas(RP.d).length?RP.d:null}RP.d=null;RP.i=null;RP.bus="";RP.q="";RP.fin=null;RP.desdeAb=false;drawRap(1);try{window.scrollTo({top:0,behavior:"smooth"})}catch(e){}}}
 function drawTip(f){const box=$("matTip"),TP=Object.keys(FICHA);if(!f&&box.contains(document.activeElement)&&document.activeElement.tagName==="INPUT")return;if(!TIPV.t)TIPV.t=TP[0];const nD=t=>DEPTOS.filter(d=>d.tipo===t).length,t=TIPV.t,q=nrm(TIPV.q||"");
   const L=INS.filter(I=>(ficT(t,I.id)||repT(t,I.id))&&(!q||nrm(I.n+" "+(I.c||"")).includes(q)));
   const nf=v=>v==null?"–":dec(v,v%1?(Number.isInteger(Math.round(v*1000)/100)?1:2):0),grp=[...new Set(L.map(I=>I.g))];
@@ -1079,7 +1097,7 @@ function card(d,i){
     if(dis===""){q("er").textContent="Completa el distribuido";return}
     if(con>T&&motErr(mot)){q("er").textContent=motErr(mot);return}
     if(fin&&!con){q("er").textContent="Si terminó, el consumido no puede ser 0";return}
-    const prevR=clon(r);if(+dis!==r.dis){delete r.lote;delete r.est}r.dis=+dis;if(con!==r.con)delete r.est;if(con&&con!==r.con)r.f=hoy();if(!con)r.f="";r.con=con;r.mot=con>T?mot:"";persist();registrar("Materiales","Ficha de "+I.n+", depto "+d.slice(1)+" T"+d[0]+": distribuido "+r.dis+", consumido "+(r.con||0),{k:"reg",key:d+"|"+i,prev:prevR});let av="";if(fin&&con&&pN&&!hp&&!q("ma").hidden&&q("mac").checked){setHecho(d,I.part,hoy());av=" · también quedó terminado en Avance";q("ma").hidden=true}q("ok").textContent="Guardado"+av;};
+    const prevR=clon(r);if(+dis!==r.dis){delete r.lote;delete r.est}if(+dis>0&&!r.fd)r.fd=hoy();r.dis=+dis;if(con!==r.con)delete r.est;if(con&&con!==r.con)r.f=hoy();if(!con)r.f="";r.con=con;r.mot=con>T?mot:"";persist();registrar("Materiales","Ficha de "+I.n+", depto "+d.slice(1)+" T"+d[0]+": distribuido "+r.dis+", consumido "+(r.con||0),{k:"reg",key:d+"|"+i,prev:prevR});let av="";if(fin&&con&&pN&&!hp&&!q("ma").hidden&&q("mac").checked){setHecho(d,I.part,hoy());av=" · también quedó terminado en Avance";q("ma").hidden=true}q("ok").textContent="Guardado"+av;};
   const drawExt=()=>{const X=q("xt");if(!(r.con>0)){X.innerHTML="";return}const E=r.ext||[],qr=extQ(r,"rep"),qp=extQ(r,"rp"),u=esc(I.u),nf=v=>dec(v,v%1?2:0);let tp="",ch="";
     const tn={rep:"Repaso por observación",rp:"Reproceso"};
     X.innerHTML=`<div style="border-top:1px solid var(--line);margin-top:8px;padding-top:10px"><div class="lbl" style="margin-bottom:4px">Consumo después del cierre</div>
