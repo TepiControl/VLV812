@@ -300,7 +300,7 @@ body::before{background:var(--top)}
     </div>
     <button class="admlink" data-go="adm" id="btnAdm" hidden>Administración ⚙</button>
     <div class="cap2" id="quien" style="text-align:center"></div>
-    <div class="cap2" id="verApp" style="opacity:.7;text-align:center">Tepi Control VLV · versión V2 (instalable, base V1.24) · 19 nov 2026</div>
+    <div class="cap2" id="verApp" style="opacity:.7;text-align:center">Tepi Control VLV · versión V2 (instalable, base V1.25) · 19 nov 2026</div>
   </section>
 
   <!-- MATERIALES: selección -->
@@ -1497,7 +1497,7 @@ function drawRec(){
   const rv=revs(recD,recK,recQ),l=rv[rv.length-1],es=estadoEt(recD,recK),avK=avisoK(recD,recK),AVI=S.avisos[avK];
   {const apr=aprK(recD,recK),PNk=recQ?null:(S.ePend[recD]||{})[recK],its=l?l.items:[],pc=pendCount(l),AZ="var(--cal)";
     const avBan=!apr&&AVI?`<div class="avb"><b>🔔 Listo para revisar</b> · avisó ${esc(AVI.por||"alguien")} el ${fCL(AVI.f)}${AVI.n?": "+esc(AVI.n):""}${puede("avisar")||rol()==="ADM"?` <button class="lnk" id="avQ">Quitar aviso</button>`:""}</div>`:"";
-    const avBtn=!apr&&!AVI&&["SUP","PT"].includes(rol())&&(l?pc>0:!recQ)?`<details class="avd"><summary class="small" style="display:inline-block;cursor:pointer">🔔 Avisar: depto listo para revisar</summary><div class="fila" style="gap:8px;margin-top:8px"><input class="txt" id="avN" placeholder="Nota (opcional)" style="flex:1"><button class="small" id="avG">Enviar aviso</button></div></details>`:"";
+    const avBtn=!apr&&!AVI&&puede("avisar")&&(l?pc>0:!recQ)?`<details class="avd"><summary class="small" style="display:inline-block;cursor:pointer">🔔 Avisar: depto listo para revisar</summary><div class="fila" style="gap:8px;margin-top:8px"><input class="txt" id="avN" placeholder="Nota (opcional)" style="flex:1"><button class="small" id="avG">Enviar aviso</button></div></details>`:"";
     const calTxt=recQ?calAvance(recD,recK):"";
     let pz;
     if(apr&&recQ)pz=`<div class="card" style="border:2px solid ${AZ}"><div class="card-h" style="border:none;padding-bottom:0"><b style="font-size:16px">Etapa cerrada para calidad</b><span class="pill" style="background:var(--cal-soft);color:${AZ}">${fCL(((S.cal||{})[recD]||{})[recK])}</span></div></div>`;
@@ -1968,7 +1968,7 @@ const ecOk=()=>!!(ADM.roles&&ADM.roles.ecAutoriza);
 function puede(a){const r=rol();if(r==="ADM")return true;
   if(a==="revision"||a==="aprobar")return r==="EC"&&ecOk();
   if(a==="calidad")return r==="EC"&&!!(ADM.roles&&ADM.roles.ecCal);
-  if(a==="avisar")return r==="SUP"||r==="PT";
+  if(a==="avisar")return r==="SUP"||r==="PT"||r==="ADM";
   if(a==="avance"||a==="materiales"||a==="subirFoto")return r==="SUP"||r==="PT";
   return false}
 function resolverRol(){if(!db){ME.rol="ADM";ME.dueno=true;return}if(window.TEPI&&TEPI.perfil){ME.rol=TEPI.perfil;ME.dueno=ME.rol==="ADM";return}const L=(ADM.roles&&ADM.roles.lista)||{};ME.rol=ME.dueno?"ADM":(L[ME.uid]||"PT")}
