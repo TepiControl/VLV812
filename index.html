@@ -667,7 +667,7 @@ window.addEventListener("error",function(e){ver((e.message||"Error")+(e.lineno?"
   let fbMsg=null;
   async function fbMensajeria(){if(fbMsg)return fbMsg;const A=await import(FBV+"firebase-app.js"),M=await import(FBV+"firebase-messaging.js");
     if(!(await M.isSupported()))throw new Error("no soportado");const app=A.initializeApp(FB);fbMsg={M,m:M.getMessaging(app)};
-    M.onMessage(fbMsg.m,p=>{const n=p.notification||{};toast((n.title||"Tepi Control")+(n.body?": "+n.body:""))});return fbMsg}
+    M.onMessage(fbMsg.m,p=>{const n=p.notification||{},t=n.title||"Tepi Control";toast(t+(n.body?": "+n.body:""));navigator.serviceWorker.ready.then(r=>r.showNotification(t,{body:n.body||"",icon:"perro-192.png",badge:"perro-192.png",tag:"tepi-"+Date.now()})).catch(()=>{})});return fbMsg}
   async function registrarPush(silencio){try{if(!pushOk()||!SES)return;if(Notification.permission!=="granted"){if(silencio)return;const r=await Notification.requestPermission();if(r!=="granted"){toast("No se activaron. Puedes permitirlas después en los ajustes del celular, en Notificaciones de la app.");return}}
       const F=await fbMensajeria(),reg=await navigator.serviceWorker.ready,tok=await F.M.getToken(F.m,{vapidKey:VAPID,serviceWorkerRegistration:reg});if(!tok)return;
       const yo=SES.yo||{},ruta="push/"+String(yo.rut||"").replace(/[^0-9Kk]/g,"");if(ruta==="push/")return;
