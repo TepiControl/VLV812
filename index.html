@@ -65,7 +65,7 @@ main{max-width:720px;margin:0 auto;padding-block:16px 48px;padding-left:max(16px
 .rpcab{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:12px 14px}
 .rpl{padding:0 12px}.rpi{display:flex;justify-content:space-between;align-items:center;width:100%;background:none;border:0;border-top:1px solid var(--line);padding:12px 2px;font:inherit;color:var(--ink);text-align:left;cursor:pointer}.rpi:first-child{border-top:0}.rpi b{display:block;font-size:16px}.rpa{font-size:24px;color:var(--muted)}
 .rpq{display:flex;align-items:center;gap:8px}.rpq input{flex:1;min-width:0;font-size:28px;font-weight:700;text-align:center;padding:10px;border:2px solid var(--line);border-radius:12px;background:var(--surface);color:var(--ink)}.rpm{width:54px;height:54px;border-radius:12px;border:1px solid var(--line);background:var(--bg);font-size:28px;color:var(--ink);cursor:pointer}.rpu{font-size:14px;color:var(--muted);min-width:44px}
-.rpok{text-align:left;padding:10px 12px;border-radius:10px;background:var(--good-soft,#e6f2df)}
+.rpav{display:block;padding:8px 10px;border-radius:10px;background:color-mix(in srgb,var(--warn) 18%,transparent);color:var(--ink)}.rpok{text-align:left;padding:10px 12px;border-radius:10px;background:var(--good-soft,#e6f2df)}
 .admlink{align-self:center;background:none;border:0;color:var(--muted);font:inherit;font-size:14px;padding:8px;cursor:pointer}
 #iniHero .hero{background:var(--top);border-radius:20px;padding:16px 16px 44px;position:relative;overflow:visible}
 #iniHero .hola{color:#fff;font-size:24px;font-weight:600;font-family:var(--display)}#iniHero .fe{color:var(--topt);font-size:13px}
@@ -300,7 +300,7 @@ body::before{background:var(--top)}
     </div>
     <button class="admlink" data-go="adm" id="btnAdm" hidden>Administración ⚙</button>
     <div class="cap2" id="quien" style="text-align:center"></div>
-    <div class="cap2" id="verApp" style="opacity:.7;text-align:center">Tepi Control VLV · versión V2 (instalable, base V1.25) · 19 nov 2026</div>
+    <div class="cap2" id="verApp" style="opacity:.7;text-align:center">Tepi Control VLV · versión V2 (instalable, base V1.26) · 21 nov 2026</div>
   </section>
 
   <!-- MATERIALES: selección -->
@@ -912,7 +912,7 @@ function drawRap(f){const box=$("matRap");if(!f&&box.contains(document.activeEle
     if(RP.abOpen)chips($("rpFT"),TORRES.map(t=>{const n=nT(t);return{id:t,label:"T"+t+(n?" ("+n+")":"")}}),it=>it.id===RP.ft,it=>{RP.ft=it.id;RP.fd=null;drawRap(1)});
     box.querySelectorAll(".rpd.re").forEach(b=>b.onclick=()=>{RP.d=b.dataset.d;RP.i=null;RP.bus="";RP.msg="";drawRap(1);const s=$("rpBus");if(s)s.focus()});
     box.querySelectorAll(".rpd.rf").forEach(b=>b.onclick=()=>{RP.fd=RP.fd===b.dataset.d?null:b.dataset.d;RP.msg="";drawRap(1);const d=$("rpDet");if(d)d.scrollIntoView({behavior:"smooth",block:"nearest"})});
-    box.querySelectorAll("#rpDet .rpi").forEach(b=>b.onclick=()=>{RP.d=RP.fd;RP.i=b.dataset.i;RP.q="";RP.fin=null;RP.mot="";RP.av=true;RP.desdeAb=true;drawRap(1)});return}
+    box.querySelectorAll("#rpDet .rpi").forEach(b=>b.onclick=()=>{RP.d=RP.fd;RP.i=b.dataset.i;RP.q="";RP.fin=null;RP.mot="";RP.av=true;RP.desdeAb=true;RP.cz=null;drawRap(1)});return}
   const de=depO(RP.d),esRep=i=>{const o=(admConf().rep||{})[de.tipo];return(o&&o[i]!=null)||repBase(de.tipo,i)!=null},cab=`<div class="card rpcab"><div><b style="font-size:18px">Depto ${RP.d.slice(1)} · Torre ${de.t}</b><div class="cap2">Tipología ${esc(de.tipo)}</div></div><button class="small" id="rpCd">Cambiar depto</button></div>`;
   // paso 3: insumo
   if(!RP.i){const q=nrm(RP.bus||""),enUso=INS.filter(I=>uso(RP.d,I.id)),frec=INS.filter(I=>esRep(I.id)&&!uso(RP.d,I.id)),
@@ -924,11 +924,13 @@ function drawRap(f){const box=$("matRap");if(!f&&box.contains(document.activeEle
     const sb=$("rpBus");sb.oninput=()=>{RP.bus=sb.value;clearTimeout(drawRap.t);drawRap.t=setTimeout(()=>{const pos=sb.selectionStart;drawRap(1);const n=$("rpBus");n.focus();try{n.setSelectionRange(pos,pos)}catch(e){}},200)};
     $("rpCd").onclick=()=>{RP.d=null;RP.msg="";drawRap(1)};
     box.querySelectorAll(".rpi").forEach(b=>b.onclick=()=>{RP.i=b.dataset.i;RP.q="";RP.fin=null;RP.mot="";RP.av=true;RP.msg="";drawRap(1)});return}
+  // cierre minimalista de una ficha abierta (entrando desde Fichas abiertas)
+  {const r0=S.reg[RP.d+"|"+RP.i];if(RP.desdeAb&&r0&&r0.dis>0&&!(r0.con>0))return drawCierreRap(box,msg,cab,de)}
   // paso 4: cantidad y si se terminó
   const I=ins(RP.i),r=S.reg[RP.d+"|"+RP.i]||{dis:0,con:0},T=ficha(RP.d,RP.i),Sg=esRep(RP.i)?repT(de.tipo,RP.i):0,st=PASO(I.u),q=+RP.q||0,tot=r1((r.con>0?0:r.dis)+q),cerr=r.con>0;
   const pN=I.part&&(PROG.find(p=>p.id===I.part)||{}).n,faltaAv=pN&&!hecho(RP.d,I.part)&&puede("avance"),sobre=RP.fin==="si"&&tot>T,dv=desv(T,tot);
   box.innerHTML=`${msg}${cab}<div class="card"><div class="card-h"><b style="font-size:18px">${esc(I.n)}</b><button class="lnk" id="rpCi">Cambiar insumo</button></div>
-    <div class="cap2" style="padding:4px 0 10px">${cerr?`Esta ficha ya está cerrada con ${nf(r.con)} ${esc(I.u)}. Si se usó más, regístralo en "Varios deptos" como consumo extra.`:r.dis>0?`Ya entregado: <b>${nf(r.dis)} ${esc(I.u)}</b>. Lo que escribas se suma.`:"Primera entrega en este depto."} ${Sg?"Sugerido "+nf(Sg)+" · ":""}Teórico ${nf(T)} ${esc(I.u)}</div>
+    <div class="cap2" style="padding:4px 0 10px">${cerr?`Esta ficha ya está cerrada con ${nf(r.con)} ${esc(I.u)}. Si se usó más, regístralo en "Varios deptos" como consumo extra.`:r.dis>0?`<span class="rpav">Ya hay <b>${nf(r.dis)} ${esc(I.u)}</b> entregados. Lo que escribas <b>se suma</b>. Para cerrar con lo instalado, usa <b>Fichas abiertas</b>.</span>`:"Primera entrega en este depto."} ${Sg?"Sugerido "+nf(Sg)+" · ":""}Teórico ${nf(T)} ${esc(I.u)}</div>
     ${cerr?"":`<div class="lbl">¿Cuánto fue a este depto hoy?</div>
     <div class="rpq"><button class="rpm" data-s="-1" aria-label="Menos">−</button><input type="number" id="rpQ" min="0" step="${st}" data-q4="1" inputmode="decimal" placeholder="0" value="${esc(RP.q)}"><span class="rpu">${esc(I.u)}</span><button class="rpm" data-s="1" aria-label="Más">+</button></div>
     <div class="chips" style="margin-top:8px">${Sg&&!r.dis?`<button class="chip sm" data-v="${Sg}">Sugerido ${nf(Sg)}</button>`:""}${!r.dis?`<button class="chip sm" data-v="${T}">Teórico ${nf(T)}</button>`:""}${r.dis>0&&T>r.dis?`<button class="chip sm" data-v="${r1(T-r.dis)}">Lo que falta para el Teórico: ${nf(r1(T-r.dis))}</button>`:""}</div>
@@ -948,12 +950,80 @@ function drawRap(f){const box=$("matRap");if(!f&&box.contains(document.activeEle
     if(q<0)return er("La cantidad no puede ser negativa");if(!RP.fin)return er("Responde si se terminó el insumo en el depto");
     if(!q&&RP.fin==="no")return er("Escribe cuánto fue al depto");if(!q&&!r.dis)return er("Escribe cuánto fue al depto");
     const tot2=r1(r.dis+q);if(RP.fin==="si"&&tot2>T&&motErr(RP.mot))return er(motErr(RP.mot));
-    const key=RP.d+"|"+RP.i,prev=S.reg[key]?clon(S.reg[key]):null,R2=rec(RP.d,RP.i);R2.dis=tot2;if(!R2.fd)R2.fd=hoy();
+    const key=RP.d+"|"+RP.i,prev=S.reg[key]?clon(S.reg[key]):null,R2=rec(RP.d,RP.i);R2.dis=tot2;if(!R2.fd)R2.fd=hoy();if(q>0)R2.ent=(R2.ent||[]).concat([{f:hoy(),q,por:quienSoy()}]);
     if(RP.fin==="si"){R2.con=tot2;R2.f=hoy();R2.mot=tot2>T?RP.mot:""}
     persist();registrar("Materiales",I.n+", "+lblD(de)+": "+(q?"entregados "+nf(q)+" "+I.u:"sin entrega nueva")+(RP.fin==="si"?" · ficha cerrada con "+nf(tot2):" · en uso ("+nf(tot2)+")"),{k:"reg",key,prev});
     if(RP.fin==="si"&&faltaAv&&RP.av)setHecho(RP.d,I.part,hoy());
     RP.msg="Guardado: "+(I.c||I.n)+" "+(q?nf(q)+" "+I.u+" ":"")+"en el depto "+RP.d.slice(1)+" de la torre "+de.t+(RP.fin==="si"?" · ficha cerrada":" · sigue en uso")+".";
     if(RP.desdeAb){RP.abOpen=true;RP.ft=de.t;RP.fd=abiertas(RP.d).length?RP.d:null}RP.d=null;RP.i=null;RP.bus="";RP.q="";RP.fin=null;RP.desdeAb=false;drawRap(1);try{window.scrollTo({top:0,behavior:"smooth"})}catch(e){}}}
+const quienSoy=()=>(ME&&ME.nombre||ROLN[rol()]||"").trim();
+const deBodega=r=>r1((r.dis||0)+(r.env||0)+(r.vb||0)+(r.vm||0)-(r.rec||0));
+function drawCierreRap(box,msg,cab,de){
+  const I=ins(RP.i),key=RP.d+"|"+RP.i,r=S.reg[key],T=ficha(RP.d,RP.i),st=PASO(I.u),u=esc(I.u),D=r.dis,nf=v=>dec(v,v%1?(Number.isInteger(Math.round(v*1000)/100)?1:2):0);
+  const CZ=RP.cz||(RP.cz={inst:String(D),dst:{},mot:"",modo:"",q:"",pa:""}),inst=Math.max(0,+CZ.inst||0),sob=r1(D-inst),asig=r1(Object.values(CZ.dst).reduce((a,v)=>a+(+v||0),0)),dv=desv(T,inst);
+  const recs=S.mov.filter(m=>m.ins===RP.i&&m.a===RP.d),bod=deBodega(r);
+  const cerr=d=>{const x=S.reg[d+"|"+RP.i];return x&&x.con>0};
+  const cand=DEPTOS.filter(d=>d.t===de.t&&d.id!==RP.d&&!cerr(d.id)).sort((a,b)=>Math.abs(a.piso-de.piso)-Math.abs(b.piso-de.piso)||numD(a)-numD(b));
+  const vec=cand.filter(d=>d.piso===de.piso),nomDst=k=>k==="bb"?"Bodega":k==="bm"?"Bodega, malo":k.slice(1)+(k[0]!==de.t?" T"+k[0]:"");
+  const origen=`<div class="cap2" style="padding:2px 0 0">Disponible <b>${nf(D)} ${u}</b>${r.rec>0?` · ${nf(bod)} de bodega + ${nf(r.rec)} de otros deptos${recs.length?" ("+[...new Set(recs.map(m=>m.de.slice(1)))].join(", ")+")":""}`:""}</div>`;
+  const back=()=>{RP.cz=null;RP.abOpen=true;RP.ft=de.t;RP.fd=abiertas(RP.d).length?RP.d:null;RP.d=null;RP.i=null;RP.desdeAb=false;drawRap(1);try{window.scrollTo({top:0,behavior:"smooth"})}catch(e){}};
+  if(CZ.modo){const pas=CZ.modo==="pasar";
+    box.innerHTML=`${msg}${cab}<div class="card"><div class="card-h"><b style="font-size:18px">${esc(I.n)}</b></div>${origen}
+      <div class="lbl" style="margin-top:12px">${pas?"¿Cuánto pasa a otro depto?":"¿Cuánto más se ocupó?"}</div>
+      <div class="rpq"><button class="rpm" data-s="-1" aria-label="Menos">−</button><input type="number" id="czQ" min="0" step="${st}" data-q4="1" inputmode="decimal" placeholder="0" value="${esc(CZ.q)}"><span class="rpu">${u}</span><button class="rpm" data-s="1" aria-label="Más">+</button></div>
+      ${pas?`<div class="lbl" style="margin-top:12px">¿A qué depto?</div><div class="chips" id="czPa"></div><input class="txt" id="czPo" inputmode="numeric" placeholder="Otro depto, ej. 4305" style="margin-top:6px">`:""}
+      <div class="err" id="czErr"></div><button class="save" id="czG">Guardar</button><button class="lnk" id="czC" style="display:block;margin:10px auto 0">Cancelar</button></div>`;
+    const qi=$("czQ");qi.oninput=()=>{CZ.q=qi.value};
+    box.querySelectorAll(".rpm").forEach(b=>b.onclick=()=>{CZ.q=String(Math.max(0,r1((+CZ.q||0)+(+b.dataset.s)*st)));drawRap(1)});
+    if(pas){chips($("czPa"),vec.map(d=>({id:d.id,label:d.id.slice(1)})),it=>it.id===CZ.pa,it=>{CZ.pa=it.id;drawRap(1)});const po=$("czPo");po.onchange=()=>{const v=po.value.replace(/\D/g,"");if(cand.some(d=>d.id===v)||DEPTOS.some(d=>d.id===v&&d.id!==RP.d&&!cerr(v))){CZ.pa=v;drawRap(1)}else $("czErr").textContent="No encuentro el depto "+v+" o su ficha ya está cerrada"}}
+    $("czC").onclick=()=>{CZ.modo="";CZ.q="";CZ.pa="";drawRap(1)};$("rpCd").onclick=back;
+    $("czG").onclick=()=>{CZ.q=qi.value;const q=r1(+CZ.q||0),er=t=>$("czErr").textContent=t;if(!(q>0))return er("Escribe la cantidad");
+      if(pas&&!CZ.pa)return er("Elige el depto que recibe");if(pas&&q>D)return er("No puedes pasar más de lo disponible ("+nf(D)+")");
+      const prev={};prev[key]=clon(r);const movs=[];
+      if(pas){const k2=CZ.pa+"|"+RP.i;prev[k2]=S.reg[k2]?clon(S.reg[k2]):null;const R=rec(CZ.pa,RP.i);R.dis=r1(R.dis+q);R.rec=r1((R.rec||0)+q);if(!R.fd)R.fd=hoy();
+        r.dis=r1(r.dis-q);r.env=r1((r.env||0)+q);const m={f:new Date().toLocaleDateString("es-CL",{day:"2-digit",month:"2-digit"}),ins:RP.i,de:RP.d,a:CZ.pa,q};S.mov.unshift(m);movs.push(m)}
+      else{r.dis=r1(r.dis+q);r.ent=(r.ent||[]).concat([{f:hoy(),q,por:quienSoy()}])}
+      persist();registrar("Materiales",I.n+", "+lblD(de)+": "+(pas?nf(q)+" "+I.u+" pasaron al depto "+nomDst(CZ.pa):"se ocuparon "+nf(q)+" "+I.u+" más")+" · sigue en uso ("+nf(r.dis)+")",{k:"cierre",prev,movs});
+      RP.msg="Guardado: "+(I.c||I.n)+" del depto "+RP.d.slice(1)+(pas?": "+nf(q)+" pasaron al "+nomDst(CZ.pa):": "+nf(q)+" más")+". Sigue en uso con "+nf(r.dis)+".";back()};
+    return}
+  const falt=r1(sob-asig),sobre=inst>T&&inst>D,pN=I.part&&(PROG.find(p=>p.id===I.part)||{}).n,faltaAv=pN&&!hecho(RP.d,I.part)&&puede("avance");
+  box.innerHTML=`${msg}${cab}<div class="card"><div class="card-h"><b style="font-size:18px">${esc(I.n)}</b><button class="lnk" id="rpCi">Cambiar insumo</button></div>${origen}
+    <div class="lbl" style="margin-top:14px;text-align:center">Instalado</div>
+    <div class="rpq"><button class="rpm" data-s="-1" aria-label="Menos">−</button><input type="number" id="czI" min="0" step="${st}" data-q4="1" inputmode="decimal" value="${esc(CZ.inst)}"><span class="rpu">${u}</span><button class="rpm" data-s="1" aria-label="Más">+</button></div>
+    <div style="text-align:center;margin-top:6px"><span class="pill ${dv.cls}">${dv.txt}</span> <span class="cap2">Teórico ${nf(T)} ${u}</span></div>
+    ${sob>0?`<div class="card" style="margin:12px 0 0;padding:10px 12px"><b>¿A dónde ${sob===1?"fue el":"fueron los"} ${nf(sob)} que sobr${sob===1?"ó":"aron"}?</b>
+      <div class="chips" id="czD" style="margin-top:8px"></div>
+      ${Object.keys(CZ.dst).length?Object.entries(CZ.dst).map(([k,v])=>`<div class="fila" style="gap:8px;align-items:center;margin-top:6px"><span style="flex:1">${nomDst(k)}</span><input type="number" class="txt czn" data-k="${k}" min="0" step="${st}" data-q4="1" value="${v}" style="width:90px;text-align:right"></div>`).join(""):""}
+      <input class="txt" id="czO" inputmode="numeric" placeholder="Otro depto, ej. 4305" style="margin-top:8px">
+      <div class="cap2" style="margin-top:6px">${falt>0?"Toca un destino: se le asigna lo que falta ("+nf(falt)+")":falt<0?'<b style="color:var(--bad)">Asignaste '+nf(-falt)+" de más</b>":"Listo, todo asignado"}</div></div>`:""}
+    ${sobre?`<div class="motivo" style="margin-top:12px"><div class="lbl">Se ocuparon ${nf(r1(inst-D))} más y queda sobre el Teórico: ¿por qué?</div><div class="chips" id="czM"></div></div>`:""}
+    ${faltaAv?`<label class="ai" style="border:none"><input type="checkbox" id="czAv"${RP.av?" checked":""}><span>Marcar "${esc(pN)}" terminado en Avance</span></label>`:""}
+    <div class="err" id="czErr"></div><button class="save" id="czG">Cerrar ficha</button>
+    <div style="display:flex;justify-content:center;gap:22px;margin-top:12px"><button class="lnk" id="czMas">Ocupó más</button><button class="lnk" id="czPas">Pasar a otro depto</button></div></div>`;
+  $("rpCd").onclick=back;$("rpCi").onclick=()=>{RP.cz=null;RP.i=null;RP.desdeAb=false;RP.bus="";drawRap(1)};
+  const ii=$("czI");ii.oninput=()=>{CZ.inst=ii.value};ii.onchange=()=>{CZ.inst=String(Math.max(0,+ii.value||0));CZ.dst={};drawRap(1)};
+  box.querySelectorAll(".rpm").forEach(b=>b.onclick=()=>{CZ.inst=String(Math.max(0,r1((+CZ.inst||0)+(+b.dataset.s)*st)));CZ.dst={};drawRap(1)});
+  const tog=k=>{if(CZ.dst[k]!=null)delete CZ.dst[k];else if(falt>0)CZ.dst[k]=falt;drawRap(1)};
+  if($("czD"))chips($("czD"),[...vec.map(d=>({id:d.id,label:d.id.slice(1)})),...Object.keys(CZ.dst).filter(k=>k!=="bb"&&k!=="bm"&&!vec.some(d=>d.id===k)).map(k=>({id:k,label:nomDst(k)})),{id:"bb",label:"Bodega"},{id:"bm",label:"Bodega, malo"}],it=>CZ.dst[it.id]!=null,it=>tog(it.id));
+  box.querySelectorAll(".czn").forEach(n=>n.onchange=()=>{CZ.dst[n.dataset.k]=String(Math.max(0,+n.value||0));drawRap(1)});
+  const co=$("czO");if(co)co.onchange=()=>{const v=co.value.replace(/\D/g,"");if(DEPTOS.some(d=>d.id===v)&&v!==RP.d&&!cerr(v))tog(v);else $("czErr").textContent="No encuentro el depto "+v+" o su ficha ya está cerrada"};
+  if($("czM"))motivoUI($("czM"),()=>CZ.mot,v=>{CZ.mot=v});if($("czAv"))$("czAv").onchange=e=>RP.av=e.target.checked;
+  $("czMas").onclick=()=>{CZ.modo="mas";CZ.q="";drawRap(1)};$("czPas").onclick=()=>{CZ.modo="pasar";CZ.q="";CZ.pa="";drawRap(1)};
+  $("czG").onclick=()=>{CZ.inst=ii.value;const er=t=>$("czErr").textContent=t,X=r1(Math.max(0,+CZ.inst||0)),s2=r1(D-X),a2=r1(Object.values(CZ.dst).reduce((a,v)=>a+(+v||0),0));
+    if(!(X>0))return er("Escribe cuánto se instaló");
+    if(s2>0&&a2!==s2)return er(a2<s2?"Falta decir a dónde fueron "+nf(r1(s2-a2))+" "+I.u:"Asignaste más de lo que sobró");
+    if(X>T&&X>D&&motErr(CZ.mot))return er(motErr(CZ.mot));
+    const prev={},movs=[],fe=new Date().toLocaleDateString("es-CL",{day:"2-digit",month:"2-digit"});prev[key]=clon(r);const partes=[];
+    if(s2>0)Object.entries(CZ.dst).forEach(([k,v])=>{const n=r1(+v||0);if(!(n>0))return;
+      if(k==="bb"){r.vb=r1((r.vb||0)+n);partes.push(nf(n)+" volvieron a bodega")}
+      else if(k==="bm"){r.vm=r1((r.vm||0)+n);partes.push(nf(n)+" volvieron a bodega malos")}
+      else{const k2=k+"|"+RP.i;if(!(k2 in prev))prev[k2]=S.reg[k2]?clon(S.reg[k2]):null;const R=rec(k,RP.i);R.dis=r1(R.dis+n);R.rec=r1((R.rec||0)+n);if(!R.fd)R.fd=hoy();r.env=r1((r.env||0)+n);const m={f:fe,ins:RP.i,de:RP.d,a:k,q:n};S.mov.unshift(m);movs.push(m);partes.push(nf(n)+" al "+nomDst(k))}});
+    if(X>D)r.ent=(r.ent||[]).concat([{f:hoy(),q:r1(X-D),por:quienSoy(),cierre:true}]);
+    r.dis=X;r.con=X;r.f=hoy();r.mot=X>T?(X>D?CZ.mot:(r.mot||"")):"";
+    persist();registrar("Materiales",I.n+", "+lblD(de)+": ficha cerrada con "+nf(X)+" "+I.u+" instalados"+(partes.length?" · "+partes.join(", "):"")+(X>D?" · se ocuparon "+nf(r1(X-D))+" más de bodega":""),{k:"cierre",prev,movs});
+    if(faltaAv&&RP.av)setHecho(RP.d,I.part,hoy());
+    RP.msg="Ficha cerrada: "+(I.c||I.n)+" del depto "+RP.d.slice(1)+", instalado "+nf(X)+" "+I.u+(partes.length?" · "+partes.join(", "):"")+".";back()};
+}
 function drawTip(f){const box=$("matTip"),TP=Object.keys(FICHA);if(!f&&box.contains(document.activeElement)&&document.activeElement.tagName==="INPUT")return;if(!TIPV.t)TIPV.t=TP[0];const nD=t=>DEPTOS.filter(d=>d.tipo===t).length,t=TIPV.t,q=nrm(TIPV.q||"");
   const L=INS.filter(I=>(ficT(t,I.id)||repT(t,I.id))&&(!q||nrm(I.n+" "+(I.c||"")).includes(q)));
   const nf=v=>v==null?"–":dec(v,v%1?(Number.isInteger(Math.round(v*1000)/100)?1:2):0),grp=[...new Set(L.map(I=>I.g))];
@@ -1040,7 +1110,7 @@ function drawCierre(){const box=$("v-cierre"),D=[...selD].sort(),L=selI.size?[..
         const prev={},movs=[],keep=k=>{if(!(k in prev))prev[k]=S.reg[k]?clon(S.reg[k]):null},fe=new Date().toLocaleDateString("es-CL",{day:"2-digit",month:"2-digit"});
         let ntr=0,cerr=0;const avs=[],rec2=[];
         F.forEach(f=>{const k=f.d+"|"+i,z=CZ[k];keep(k);const r=rec(f.d,i);
-          if(z.t==="si"){const Lx=z.L.filter(x=>+x.n>0);ntr++;Lx.forEach(x=>{const n=r1(+x.n);keep(x.a+"|"+i);const R=rec(x.a,i);R.dis=r1(R.dis+n);const m={f:fe,ins:i,de:f.d,a:x.a,q:n};S.mov.unshift(m);movs.push(m);if(!F.some(y=>y.d===x.a))rec2.push(x.a)});r.dis=r1(r.dis-Lx.reduce((a,x)=>a+(+x.n),0))}});
+          if(z.t==="si"){const Lx=z.L.filter(x=>+x.n>0);ntr++;Lx.forEach(x=>{const n=r1(+x.n);keep(x.a+"|"+i);const R=rec(x.a,i);R.dis=r1(R.dis+n);R.rec=r1((R.rec||0)+n);const m={f:fe,ins:i,de:f.d,a:x.a,q:n};S.mov.unshift(m);movs.push(m);if(!F.some(y=>y.d===x.a))rec2.push(x.a)});{const tt=Lx.reduce((a,x)=>a+(+x.n),0);r.dis=r1(r.dis-tt);r.env=r1((r.env||0)+tt)}}});
         F.forEach(f=>{const k=f.d+"|"+i,r=rec(f.d,i);
           if(r.dis>0){r.con=r.dis;r.f=hoy();r.mot=r.con>ficha(f.d,i)?G.mot:"";cerr++;if(G.av&&pN&&puede("avance")&&!hecho(f.d,I.part))avs.push(f.d)}
           delete CZ[k]});
@@ -1110,8 +1180,8 @@ function card(d,i){
     if(!L.length){q("er").textContent="Escribe cuánto traspasar";return}
     if(new Set(L.map(x=>x.a)).size<L.length){q("er").textContent="Elegiste el mismo depto dos veces";return}
     if(tot>dis){q("er").textContent="No puedes traspasar más de lo distribuido ("+dis+"); suman "+tot;return}
-    const prevDe=clon(r),lst=L.map(x=>({a:x.a,q:x.n,prevA:clon(S.reg[x.a+"|"+i]||null)}));r.dis=r1(dis-tot);q("dis").value=r.dis;if(fin&&!editado)q("con").value=r.dis;
-    const f=new Date().toLocaleDateString("es-CL",{day:"2-digit",month:"2-digit"});L.forEach(x=>{const R=rec(x.a,i);R.dis=r1(R.dis+x.n);S.mov.unshift({f,ins:i,de:d,a:x.a,q:x.n})});
+    const prevDe=clon(r),lst=L.map(x=>({a:x.a,q:x.n,prevA:clon(S.reg[x.a+"|"+i]||null)}));r.dis=r1(dis-tot);r.env=r1((r.env||0)+tot);q("dis").value=r.dis;if(fin&&!editado)q("con").value=r.dis;
+    const f=new Date().toLocaleDateString("es-CL",{day:"2-digit",month:"2-digit"});L.forEach(x=>{const R=rec(x.a,i);R.dis=r1(R.dis+x.n);R.rec=r1((R.rec||0)+x.n);if(!R.fd)R.fd=hoy();S.mov.unshift({f,ins:i,de:d,a:x.a,q:x.n})});
     persist();const txt=L.map(x=>x.n+" al "+x.a.slice(1)+" T"+x.a[0]).join(", ");registrar("Materiales","Traspaso de "+I.n+" desde el depto "+d.slice(1)+" T"+d[0]+": "+txt,{k:"trasM",ins:i,de:d,prevDe,lst});
     q("tl").innerHTML="";addTr();q("tr").open=false;q("ok").textContent="Traspasados "+tot+" "+I.u+": "+txt;sumUpd()};
   const sumUpd=()=>{const ds=+q("dis").value||0,cn=fin?(+q("con").value||0):0,dv=desv(T,cn?cn+extQ(r,"rep"):0);q("fs").innerHTML=`<span class="cap2">Teórico ${dec(T,T%1?1:0)} · Rep. ${dec(ds,ds%1?1:0)}${cn?" · Real "+dec(cn,cn%1?1:0):""}</span>${cn?`<span class="pill ${dv.cls}">${dv.txt}</span>`:'<span class="pill neu">'+(ds?"En uso":"Sin registro")+"</span>"}`};
