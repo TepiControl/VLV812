@@ -300,7 +300,7 @@ body::before{background:var(--top)}
     </div>
     <button class="admlink" data-go="adm" id="btnAdm" hidden>Administración ⚙</button>
     <div class="cap2" id="quien" style="text-align:center"></div>
-    <div class="cap2" id="verApp" style="opacity:.7;text-align:center">Tepi Control VLV · versión V2 (instalable, base V1.26) · 21 nov 2026</div>
+    <div class="cap2" id="verApp" style="opacity:.7;text-align:center">Tepi Control VLV · versión V2 (instalable, base V1.27) · 23 nov 2026</div>
   </section>
 
   <!-- MATERIALES: selección -->
@@ -763,7 +763,17 @@ function pintarInicio(){const e=$("iniMat");if(!e)return;const r=rol(),D=datosHo
   const f=new Date(),dia=f.toLocaleDateString("es-CL",{weekday:"long",day:"numeric",month:"long"});
   $("iniHero").innerHTML=`<div class="hero"><div class="hola">¡Hola${nom?", "+esc(nom):""}!</div><div class="fe">${esc(dia.charAt(0).toUpperCase()+dia.slice(1))} · ${esc(ROLN[r]||"")}</div>${PERRO(PERRO_X[r])}</div>
     <div class="hoy"><div class="k">HOY EN OBRA</div><div class="v">${li.length?li.map(x=>`<b style="color:${x[3]==="bad"?"var(--bad)":"var(--accent)"}">${x[0]}</b> ${x[0]===1?x[2]:x[1]}`).join("<br>"):"Todo al día"}</div></div>`}
-function refrescar(){syncIns();try{pintarInicio()}catch(e){}$("vacio").hidden=true;if(cur==="fichas"||(cur==="rec"&&draft))return;({mat:drawSel,ava:drawAva,res:drawRes,rec:drawRec,adm:drawAdm})[cur]?.()}
+/* grilla de etapamiento para la planilla en vivo del Drive (la pinta Apps Script) */
+function vistaEtapas(){const T={},O=[],avD=d=>Object.keys(S.avisos||{}).some(k=>k.split("|")[0]===d),qD=d=>Object.values(REC).some(r=>r.cal&&r.depto===d);
+  DEPTOS.forEach(d=>{const e=estD(d.id),k=(S.etapa[d.id]??-1)+1;let o=0;
+    if(k<=4){const rv=revs(d.id,k),l=rv[rv.length-1];if(l&&!l.ext){const rI=revIdOf(l);(l.items||[]).forEach(it=>{if(levAcept(rI,it.id))return;o++;const x=LEV[levId(rI,it.id)]||{};
+      O.push([d.t,d.id.slice(1),"E"+k,l.rev,it.recinto||"",it.partida||"",it.texto||"",l.fecha||l.f||"",x.estado==="enviada"?"Foto enviada, por revisar":x.estado==="rechazada"?"Foto rechazada":"Pendiente",it.foto||""])})}}
+    const t=T[d.t]||(T[d.t]={ed:d.ed,d:[]});t.d.push([d.id.slice(1),d.piso,e,o,avD(d.id)?1:0,qD(d.id)?1:0,pendNR(d.id)])});
+  return{t:T,o:O,ley:EST.map(k=>[k,ENOM[k],ECOL[k],ETXT[k]])}}
+let vistaT=null;function publicarVista(){if(!db||!window.TEPI)return;clearTimeout(vistaT);vistaT=setTimeout(()=>{try{const V=vistaEtapas(),j=JSON.stringify(V);let h=0;for(let i=0;i<j.length;i++)h=(h*31+j.charCodeAt(i))|0;
+  let ya=null;try{ya=localStorage.getItem("tepiVista")}catch(e){}if(String(h)===ya)return;
+  db.collection("vista").doc("etapas").set({h:String(h),act:new Date().toISOString(),...V}).then(()=>{try{localStorage.setItem("tepiVista",String(h))}catch(e){}}).catch(()=>{})}catch(e){}},4000)}
+function refrescar(){syncIns();try{pintarInicio()}catch(e){}publicarVista();$("vacio").hidden=true;if(cur==="fichas"||(cur==="rec"&&draft))return;({mat:drawSel,ava:drawAva,res:drawRes,rec:drawRec,adm:drawAdm})[cur]?.()}
 async function iniciar(){
   try{db=await window.claude?.use?.("db")}catch(e){db=null}
   try{assets=await window.claude?.use?.("assets")}catch(e){assets=null}
