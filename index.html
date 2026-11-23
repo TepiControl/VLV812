@@ -300,7 +300,7 @@ body::before{background:var(--top)}
     </div>
     <button class="admlink" data-go="adm" id="btnAdm" hidden>Administración ⚙</button>
     <div class="cap2" id="quien" style="text-align:center"></div>
-    <div class="cap2" id="verApp" style="opacity:.7;text-align:center">Tepi Control VLV · versión V2 (instalable, base V1.27) · 23 nov 2026</div>
+    <div class="cap2" id="verApp" style="opacity:.7;text-align:center">Tepi Control VLV · versión V2 (instalable, base V1.28) · 23 nov 2026</div>
   </section>
 
   <!-- MATERIALES: selección -->
@@ -419,6 +419,8 @@ body::before{background:var(--top)}
     <div class="card" id="admNot"></div>
     <h2>Causas de reproceso de materiales</h2>
     <div class="card" id="admCRP"></div>
+    <h2>Torres liberadas para etapamiento</h2>
+    <div class="card" id="admLib"></div>
     <h2>Avance en bloque</h2>
     <div class="card" id="admAvB"></div>
     <h2>Bitácora de cambios</h2>
@@ -768,7 +770,14 @@ function vistaEtapas(){const T={},O=[],avD=d=>Object.keys(S.avisos||{}).some(k=>
   DEPTOS.forEach(d=>{const e=estD(d.id),k=(S.etapa[d.id]??-1)+1;let o=0;
     if(k<=4){const rv=revs(d.id,k),l=rv[rv.length-1];if(l&&!l.ext){const rI=revIdOf(l);(l.items||[]).forEach(it=>{if(levAcept(rI,it.id))return;o++;const x=LEV[levId(rI,it.id)]||{};
       O.push([d.t,d.id.slice(1),"E"+k,l.rev,it.recinto||"",it.partida||"",it.texto||"",l.fecha||l.f||"",x.estado==="enviada"?"Foto enviada, por revisar":x.estado==="rechazada"?"Foto rechazada":"Pendiente",it.foto||""])})}}
-    const t=T[d.t]||(T[d.t]={ed:d.ed,d:[]});t.d.push([d.id.slice(1),d.piso,e,o,avD(d.id)?1:0,qD(d.id)?1:0,pendNR(d.id)])});
+    const t=T[d.t]||(T[d.t]={ed:d.ed,d:[]}),nt=[];
+    const av=Object.entries(S.avisos||{}).filter(([k])=>k.split("|")[0]===d.id);
+    av.forEach(([k,x])=>{const p=k.split("|");nt.push("🔔 Listo para revisar"+(p[2]?" (calidad EC)":"")+" · etapa "+p[1]+(x.por?" · avisó "+x.por:"")+(x.f?" · "+fCL(x.f):"")+(x.n?"\n   "+x.n:""))});
+    const mias=O.filter(r=>r[0]===d.t&&r[1]===d.id.slice(1));
+    if(mias.length)nt.push("Observaciones pendientes ("+mias.length+"):\n"+mias.map((r,i)=>(i+1)+". "+[r[5],r[4]].filter(Boolean).join(" · ")+": "+r[6]+(r[8]!=="Pendiente"?" ["+r[8]+"]":"")).join("\n"));
+    if(qD(d.id))nt.push("🔍 Tiene revisión de calidad EC");
+    const pn=pendNR(d.id);if(pn)nt.push("○ "+pn+" pendiente"+(pn>1?"s":"")+" no restrictivo"+(pn>1?"s":""));
+    t.d.push([d.id.slice(1),d.piso,e,o,av.length?1:0,qD(d.id)?1:0,pn,nt.length?"Depto "+d.id.slice(1)+" T"+d.t+" · "+ENOM[e]+"\n\n"+nt.join("\n\n"):""])});
   return{t:T,o:O,ley:EST.map(k=>[k,ENOM[k],ECOL[k],ETXT[k]])}}
 let vistaT=null;function publicarVista(){if(!db||!window.TEPI)return;clearTimeout(vistaT);vistaT=setTimeout(()=>{try{const V=vistaEtapas(),j=JSON.stringify(V);let h=0;for(let i=0;i<j.length;i++)h=(h*31+j.charCodeAt(i))|0;
   if(String(h)===publicarVista.h)return;publicarVista.h=String(h);
@@ -1629,9 +1638,10 @@ const sinUrl=o=>Array.isArray(o)?o.map(sinUrl):o&&typeof o==="object"&&!(o insta
 const conUrl=o=>{if(Array.isArray(o))o.forEach(conUrl);else if(o&&typeof o==="object"&&!(o instanceof Blob)){if(o.blob instanceof Blob)o.url=URL.createObjectURL(o.blob);Object.values(o).forEach(conUrl)}return o};
 let bT=null;function guardarBorrador(){if(!draft||!recD)return;const D=draft,k=bKey(recD,recK,D.n),d=recD,e=recK;clearTimeout(bT);bT=setTimeout(()=>{IDB.set(k,{t:new Date().toISOString(),d,k:e,D:sinUrl(D)});const m=$("recBorr");if(m)m.textContent="Borrador guardado en este equipo "+new Date().toLocaleTimeString("es-CL",{hour:"2-digit",minute:"2-digit"})},500)}
 const nGrupos=D=>(D.grupos||[]).filter(g=>g.estado).length+(D.prev||[]).filter(x=>x.estado).length+(D.nuevas||[]).length;
-const EST=["E0","E1","E2","E3","E4","RF"],ECOL={E0:"#eee5cf",E1:"#f0c860",E2:"#b8d35f",E3:"#6fb766",E4:"#3d8f57",RF:"#1e5c3a"},ETXT={E0:"#3b3524",E1:"#3d2e08",E2:"#2b3a0c",E3:"#11300f",E4:"#ffffff",RF:"#ffffff"};
-const ENOM={E0:"En etapa 0",E1:"En etapa 1",E2:"En etapa 2",E3:"En etapa 3",E4:"En etapa 4",RF:"RF, recepción final"};
-const estD=d=>{const e=S.etapa[d]??-1;return e>=4?"RF":"E"+(e+1)};
+const EST=["OG","E0","E1","E2","E3","E4","RF"],ECOL={OG:"#c9cdd0",E0:"#eee5cf",E1:"#f0c860",E2:"#b8d35f",E3:"#6fb766",E4:"#3d8f57",RF:"#1e5c3a"},ETXT={OG:"#2f3437",E0:"#3b3524",E1:"#3d2e08",E2:"#2b3a0c",E3:"#11300f",E4:"#ffffff",RF:"#ffffff"};
+const ENOM={OG:"OG, obra gruesa (torre sin liberar)",E0:"En etapa 0",E1:"En etapa 1",E2:"En etapa 2",E3:"En etapa 3",E4:"En etapa 4",RF:"RF, recepción final"};
+const torreLib=t=>{const L=ADM.lib&&ADM.lib.torres;return!Array.isArray(L)||L.includes(String(t))};
+const estD=d=>{const e=S.etapa[d]??-1;return e>=4?"RF":e<0&&!torreLib(d[0])?"OG":"E"+(e+1)};
 function pendD(d){const k=(S.etapa[d]??-1)+1;if(k>4)return 0;const rv=revs(d,k),l=rv[rv.length-1];return pendCount(l)}
 let rcT="todo",rcE="todas";
 function drawEdif(){
@@ -2003,9 +2013,13 @@ function drawCRP(){const box=$("admCRP");if(!box)return;const L=S.cRP||[];
     <div class="fila" style="gap:8px;margin-top:8px"><input class="txt" id="crpN" placeholder="Filtración" style="flex:1"><button class="small" id="crpA">Agregar</button></div><div class="err" id="crpE" style="text-align:left"></div>`;
   box.querySelectorAll("[data-qr]").forEach(b=>b.onclick=()=>{const c=L[+b.dataset.qr];S.cRP=L.filter((x,i)=>i!==+b.dataset.qr);persist();registrar("Materiales","Se quitó la causa de reproceso: "+c,null);drawCRP()});
   $("crpA").onclick=()=>{const t=$("crpN").value.trim();if(!t){$("crpE").textContent="Escribe la causa";return}if(L.some(x=>x.toLowerCase()===t.toLowerCase())){$("crpE").textContent="Esa causa ya está";return}S.cRP=[...L,t];persist();registrar("Materiales","Nueva causa de reproceso: "+t,null);drawCRP()}}
+function drawLib(){const box=$("admLib");if(!box)return;const L=ADM.lib&&Array.isArray(ADM.lib.torres)?ADM.lib.torres:null;
+  box.innerHTML=`<div class="cap2">Las torres sin marcar se muestran como <b>OG</b> (obra gruesa) en la grilla de Recepción, en el resumen y en la planilla del Drive, hasta que se liberen para hacer E0.</div><div class="chips" id="libCh" style="margin-top:8px"></div><div class="err" id="libMsg"></div>`;
+  chips($("libCh"),TORRES.map(t=>({id:t,label:"T"+t})),it=>!L||L.includes(it.id),async it=>{const cur=L?L.slice():TORRES.slice(),on=cur.includes(it.id),nv=on?cur.filter(x=>x!==it.id):cur.concat([it.id]).sort();
+    try{await guardarAdm("lib",{torres:nv});await registrar("Administración",(on?"Torre "+it.id+" vuelve a OG (sin liberar)":"Torre "+it.id+" liberada para etapamiento"),null);drawLib();refrescar()}catch(e){$("libMsg").textContent="No se pudo guardar."}})}
 function drawAdm(){
   if(ME.rol!=="ADM")return;
-  drawPerf();drawBit();drawCausasAdm();drawNot();drawCRP();drawAvB();drawFicAdm();drawFicCarga();if(document.activeElement!==$("admRecT"))$("admRecT").value=recList().join("\n");["prog","oc","vales"].forEach(k=>{$("del-"+k).hidden=!ADM[k]});
+  drawPerf();drawLib();drawBit();drawCausasAdm();drawNot();drawCRP();drawAvB();drawFicAdm();drawFicCarga();if(document.activeElement!==$("admRecT"))$("admRecT").value=recList().join("\n");["prog","oc","vales"].forEach(k=>{$("del-"+k).hidden=!ADM[k]});
   if(!$("admUf").value&&ADM.conf.uf)$("admUf").value=ufV().toLocaleString("es-CL");
   $("admPrInfo").textContent=ADM.prog?"Programa cargado: "+ADM.prog.archivo+" · el "+fCL(ADM.prog.fecha)+" · "+ADM.prog.partidas.length+" partidas":"La app usa el programa del 30/10 (Programacion Terminaciones, Control diario torres). Sube el Excel para actualizarlo o para importar lo registrado en las hojas de control.";drawRitmos();
   const O=ADM.oc,V=ADM.vales;
