@@ -300,7 +300,7 @@ body::before{background:var(--top)}
     </div>
     <button class="admlink" data-go="adm" id="btnAdm" hidden>Administración ⚙</button>
     <div class="cap2" id="quien" style="text-align:center"></div>
-    <div class="cap2" id="verApp" style="opacity:.7;text-align:center">Tepi Control VLV · versión V2 (instalable, base V1.29) · 23 nov 2026</div>
+    <div class="cap2" id="verApp" style="opacity:.7;text-align:center">Tepi Control VLV · versión V2 (instalable, base V1.30) · 23 nov 2026</div>
   </section>
 
   <!-- MATERIALES: selección -->
@@ -604,11 +604,12 @@ window.addEventListener("error",function(e){ver((e.message||"Error")+(e.lineno?"
     try{while(COLA.length){const o=COLA[0];let r=null;
       try{if(o.op==="foto")r=await run("subirFoto",SES.token,o.b64,o.tipo);
         else if(o.op==="doc")r=await run("guardarArchivo",SES.token,o.n,o.b64,o.tipo,o.carpeta||"");
+        else if(o.op==="borrarDoc")r=await run("borrarArchivo",SES.token,o.n,o.carpeta||"");
         else{try{r=await run("escribir",SES.token,o.op,o.p,conIds(o.d))}catch(e){if(e.code==="invalid_argument"&&o.op==="update"&&DOCS[o.p])r=await run("escribir",SES.token,"set",o.p,conIds(clon(DOCS[o.p].d)));else throw e}}}
       catch(e){if(e.code==="unavailable"||e.code==="sesion"){sinSenal=e.code==="unavailable";break}r={__fallo:e.message}}
       COLA.shift();
       if(r&&r.__fallo)toast("No se guardó un cambio: "+r.__fallo);
-      else if(o.op==="doc"){}
+      else if(o.op==="doc"||o.op==="borrarDoc"){}
       else if(o.op==="foto"){MAPA[o.id]=r.id;FC[r.id]=FC[o.id];await IDB.put("mapa",MAPA)}
       else if(!pendiente(o.p)){if(r.exists)DOCS[o.p]={v:r.v,d:r.d};else delete DOCS[o.p];guardarCache()}
       sinSenal=false;await guardarCola();pintar()}}
@@ -654,13 +655,14 @@ window.addEventListener("error",function(e){ver((e.message||"Error")+(e.lineno?"
 
   async function guardarDoc(nombre,data,carpeta){const tipo="application/pdf",blob=data instanceof Blob?data:new Blob([data],{type:tipo});
     COLA.push({op:"doc",n:nombre,b64:await b64(blob),tipo,carpeta:carpeta||""});await guardarCola();pintar();enviar()}
+  async function borrarDoc(nombre,carpeta){COLA.push({op:"borrarDoc",n:nombre,carpeta:carpeta||""});await guardarCola();pintar();enviar()}
   /* ---- usuario ---- */
   const user={me:async()=>({id:SES.yo.rut,name:SES.yo.nombre,isOwner:SES.yo.perfil==="ADM"}),id:async()=>SES.yo.rut,
     isOwner:()=>!!SES&&SES.yo.perfil==="ADM",canEdit:()=>!!SES&&SES.yo.perfil==="ADM",
     profiles:async ids=>{const o={};ids.forEach(i=>o[i]={id:i,name:(window.TEPI.gente||{})[i]||""});return o},search:async()=>[]};
 
   const fileUrl=id=>{if(MAPA[id])id=MAPA[id];return/^tmp/.test(id)?(FC[id]||""):"https://drive.google.com/file/d/"+encodeURIComponent(id)+"/view"};
-  window.TEPI={perfil:null,yo:null,gente:{},fotoUrl,fileUrl,fotoData,salir,estado,guardarDoc,pendientes:()=>COLA.length,v2:true};
+  window.TEPI={perfil:null,yo:null,gente:{},fotoUrl,fileUrl,fotoData,salir,estado,guardarDoc,borrarDoc,pendientes:()=>COLA.length,v2:true};
   let promptInst=null;
   function botonInstalar(){const h=document.querySelector("header.top");if(!h||$("tpInst"))return;const st=window.matchMedia&&matchMedia("(display-mode: standalone)").matches||navigator.standalone;if(st)return;
     const b=document.createElement("button");b.id="tpInst";b.textContent="Instalar app";b.style.cssText="margin-left:8px;font-size:13px;background:#f6c7a8;color:#8a4a2c;border:0;border-radius:8px;padding:5px 10px;font-weight:600";
@@ -1793,7 +1795,8 @@ function drawRecExt(l){const X=$("recExt");if(!X)return;if(!puede("revision")||d
       await guardarRec(id,doc);await registrar("Revisiones",dNom(recD)+" etapa "+recK+": se subió la revisión "+n+" hecha antes de la app ("+A.length+(A.length===1?" archivo)":" archivos)"),{k:"rev",id});
       syncObsAv(recD,recK);recAviso="Respaldo guardado como revisión "+n+"."+((S.etapa[recD]??-1)>=recK?"":" Ya puedes aprobar la etapa.");drawRec()}
     catch(x){b.disabled=false;b.textContent="Guardar respaldo";er(x&&x.code==="tipo"?"En esta vista solo se pueden subir PDF y fotos. Guarda el Word como PDF, o súbelo desde la app V1.":"No se pudieron subir los archivos. Revisa la conexión e intenta de nuevo.")}}}
-async function borrarRec(id){if(db)await db.collection("recepciones").doc(id).delete();delete REC[id];if(!db)try{localStorage.setItem(RKEY,JSON.stringify(REC))}catch(e){}syncId(id)}
+const borrarPdf=(nm,d)=>{try{if(window.TEPI&&window.TEPI.borrarDoc)window.TEPI.borrarDoc(nm,carpD(d))}catch(e){}};
+async function borrarRec(id){{const r=REC[id];if(r&&!r.ext)borrarPdf(nomPdf(r.depto,r.etapa,(r.cal?"Revisión de calidad ":"Revisión ")+r.rev,r.fecha),r.depto)}if(db)await db.collection("recepciones").doc(id).delete();delete REC[id];if(!db)try{localStorage.setItem(RKEY,JSON.stringify(REC))}catch(e){}syncId(id)}
 
 /* ---------- PDF del listado de observaciones ---------- */
 async function imgData(id,data){if(data)return data;if(!id)return null;if(window.TEPI)return await TEPI.fotoData(id);try{const r=await fetch("/_blob/"+id);if(!r.ok)return null;return await aDataURL(await r.blob())}catch(e){return null}}
@@ -2122,7 +2125,7 @@ async function drawBit(){const box=$("admBit");if(!box)return;
 async function deshacer(id){const e=BIT.find(x=>x.id===id),m=$("bitMsg");if(!e||!e.undo||e.deshecho)return;const u=e.undo;
   try{
     if(u.k==="av"){const T=avT(u.d[0]);T.av[u.d]=T.av[u.d]||{};T.nc[u.d]=T.nc[u.d]||{};if(u.prev.av)T.av[u.d][u.pid]=u.prev.av;else delete T.av[u.d][u.pid];if(u.prev.nc)T.nc[u.d][u.pid]=u.prev.nc;else delete T.nc[u.d][u.pid];if("hc" in u.prev){T.hc=T.hc||{};T.hc[u.d]=T.hc[u.d]||{};if(u.prev.hc)T.hc[u.d][u.pid]=u.prev.hc;else delete T.hc[u.d][u.pid]}persistAv(u.d[0])}
-    else if(u.k==="etapa"){if(u.prev.e==null)delete S.etapa[u.d];else S.etapa[u.d]=u.prev.e;if(u.prev.F)S.etapaF[u.d]=u.prev.F;else delete S.etapaF[u.d];if("P" in u.prev){if(u.prev.P)S.ePend[u.d]=u.prev.P;else delete S.ePend[u.d]}persist();ETAPAS.forEach(k=>syncObsAv(u.d,k))}
+    else if(u.k==="etapa"){{const cur=S.etapa[u.d]??-1,ant=u.prev.e??-1,F=S.etapaF[u.d]||{};for(let k=ant+1;k<=cur;k++)borrarPdf(nomPdf(u.d,k,"Acta de cierre",F[k]||hoy()),u.d)}if(u.prev.e==null)delete S.etapa[u.d];else S.etapa[u.d]=u.prev.e;if(u.prev.F)S.etapaF[u.d]=u.prev.F;else delete S.etapaF[u.d];if("P" in u.prev){if(u.prev.P)S.ePend[u.d]=u.prev.P;else delete S.ePend[u.d]}persist();ETAPAS.forEach(k=>syncObsAv(u.d,k))}
     else if(u.k==="rev"){const r=REC[u.id];if(r){const rv=revs(r.depto,r.etapa,r.cal);if(rv[rv.length-1].rev!==r.rev)throw{msg:"Primero deshaz las revisiones posteriores de ese depto y etapa."};
       if((S.etapa[r.depto]??-1)>=r.etapa)throw{msg:"Esa etapa ya fue aprobada: deshaz primero la aprobación."}}await borrarRec(u.id)}
     else if(u.k==="reg"){if(u.prev)S.reg[u.key]=u.prev;else delete S.reg[u.key];persist()}
