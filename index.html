@@ -300,7 +300,7 @@ body::before{background:var(--top)}
     </div>
     <button class="admlink" data-go="adm" id="btnAdm" hidden>Administración ⚙</button>
     <div class="cap2" id="quien" style="text-align:center"></div>
-    <div class="cap2" id="verApp" style="opacity:.7;text-align:center">Tepi Control VLV · versión V2 (instalable, base V1.28) · 23 nov 2026</div>
+    <div class="cap2" id="verApp" style="opacity:.7;text-align:center">Tepi Control VLV · versión V2 (instalable, base V1.29) · 23 nov 2026</div>
   </section>
 
   <!-- MATERIALES: selección -->
@@ -603,10 +603,12 @@ window.addEventListener("error",function(e){ver((e.message||"Error")+(e.lineno?"
   async function enviar(){if(enviando||!SES||!COLA.length)return;enviando=true;
     try{while(COLA.length){const o=COLA[0];let r=null;
       try{if(o.op==="foto")r=await run("subirFoto",SES.token,o.b64,o.tipo);
+        else if(o.op==="doc")r=await run("guardarArchivo",SES.token,o.n,o.b64,o.tipo,o.carpeta||"");
         else{try{r=await run("escribir",SES.token,o.op,o.p,conIds(o.d))}catch(e){if(e.code==="invalid_argument"&&o.op==="update"&&DOCS[o.p])r=await run("escribir",SES.token,"set",o.p,conIds(clon(DOCS[o.p].d)));else throw e}}}
       catch(e){if(e.code==="unavailable"||e.code==="sesion"){sinSenal=e.code==="unavailable";break}r={__fallo:e.message}}
       COLA.shift();
       if(r&&r.__fallo)toast("No se guardó un cambio: "+r.__fallo);
+      else if(o.op==="doc"){}
       else if(o.op==="foto"){MAPA[o.id]=r.id;FC[r.id]=FC[o.id];await IDB.put("mapa",MAPA)}
       else if(!pendiente(o.p)){if(r.exists)DOCS[o.p]={v:r.v,d:r.d};else delete DOCS[o.p];guardarCache()}
       sinSenal=false;await guardarCola();pintar()}}
@@ -637,26 +639,28 @@ window.addEventListener("error",function(e){ver((e.message||"Error")+(e.lineno?"
 
   /* ---- descargas ---- */
   function toast(txt,accion){$("tpTt").textContent=txt;const a=$("tpTa");a.innerHTML="";if(accion)a.appendChild(accion);$("tpToast").hidden=false;clearTimeout(toast.t);toast.t=setTimeout(()=>$("tpToast").hidden=true,15000)}
-  const downloads={save:async({filename,data})=>{
+  const downloads={save:async({filename,data,carpeta})=>{
     const tipo=/\.pdf$/i.test(filename)?"application/pdf":/\.xlsx$/i.test(filename)?"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet":/\.csv$/i.test(filename)?"text/csv":"application/octet-stream";
     const blob=data instanceof Blob?data:new Blob([data],{type:tipo});
     const movil=/android|iphone|ipad/i.test(navigator.userAgent);
     if(!movil)try{const u=URL.createObjectURL(blob),a=document.createElement("a");a.href=u;a.download=filename;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),60000)}catch(e){}
     toast("Guardando "+filename+" en Drive…");
-    const subir=async()=>{try{const r=await run("guardarArchivo",SES.token,filename,await b64(blob),tipo),m=/id=([\w-]+)/.exec(r.url||""),vu=m?"https://drive.google.com/file/d/"+m[1]+"/view":r.url;const l=document.createElement("a");l.href=vu;l.target="_blank";l.rel="noopener";l.textContent="Abrir";l.style.cssText="font-weight:700;color:#f6c7a8";
+    const subir=async()=>{try{const r=await run("guardarArchivo",SES.token,filename,await b64(blob),tipo,carpeta||""),m=/id=([\w-]+)/.exec(r.url||""),vu=m?"https://drive.google.com/file/d/"+m[1]+"/view":r.url;const l=document.createElement("a");l.href=vu;l.target="_blank";l.rel="noopener";l.textContent="Abrir";l.style.cssText="font-weight:700;color:#f6c7a8";
         toast("Guardado en Drive: "+filename,l);if(movil)try{window.open(vu,"_blank","noopener")}catch(e){}}
       catch(e){const bt=document.createElement("button");bt.textContent="Intentar de nuevo";bt.onclick=subir;
         if(movil){try{const u=URL.createObjectURL(blob),a=document.createElement("a");a.href=u;a.download=filename;document.body.appendChild(a);a.click();a.remove()}catch(x){}}
         toast("Sin señal: no se pudo guardar en Drive. "+(movil?"Se intentó descargar al celular.":""),bt)}};
     subir()}};
 
+  async function guardarDoc(nombre,data,carpeta){const tipo="application/pdf",blob=data instanceof Blob?data:new Blob([data],{type:tipo});
+    COLA.push({op:"doc",n:nombre,b64:await b64(blob),tipo,carpeta:carpeta||""});await guardarCola();pintar();enviar()}
   /* ---- usuario ---- */
   const user={me:async()=>({id:SES.yo.rut,name:SES.yo.nombre,isOwner:SES.yo.perfil==="ADM"}),id:async()=>SES.yo.rut,
     isOwner:()=>!!SES&&SES.yo.perfil==="ADM",canEdit:()=>!!SES&&SES.yo.perfil==="ADM",
     profiles:async ids=>{const o={};ids.forEach(i=>o[i]={id:i,name:(window.TEPI.gente||{})[i]||""});return o},search:async()=>[]};
 
   const fileUrl=id=>{if(MAPA[id])id=MAPA[id];return/^tmp/.test(id)?(FC[id]||""):"https://drive.google.com/file/d/"+encodeURIComponent(id)+"/view"};
-  window.TEPI={perfil:null,yo:null,gente:{},fotoUrl,fileUrl,fotoData,salir,estado,pendientes:()=>COLA.length,v2:true};
+  window.TEPI={perfil:null,yo:null,gente:{},fotoUrl,fileUrl,fotoData,salir,estado,guardarDoc,pendientes:()=>COLA.length,v2:true};
   let promptInst=null;
   function botonInstalar(){const h=document.querySelector("header.top");if(!h||$("tpInst"))return;const st=window.matchMedia&&matchMedia("(display-mode: standalone)").matches||navigator.standalone;if(st)return;
     const b=document.createElement("button");b.id="tpInst";b.textContent="Instalar app";b.style.cssText="margin-left:8px;font-size:13px;background:#f6c7a8;color:#8a4a2c;border:0;border-radius:8px;padding:5px 10px;font-weight:600";
@@ -1666,7 +1670,7 @@ function drawForm(l){const box=$("recForm");box.innerHTML="";const rb=$("recBtns
   if(!draft){const n=l?l.rev+1:1,wrap=document.createElement("div");wrap.style.cssText="display:flex;flex-direction:column;gap:10px";
     if(!(recQ?puede("calidad"):puede("revision"))){box.innerHTML='<div class="note">'+(recQ?"La revisión de calidad la hacen el administrador y el EC (10% de recepción por etapa).":"Crear revisiones y aprobar etapas: administrador y EC (10% de recepción por etapa).")+(puede("avisar")?" Tu perfil puede ver revisiones, subir fotos de levantamientos y avisar deptos listos para revisar.":" Tu perfil puede ver revisiones.")+'</div>';return}
     if(l&&!pendCount(l)){const ap=document.createElement("button");ap.className="go";ap.textContent=recQ?"Cerrar etapa "+recK+" para calidad":"Aprobar etapa "+recK;
-      ap.onclick=async()=>{if(recQ){marcarCal(recD,recK);recAviso=dNom(recD)+": etapa "+recK+" cerrada para calidad."}else{marcarEtapa(recD,recK);syncObsAv(recD,recK);recAviso=dNom(recD)+": etapa "+recK+" aprobada."}if(S.avisos[avisoK(recD,recK)]){delete S.avisos[avisoK(recD,recK)];S.avisos={...S.avisos};persist()}drawRec()};wrap.appendChild(ap)}
+      ap.onclick=async()=>{if(recQ){marcarCal(recD,recK);recAviso=dNom(recD)+": etapa "+recK+" cerrada para calidad."}else{marcarEtapa(recD,recK);syncObsAv(recD,recK);{const d0=recD,k0=recK;autoPdf(()=>pdfActa(d0,k0,true))}recAviso=dNom(recD)+": etapa "+recK+" aprobada."}if(S.avisos[avisoK(recD,recK)]){delete S.avisos[avisoK(recD,recK)];S.avisos={...S.avisos};persist()}drawRec()};wrap.appendChild(ap)}
     else{if(l&&pendCount(l)&&puede("aprobar")&&!recQ){const pc=document.createElement("details");pc.className="acc";const rI=revIdOf(l),its=l.items.filter(it=>!levAcept(rI,it.id));let tipo="";
         pc.innerHTML=`<summary><span class="axn">Cerrar la etapa con pendientes no restrictivos</span><span class="axc">${its.length} pendientes</span></summary><div class="axl" style="gap:8px">
           <div class="cap2">Para cuando lo que falta no impide pasar a la etapa siguiente y no depende de la cuadrilla. Los pendientes quedan anotados en el depto hasta que se resuelvan.</div>
@@ -1677,7 +1681,7 @@ function drawForm(l){const box=$("recForm");box.innerHTML="";const rb=$("recBtns
         pc.querySelectorAll(".pnT [data-k]").forEach(b=>b.onclick=()=>{tipo=tipo===b.dataset.k?"":b.dataset.k;pc.querySelectorAll(".pnT .chip").forEach(x=>x.classList.toggle("on",x.dataset.k===tipo));pc.querySelector(".pnN").placeholder=tipo?"Nota opcional":"Escribe por qué quedan pendientes"});
         pc.querySelector(".pnOk").onclick=()=>{const nota=pc.querySelector(".pnN").value.trim();if(!tipo&&!nota){pc.querySelector(".pnE").textContent="Elige un motivo o escribe en la nota por qué quedan pendientes";return}
           const d=recD,k=recK;S.ePend[d]=S.ePend[d]||{};S.ePend[d][k]={tipo,nota,f:hoy(),rev:rI,items:its.map(it=>({id:it.id,partida:it.partida,recinto:it.recinto||"",texto:it.texto,res:null}))};
-          marcarEtapa(d,k," con "+its.length+" pendientes no restrictivos ("+[tipo,nota].filter(Boolean).join(": ")+")");syncObsAv(d,k);recAviso=dNom(d)+": etapa "+k+" cerrada con "+its.length+" pendientes no restrictivos.";draft=null;drawRec()};
+          marcarEtapa(d,k," con "+its.length+" pendientes no restrictivos ("+[tipo,nota].filter(Boolean).join(": ")+")");syncObsAv(d,k);autoPdf(()=>pdfActa(d,k,true));recAviso=dNom(d)+": etapa "+k+" cerrada con "+its.length+" pendientes no restrictivos.";draft=null;drawRec()};
         wrap.__pc=pc}
       const b=document.createElement("button");b.className="go";b.textContent=(recQ?"Iniciar revisión de calidad ":"Iniciar revisión ")+n+(n===1?"":": levantar estos pendientes");if(recQ)b.style.cssText="background:var(--cal);border-color:var(--cal);color:#fff";
       b.onclick=()=>{draft=n===1?{n,modo:"partida",grupos:mkGrupos("partida")}
@@ -1759,8 +1763,9 @@ async function guardarRevision(l){const D=draft,box=$("recForm"),err=t=>{box.que
     const doc={depto:recD,etapa:recK,rev:D.n,fecha:hoy(),por,modo:D.n===1?D.modo:(l&&l.modo)||"partida",items,levantadas:lev,okPartidas:okP,noAplica:na,...(recQ?{cal:true}:{})};
     const id=revIdOf(doc);if(S.avisos[avisoK(recD,recK)]){delete S.avisos[avisoK(recD,recK)];S.avisos={...S.avisos};persist()}await guardarRec(id,doc);for(const h of habs)await guardarLev(levId(id,h),{rev:id,item:h,d:recD,etapa:recK,hab:true});
     await registrar("Revisiones",dNom(recD)+" etapa "+recK+": revisión "+(recQ?"de calidad ":"")+D.n+" guardada ("+items.length+" pendientes)",{k:"rev",id});
+    autoPdf(()=>pdfRevision(REC[id]||doc,true));
     if(!recQ)syncObsAv(recD,recK);IDB.del(bKey(recD,recK,D.n));draft=null;
-    recAviso="Revisión "+doc.rev+" guardada: "+items.length+" pendientes."+(items.length?" Descarga el PDF desde el historial.":" Ya puedes aprobar la etapa.");drawRec()}
+    recAviso="Revisión "+doc.rev+" guardada: "+items.length+" pendientes."+(items.length?" El PDF se guarda solo en el Drive, en la carpeta del depto.":" Ya puedes aprobar la etapa.");drawRec()}
   catch(x){btn.disabled=false;btn.textContent="Guardar revisión "+D.n;
     err(x&&x.code==="lleno"?"Este dispositivo no tiene espacio para más fotos. Abre la app desde claude.ai para guardarlas en la nube.":x&&x.code==="quota_or_state"?"Se llenó el espacio de fotos de la app.":"No se pudo guardar. Revisa la conexión e intenta de nuevo.")}}
 function drawRecExt(l){const X=$("recExt");if(!X)return;if(!puede("revision")||draft){X.innerHTML="";return}
@@ -1808,7 +1813,9 @@ function historiaEt(d,k){const rv=revs(d,k);if(!rv.length)return null;const r1=r
       const lv=r.rev>o.r0&&(r.levantadas||[]).find(x=>x.texto===o.texto&&x.partida===o.partida&&(x.recinto||"")===(o.recinto||"")&&x.desde===o.desde);if(lv){o.lev={via:lv.via,f:r.fecha,rev:r.rev};break}}});
   const conObs=[...new Set(obs.map(o=>o.partida))],ok=(r1.okPartidas||[]).filter(n=>!conObs.includes(n));
   return{rv,r1,obs,ok,na:r1.noAplica||[],pend:obs.filter(o=>!o.lev).length,apr:(S.etapa[d]??-1)>=k?(S.etapaF[d]||{})[k]:null}}
-async function pdfActa(d,k){const e=$("recMsg")||$("errExp"),H=historiaEt(d,k);if(!H){if(e)e.textContent="Esta etapa no tiene revisiones.";return}
+const carpD=d=>"T"+d[0]+"/"+d.slice(1),nomPdf=(d,k,t,f)=>d.slice(1)+" T"+d[0]+" · E"+k+" · "+t+" · "+(f||hoy())+".pdf";
+const autoPdf=f=>{if(!(window.TEPI&&window.TEPI.guardarDoc))return;setTimeout(()=>{f().catch(x=>console.error("PDF automático",x))},800)};
+async function pdfActa(d,k,auto){const e=auto?null:($("recMsg")||$("errExp")),H=historiaEt(d,k);if(!H){if(e)e.textContent="Esta etapa no tiene revisiones.";return}
   try{if(!window.jspdf)await cargar("https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js")}catch(x){if(e)e.textContent="No se pudo cargar el generador de PDF.";return}
   const doc=new jspdf.jsPDF({unit:"mm",format:"a4"}),INK=[29,35,38],MU=[95,103,107],AC=[31,95,139],RD=[178,58,42],G=[47,125,79],col=c=>doc.setTextColor(...c);
   const cab=()=>{doc.setFont("helvetica","bold");doc.setFontSize(15);col(INK);doc.text("Cierre de etapa "+k,15,17);doc.setFont("helvetica","normal");doc.setFontSize(9.5);col(MU);
@@ -1833,8 +1840,9 @@ async function pdfActa(d,k){const e=$("recMsg")||$("errExp"),H=historiaEt(d,k);i
     if(F.length){y+=3;await dibFotos(doc,F,st)}y+=2}
   y+=4;lin("Este cierre incluye las fotos de cada observación y de su levantamiento. Se arma con los datos guardados en la app y puede descargarse de nuevo cuando quieras.",MU);
   pieRec(doc,MU);
-  await guardar("Cierre etapa "+k+" 812 depto "+d.slice(1)+" T"+d[0]+".pdf",doc.output("arraybuffer"),e)}
-async function pdfRevision(r){const e=$("recMsg")||$("errExp");
+  const nm=nomPdf(d,k,"Acta de cierre",H.apr||hoy());if(auto)return window.TEPI.guardarDoc(nm,doc.output("arraybuffer"),carpD(d));
+  await guardar(nm,doc.output("arraybuffer"),e,carpD(d))}
+async function pdfRevision(r,auto){const e=auto?null:($("recMsg")||$("errExp"));
   try{if(!window.jspdf)await cargar("https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js")}catch(x){if(e)e.textContent="No se pudo cargar el generador de PDF.";return}
   const doc=new jspdf.jsPDF({unit:"mm",format:"a4"}),INK=[29,35,38],MU=[95,103,107],AC=[31,95,139],RD=[178,58,42],G=[47,125,79],col=c=>doc.setTextColor(...c);
   const tit="Recepción etapa "+r.etapa+" · Revisión "+r.rev;
@@ -1870,7 +1878,8 @@ async function pdfRevision(r){const e=$("recMsg")||$("errExp");
       if(y+ls.length*4.2+3+(F.length?50:0)>272)st.nueva();doc.setFontSize(9);col(INK);doc.text(ls,15,y);y+=ls.length*4.2+3;
       if(F.length)await dibFotos(doc,F,st);y+=2}}
   pieRec(doc,MU);
-  await guardar("Observaciones 812 depto "+r.depto.slice(1)+" T"+r.depto[0]+" etapa "+r.etapa+" rev "+r.rev+".pdf",doc.output("arraybuffer"),e)}
+  const nm=nomPdf(r.depto,r.etapa,(r.cal?"Revisión de calidad ":"Revisión ")+r.rev,r.fecha);if(auto)return window.TEPI.guardarDoc(nm,doc.output("arraybuffer"),carpD(r.depto));
+  await guardar(nm,doc.output("arraybuffer"),e,carpD(r.depto))}
 
 /* ---------- administración: OC, guías y vales ---------- */
 let ADM={oc:null,vales:null,prog:null,roles:null,conf:{mapa:{},uf:0}},esAdmin=false;
@@ -2369,9 +2378,9 @@ $("cargarPrueba").onclick=()=>{S=norm(seed());vacio=false;persist();refrescar()}
 function cargar(src){return new Promise((ok,no)=>{const s=document.createElement("script");s.src=src;s.onload=ok;s.onerror=()=>no(new Error("load"));document.head.appendChild(s)})}
 let dl=null;(async()=>{try{dl=await window.claude?.use?.("downloads")}catch(e){dl=null}})();
 const ERR={declined:"Descarga cancelada.",rate_limited:"Ya hay una descarga abierta, espera un momento."};
-async function guardar(filename,data,e=$("errExp")){e.style.color="";e.textContent="";
+async function guardar(filename,data,e=$("errExp"),carpeta){e.style.color="";e.textContent="";
   if(!dl){e.textContent="La descarga no está disponible en esta vista.";return}
-  try{await dl.save({filename,data});e.style.color="var(--good)";e.textContent=window.TEPI?"Se guarda en tu Drive: "+filename+". Mira el aviso de abajo para abrirlo.":"Archivo entregado: "+filename+". Búscalo en Descargas (PC) o en el menú Compartir o Archivos (celular)."}
+  try{await dl.save(window.TEPI?{filename,data,carpeta:carpeta||""}:{filename,data});e.style.color="var(--good)";e.textContent=window.TEPI?"Se guarda en tu Drive: "+filename+". Mira el aviso de abajo para abrirlo.":"Archivo entregado: "+filename+". Búscalo en Descargas (PC) o en el menú Compartir o Archivos (celular)."}
   catch(x){e.textContent=ERR[x&&x.code]||"No se pudo descargar en esta vista."}}
 const fechaHoy=()=>new Date().toLocaleDateString("es-CL");
 const nomArch=ext=>"Informe obra 812 "+hoy()+"."+ext;
