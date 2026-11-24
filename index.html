@@ -325,6 +325,35 @@ body::before{background:var(--top)}
 .eqkan{display:grid;grid-template-columns:repeat(4,minmax(150px,1fr));gap:6px;overflow-x:auto}.eqkan>div{background:var(--bg);border-radius:10px;padding:6px;min-height:80px}
 .eqkc{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:6px 8px;margin-top:6px;font-size:13px}
 .eqdib canvas{width:100%;display:block;background:#fff;border:1px dashed var(--line);border-radius:10px;touch-action:none;cursor:crosshair}
+
+.eqnav button span{position:relative}.eqbad{position:absolute;top:-4px;right:-12px;font-style:normal;background:var(--bad);color:#fff;font-size:10px;font-weight:700;border-radius:9px;padding:0 5px;line-height:16px}
+.eqobra{background:color-mix(in srgb,var(--warn) 8%,transparent);border-radius:10px;padding:8px;border-top:none;margin-top:4px}
+.eqob{font-size:10px;font-weight:800;letter-spacing:.04em;padding:2px 8px;border-radius:8px;background:color-mix(in srgb,var(--warn) 22%,transparent);color:var(--warn);white-space:nowrap;align-self:flex-start}
+.eqbar{height:8px;border-radius:4px;background:var(--bg);overflow:hidden;margin:6px 0}.eqbar div{height:100%;background:var(--good)}
+.eqfold{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px;margin-top:12px}
+.eqfold button{display:flex;flex-direction:column;align-items:flex-start;gap:2px;padding:14px;border:1px solid var(--line);border-radius:14px;background:var(--surface);color:var(--ink);font:inherit;cursor:pointer;text-align:left}
+.eqfold button span{font-size:28px}.eqfold button b{font-size:16px}.eqfold button small{color:var(--muted);font-size:12px}.eqfold .mas{border-style:dashed;color:var(--accent)}
+.eqnew{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:6px;margin-bottom:10px}
+.eqnew button{display:flex;gap:8px;align-items:center;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:var(--surface);color:var(--ink);font:inherit;font-weight:600;cursor:pointer}.eqnew button span{font-size:20px}
+.eqnew button.obra{border-color:var(--warn);background:color-mix(in srgb,var(--warn) 8%,transparent)}
+.eqdoc{display:flex;gap:10px;align-items:center;width:100%;padding:10px 4px;border:none;border-top:1px solid var(--line);background:none;color:var(--ink);font:inherit;cursor:pointer}.eqdi{font-size:24px;width:36px;text-align:center}
+.eqdt{font-size:24px;font-weight:700;font-family:var(--display);outline:none;margin:6px 0 10px;padding:2px 0}
+.eqdocc .eqhoja{border:none;padding:0;min-height:0;background:none}
+.eqnec{display:flex;flex-direction:column;gap:8px}.eqnf{display:flex;flex-direction:column;gap:3px}.eqnf label{font-size:13px;font-weight:700;color:var(--muted)}
+.eqin{border:1px solid var(--line);border-radius:10px;padding:8px 10px;background:var(--bg)}
+.eqent{display:flex;gap:10px;align-items:center;padding:8px;border:1px solid var(--line);border-radius:10px;margin-top:6px}.eqent.ok{background:var(--good-soft)}
+.eqplano{position:relative;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#fff}.eqplano img{display:block;width:100%;height:auto;user-select:none}.eqplano.marcando{cursor:crosshair;outline:3px solid var(--accent)}
+.eqpin{position:absolute;transform:translate(-50%,-100%);width:30px;height:30px;border-radius:50% 50% 50% 0;rotate:-45deg;border:2px solid #fff;background:var(--bad);color:#fff;font:inherit;font-weight:800;font-size:13px;cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,.3)}
+.eqpin{display:grid;place-items:center}.eqpin.ok{background:var(--good)}
+.eqpinr{display:inline-grid;place-items:center;width:18px;height:18px;border-radius:50%;background:var(--bad);color:#fff;font-size:11px}
+.eqcon{padding:10px;border:1px solid var(--line);border-radius:12px;margin-top:8px}.eqcon.cerr{opacity:.65}.eqcon.flash{outline:3px solid var(--accent)}
+.eqresp{margin-top:6px;padding:6px 10px;border-left:3px solid var(--accent);background:var(--bg);border-radius:0 8px 8px 0;font-size:14px}
+.eqcnew{margin-top:10px;padding:10px;border:1px dashed var(--line);border-radius:12px}.eqcnew textarea{width:100%;box-sizing:border-box;resize:vertical}
+.eqimg{max-width:100%;border-radius:10px;display:block}
+.eqat{width:28px;height:28px;border-radius:50%;border:1px solid var(--line);background:var(--surface);color:var(--accent);font:inherit;font-weight:800;cursor:pointer;flex:none}.eqat.on{background:var(--accent);color:#fff}
+.eqatp{display:flex;gap:6px;align-items:center;flex-wrap:wrap;width:100%;padding:6px 0 2px 28px}
+.eqce.obra{background:var(--warn)!important;color:#fff}
+.eqmeta{display:flex;gap:6px;align-items:center;margin-left:auto}
 /* pizarras */
 #v-piz{display:flex;flex-direction:column;gap:10px}
 .pzc{display:flex;align-items:center;gap:12px;width:100%;padding:12px 4px;border:none;border-top:1px solid var(--line);background:none;color:var(--ink);font:inherit;cursor:pointer}
@@ -394,7 +423,7 @@ body::before{background:var(--top)}
     </div>
     <button class="admlink" data-go="adm" id="btnAdm" hidden>Administración ⚙</button>
     <div class="cap2" id="quien" style="text-align:center"></div>
-    <div class="cap2" id="verApp" style="opacity:.7;text-align:center">Tepi Control VLV · versión V2 (instalable, base V1.34) · 24 nov 2026</div>
+    <div class="cap2" id="verApp" style="opacity:.7;text-align:center">Tepi Control VLV · versión V2 (instalable, base V1.35) · 24 nov 2026</div>
   </section>
 
   <!-- MATERIALES: selección -->
@@ -695,7 +724,7 @@ window.addEventListener("error",function(e){ver((e.message||"Error")+(e.lineno?"
   function mezclar(a,b){Object.keys(b).forEach(k=>{const v=b[k];if(v===null)delete a[k];else if(v&&typeof v==="object"&&!Array.isArray(v)&&a[k]&&typeof a[k]==="object"&&!Array.isArray(a[k]))mezclar(a[k],v);else a[k]=clon(v)});return a}
   function aplicarLocal(o){if(o.op==="delete")delete DOCS[o.p];else if(o.op==="update"&&DOCS[o.p])mezclar(DOCS[o.p].d,o.d||{});else DOCS[o.p]={v:(DOCS[o.p]||{}).v||0,d:clon(o.d||{})}}
   function conIds(x){if(x==null)return x;let t=JSON.stringify(x);if(t.indexOf("tmp")<0)return x;Object.keys(MAPA).forEach(a=>{t=t.split(a).join(MAPA[a])});return JSON.parse(t)}
-  function permitido(op,p){const pf=SES.yo.perfil;if(pf==="ADM")return true;if(p.indexOf("admin/")===0)return false;if(op==="delete")return p.indexOf("recepciones/")===0||p.indexOf("levantes/")===0||p.indexOf("pizEl/")===0||p.indexOf("pizarras/")===0||p.indexOf("bloques/")===0||p.indexOf("hojas/")===0||p.indexOf("espacios/")===0;return true}
+  function permitido(op,p){const pf=SES.yo.perfil;if(pf==="ADM")return true;if(p.indexOf("admin/")===0)return false;if(op==="delete")return p.indexOf("recepciones/")===0||p.indexOf("levantes/")===0||p.indexOf("pizEl/")===0||p.indexOf("pizarras/")===0||p.indexOf("bloques/")===0||p.indexOf("hojas/")===0||p.indexOf("espacios/")===0||p.indexOf("consultas/")===0;return true}
   async function enviar(){if(enviando||!SES||!COLA.length)return;enviando=true;
     try{while(COLA.length){const o=COLA[0];let r=null;
       try{if(o.op==="foto")r=await run("subirFoto",SES.token,o.b64,o.tipo);
@@ -2391,105 +2420,209 @@ function pzPintarOn(){const o=$("pzOn");if(o){const a=pzEnLinea("piz:"+pzCur);o.
 setInterval(()=>{if(document.visibilityState==="visible")pzPresencia()},25000);setTimeout(pzPresencia,3000);
 document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible")pzPresencia()});
 
-/* ---------- Equipo: cuaderno compartido (espacios, pestañas, bloques) + Mi trabajo, Pedí yo y Calendario ---------- */
-let EQE={},EQH={},EQB={},eqV="mi",eqEsp=null,eqHoja=null,eqMenu=false,eqCalM="gen",eqSem=0,eqNomC={},eqForm=null,eqMsg="";
+/* ---------- Equipo: Mi trabajo, Solicitudes, Calendario y Documentos por área (como un Drive del equipo) ---------- */
+let EQE={},EQH={},EQB={},EQC={},eqV="mi",eqArea=null,eqHoja=null,eqMenu=false,eqCalM="gen",eqSem=0,eqNomC={},eqMsg="",eqSolV="pedi",eqArch=false,eqEdit=null,eqPin=false,eqNueva=null;
 const EQEST=[["hacer","Por hacer","n"],["curso","En curso","a"],["bloq","Bloqueado","r"],["hecho","Hecho","g"]];
 const EQCOL=["#185FA5","#1D9E75","#D85A30","#7F77DD","#BA7517","#993556","#0F6E56","#A32D2D"];
+const EQAREAS=[["👷","RRHH"],["✅","Calidad"],["📊","Gestión"],["🚚","Logística"],["🦺","Prevención"],["🏗","Terreno"]];
+const EQTIPOS={doc:["📄","Documento"],pla:["▦","Planilla"],plano:["📐","Plano o imagen"],nec:["🏗","Necesidad de la obra"]};
 const eqId=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
 const eqYo=()=>ME.uid||"local";
 function eqSub(){if(!db||eqSub.ok)return;eqSub.ok=1;const R=(c,set)=>db.collection(c).onSnapshot(qs=>{const o={};qs.docs.forEach(d=>o[d.id]=JSON.parse(JSON.stringify(d.data())));set(o);if(cur==="eq")eqRefresh()},()=>{});
-  R("espacios",o=>EQE=o);R("hojas",o=>EQH=o);R("bloques",o=>EQB=o)}
-function eqRefresh(){clearTimeout(eqRefresh.t);eqRefresh.t=setTimeout(()=>{const a=document.activeElement,v=$("v-eq");if(v&&a&&v.contains(a)&&(a.isContentEditable||/INPUT|SELECT|TEXTAREA/.test(a.tagName))){eqRefresh.pend=true;return}drawEq()},60)}
-document.addEventListener("focusout",()=>{if(eqRefresh.pend){eqRefresh.pend=false;setTimeout(()=>{const a=document.activeElement,v=$("v-eq");if(!(v&&a&&v.contains(a)&&(a.isContentEditable||/INPUT|SELECT|TEXTAREA/.test(a.tagName))))drawEq()},80)}});
+  R("espacios",o=>EQE=o);R("hojas",o=>EQH=o);R("bloques",o=>EQB=o);R("consultas",o=>EQC=o)}
+const eqEditando=()=>{const a=document.activeElement,v=$("v-eq");return v&&a&&v.contains(a)&&(a.isContentEditable||/INPUT|SELECT|TEXTAREA/.test(a.tagName))};
+function eqRefresh(){clearTimeout(eqRefresh.t);eqRefresh.t=setTimeout(()=>{if(eqEditando()){eqRefresh.pend=true;return}drawEq()},60)}
+document.addEventListener("focusout",()=>{if(eqRefresh.pend){eqRefresh.pend=false;setTimeout(()=>{if(!eqEditando())drawEq();else eqRefresh.pend=true},80)}});
 async function eqSet(col,id,data,mem){mem[id]=data;if(db)await db.collection(col).doc(id).set(data).catch(()=>{})}
 async function eqDel(col,id,mem){delete mem[id];if(db)await db.collection(col).doc(id).delete().catch(()=>{})}
 // personas: usuarios de la app + nombres escritos a mano ("n:Juan")
 function eqGente(){const G={};const T=window.TEPI&&TEPI.gente;if(T)Object.keys(T).forEach(k=>G[k]=T[k]);
   const L=(ADM.roles&&ADM.roles.lista)||{};Object.keys(L).forEach(k=>{if(!G[k])G[k]=eqNomC[k]||""});G[eqYo()]=ME.nombre||"Yo";
-  Object.values(EQB).forEach(b=>{if(b.a&&/^n:/.test(b.a))G[b.a]=b.a.slice(2)});return G}
+  const add=a=>{if(a&&/^n:/.test(a))G[a]=a.slice(2)};Object.values(EQB).forEach(b=>add(b.a));Object.values(EQC).forEach(c=>add(c.a));Object.values(EQH).forEach(h=>(h.ent||[]).forEach(e=>add(e.a)));return G}
 const eqNom=a=>!a?"":/^n:/.test(a)?a.slice(2):(eqGente()[a]||eqNomC[a]||"Persona");
 const eqIni=a=>eqNom(a).split(/\s+/).map(x=>x[0]||"").join("").slice(0,2).toUpperCase()||"?";
 const eqColor=a=>{let h=0;for(const c of String(a))h=(h*31+c.charCodeAt(0))|0;return EQCOL[Math.abs(h)%EQCOL.length]};
 const eqAv=a=>`<span class="eqav" style="background:${eqColor(a)}" title="${esc(eqNom(a))}">${esc(eqIni(a))}</span>`;
 const eqFd=f=>{if(!f)return"";const d=new Date(f+"T12:00:00");return d.toLocaleDateString("es-CL",{weekday:"short",day:"numeric",month:"short"})};
-function eqEstado(b){if(b.hecho)return["g","Hecha"];if(!b.f)return["n","Sin fecha"];const h=hoy();return b.f<h?["r","Atrasada"]:b.f===h?["a","Vence hoy"]:["n","Pendiente"]}
-const eqTareas=()=>Object.entries(EQB).filter(([k,b])=>b.t==="chk"&&(b.a||b.f)&&(b.txt||"").trim()).map(([k,b])=>({...b,id:k}));
+const eqHace=t=>{const m=Math.round((Date.now()-t)/60000);return m<1?"recién":m<60?"hace "+m+" min":m<1440?"hace "+Math.round(m/60)+" h":new Date(t).toLocaleDateString("es-CL",{day:"numeric",month:"short"})};
+function eqEstado(b){if(b.hecho||b.ok)return["g","Hecha"];if(!b.f)return["n","Sin fecha"];const h=hoy();return b.f<h?["r","Atrasada"]:b.f===h?["a","Vence hoy"]:["n","Pendiente"]}
+const eqTareas=()=>Object.entries(EQB).filter(([k,b])=>b.t==="chk"&&(b.a||b.f)&&(b.txt||"").trim()&&!(EQH[b.h]&&EQH[b.h].arch)).map(([k,b])=>({...b,id:k}));
+const eqHojas=()=>Object.entries(EQH).map(([k,v])=>({...v,id:k}));
+const eqNecs=()=>eqHojas().filter(h=>h.tipo==="nec"&&!h.arch);
+const eqEntregas=()=>eqNecs().flatMap(h=>(h.ent||[]).map((e,i)=>({...e,i,h:h.id,nec:h,f:h.f})));
 const eqHojaN=h=>h&&/^mis:/.test(h)?"Mis listas":((EQH[h]||{}).n||"")+((EQH[h]&&EQE[EQH[h].esp])?" · "+EQE[EQH[h].esp].n:"");
+const eqIr=h=>{if(!h||/^mis:/.test(h)){eqV="mi";drawEq();return}eqHoja=h;eqArea=(EQH[h]||{}).esp||null;eqV="doc";eqMenu=false;eqPin=false;drawEq();try{window.scrollTo({top:0})}catch(e){}};
 function drawEq(){eqSub();const box=$("v-eq");if(!box)return;
   if(!eqNomC.__ok&&window.nombres){eqNomC.__ok=1;const ids=Object.keys((ADM.roles&&ADM.roles.lista)||{});nombres(ids).then(o=>{Object.assign(eqNomC,o);drawEq()}).catch(()=>{})}
-  const V=[["mi","🙋","Mi trabajo"],["esp","📚","Espacios"],["cal","📅","Calendario"],["pedi","📤","Pedí yo"]];
-  box.innerHTML=`<div class="eqnav">${V.map(([k,i,n])=>`<button class="${eqV===k?"on":""}" data-ev="${k}"><span>${i}</span>${n}</button>`).join("")}</div><div id="eqMsg" class="eqmsg"${eqMsg?"":" hidden"}>${esc(eqMsg)}</div><div id="eqBody"></div>`;
-  box.querySelectorAll("[data-ev]").forEach(b=>b.onclick=()=>{eqV=b.dataset.ev;eqMenu=false;drawEq()});
-  ({mi:eqMi,esp:eqEspacios,cal:eqCal,pedi:eqPedi})[eqV]($("eqBody"));if(eqMsg){clearTimeout(drawEq.m);drawEq.m=setTimeout(()=>{eqMsg="";const m=$("eqMsg");if(m)m.hidden=true},3500)}}
-/* ---------- Mi trabajo ---------- */
+  const yo=eqYo(),nMi=eqTareas().filter(b=>b.a===yo&&!b.hecho).length+eqEntregas().filter(e=>e.a===yo&&!e.ok).length+Object.values(EQC).filter(c=>c.a===yo&&!c.cerr).length;
+  const V=[["mi","🙋","Mi trabajo",nMi],["sol","📨","Solicitudes"],["cal","📅","Calendario"],["doc","📁","Documentos"]];
+  box.innerHTML=`<div class="eqnav">${V.map(([k,i,n,c])=>`<button class="${eqV===k?"on":""}" data-ev="${k}"><span>${i}${c?`<i class="eqbad">${c}</i>`:""}</span>${n}</button>`).join("")}</div><div id="eqMsg" class="eqmsg"${eqMsg?"":" hidden"}>${esc(eqMsg)}</div><div id="eqBody"></div>`;
+  box.querySelectorAll("[data-ev]").forEach(b=>b.onclick=()=>{eqV=b.dataset.ev;eqMenu=false;if(eqV==="doc"){eqHoja=null}drawEq()});
+  ({mi:eqMi,sol:eqSol,cal:eqCal,doc:eqDocs})[eqV]($("eqBody"));if(eqMsg){clearTimeout(drawEq.m);drawEq.m=setTimeout(()=>{eqMsg="";const m=$("eqMsg");if(m)m.hidden=true},3500)}}
+/* ---------- filas reutilizables ---------- */
 function eqFila(b,modo){const st=eqEstado(b),otro=modo==="pedi"?b.a:b.de;
   return`<div class="eqrow${b.hecho?" hecho":""}"><input type="checkbox" data-done="${esc(b.id)}"${b.hecho?" checked":""}${modo==="pedi"&&b.a!==eqYo()?" disabled":""}>
-    <div class="t"><b>${esc(b.txt)}</b><div class="cap2">${modo==="pedi"?"Se lo pediste a "+esc(eqNom(b.a)):b.de&&b.de!==eqYo()?"Te lo pidió "+esc(eqNom(b.de)):"Anotado por ti"}${b.f?" · "+esc(eqFd(b.f)):""}${b.h?` · <a class="lnk" data-ir="${esc(b.h)}">${esc(eqHojaN(b.h))}</a>`:""}</div></div>
-    ${otro&&otro!==eqYo()?eqAv(otro):""}<span class="eqpill ${st[0]}">${st[1]}</span>${modo==="pedi"&&!b.hecho?`<button class="small" data-rec="${esc(b.id)}">🔔 Recordar</button>`:""}</div>`}
-function eqWire(el){el.querySelectorAll("[data-done]").forEach(c=>c.onchange=()=>{const b=EQB[c.dataset.done];if(!b)return;const n={...b,hecho:c.checked,fh:c.checked?hoy():""};eqSet("bloques",c.dataset.done,n,EQB);
+    <div class="t"><b>${esc(b.txt)}</b><div class="cap2">${modo==="pedi"?"Se lo pediste a "+esc(eqNom(b.a)):b.de&&b.de!==eqYo()?"Te lo pidió "+esc(eqNom(b.de)):"Anotado por ti"}${b.f?" · "+esc(eqFd(b.f)):""}${b.h&&!/^mis:/.test(b.h)?` · <a class="lnk" data-ir="${esc(b.h)}">${esc(eqHojaN(b.h))}</a>`:""}</div></div>
+    ${otro&&otro!==eqYo()?eqAv(otro):""}<span class="eqpill ${st[0]}">${st[1]}</span>${modo==="pedi"&&!b.hecho?`<button class="small" data-rec="${esc(b.id)}">🔔</button>`:""}</div>`}
+function eqFilaEnt(e,modo){const n=e.nec,st=e.ok?["g","Entregado"]:eqEstado({f:n.f});
+  return`<div class="eqrow eqobra"><span class="eqob">🏗 OBRA</span><div class="t"><b>${esc(n.n||"Necesidad de la obra")}</b>${e.que?`<div>${esc(e.que)}</div>`:""}<div class="cap2">${modo==="pedi"?"Para "+esc(eqNom(e.a)):"Pide "+esc(eqNom(n.por))+((EQE[n.esp]||{}).n?" · "+esc(EQE[n.esp].n):"")}${n.f?" · límite "+esc(eqFd(n.f)):""}${n.sino?" · si no llega: "+esc(n.sino):""} · <a class="lnk" data-ir="${esc(e.h)}">ver</a></div></div>
+    <span class="eqpill ${st[0]}">${st[1]}</span>${modo!=="pedi"&&!e.ok&&e.a===eqYo()?`<button class="small go" data-ent="${esc(e.h)}" data-i="${e.i}" style="width:auto;margin:0;padding:6px 10px">Entregado</button>`:""}</div>`}
+function eqFilaCon(c,modo){const yo=eqYo(),otro=modo==="pedi"?c.a:c.de,ult=(c.resp||[]).slice(-1)[0];
+  return`<div class="eqrow"><span style="font-size:18px">💬</span><div class="t"><b>${esc(c.txt)}</b><div class="cap2">${modo==="pedi"?"Consultaste a "+esc(eqNom(c.a)):esc(eqNom(c.de))+" te consulta"} · ${esc(eqHace(c.f))} · en <a class="lnk" data-ir="${esc(c.h)}">${esc(eqHojaN(c.h))}</a>${ult?` · última respuesta de ${esc(eqNom(ult.de))}`:""}</div></div>${otro?eqAv(otro):""}<span class="eqpill ${c.cerr?"g":(c.resp||[]).length?"a":"n"}">${c.cerr?"Resuelta":(c.resp||[]).length?"Respondida":"Sin respuesta"}</span></div>`}
+function eqWire(el){el.querySelectorAll("[data-done]").forEach(c=>c.onchange=()=>{const b=EQB[c.dataset.done];if(!b)return;eqSet("bloques",c.dataset.done,{...b,hecho:c.checked,fh:c.checked?hoy():""},EQB);
     if(c.checked&&b.de&&b.de!==eqYo())eqMsg="Listo. "+eqNom(b.de)+" verá que lo terminaste.";drawEq()});
-  el.querySelectorAll("[data-ir]").forEach(a=>a.onclick=()=>{const h=a.dataset.ir;if(/^mis:/.test(h)){eqV="mi";drawEq();return}eqHoja=h;eqEsp=(EQH[h]||{}).esp;eqV="esp";drawEq()});
+  el.querySelectorAll("[data-ir]").forEach(a=>a.onclick=()=>eqIr(a.dataset.ir));
+  el.querySelectorAll("[data-ent]").forEach(b=>b.onclick=()=>{const h=EQH[b.dataset.ent];if(!h)return;const E=(h.ent||[]).map(x=>({...x}));E[+b.dataset.i]={...E[+b.dataset.i],ok:true,fok:hoy()};eqSet("hojas",b.dataset.ent,{...h,ent:E,m:Date.now()},EQH);eqMsg="Gracias. "+eqNom(h.por)+" ya sabe que lo entregaste.";drawEq()});
   el.querySelectorAll("[data-rec]").forEach(b=>b.onclick=()=>{const x=EQB[b.dataset.rec];if(!x)return;eqSet("bloques",b.dataset.rec,{...x,rec:(x.rec||0)+1,recF:new Date().toISOString()},EQB);eqMsg="Recordatorio enviado a "+eqNom(x.a)+".";drawEq()})}
+/* ---------- Mi trabajo ---------- */
 function eqMi(el){const yo=eqYo(),T=eqTareas().filter(b=>b.a===yo),abiertas=T.filter(b=>!b.hecho),h=hoy();
+  const nec=eqEntregas().filter(e=>e.a===yo&&!e.ok).sort((a,b)=>(a.f||"9").localeCompare(b.f||"9")),con=Object.entries(EQC).map(([k,c])=>({...c,id:k})).filter(c=>c.a===yo&&!c.cerr).sort((a,b)=>b.f-a.f);
   const urg=abiertas.filter(b=>b.f&&b.f<=h),pid=abiertas.filter(b=>!(b.f&&b.f<=h)&&b.de&&b.de!==yo),mias=abiertas.filter(b=>!(b.f&&b.f<=h)&&(!b.de||b.de===yo)),hechas=T.filter(b=>b.hecho).sort((a,b)=>(b.fh||"").localeCompare(a.fh||"")).slice(0,5);
-  const nom=(ME.nombre||"").trim().split(/\s+/)[0];
-  el.innerHTML=`<div class="card"><div style="font-size:18px;font-weight:600">${nom?"Hola "+esc(nom)+", ":""}tienes ${abiertas.length} pendiente${abiertas.length===1?"":"s"}</div>
+  const nom=(ME.nombre||"").trim().split(/\s+/)[0],tot=abiertas.length+nec.length+con.length;
+  el.innerHTML=`<div class="card"><div style="font-size:18px;font-weight:600">${nom?"Hola "+esc(nom)+", ":""}${tot?"tienes "+tot+" pendiente"+(tot===1?"":"s"):"no tienes pendientes 🎉"}</div>
+    ${nec.length?`<div class="eqgrp" style="color:var(--warn)">🏗 Necesidades de la obra · van primero</div>${nec.map(e=>eqFilaEnt(e)).join("")}`:""}
     ${urg.length?`<div class="eqgrp">⚠ Atrasadas y para hoy</div>${urg.map(b=>eqFila(b)).join("")}`:""}
-    <div class="eqgrp">📥 Me pidieron</div>${pid.length?pid.map(b=>eqFila(b)).join(""):'<div class="cap2" style="padding:6px 0">Nadie te ha pedido nada pendiente.</div>'}
+    ${con.length?`<div class="eqgrp">💬 Consultas para ti</div>${con.map(c=>eqFilaCon(c)).join("")}`:""}
+    ${pid.length?`<div class="eqgrp">📥 Me pidieron</div>${pid.map(b=>eqFila(b)).join("")}`:""}
     <div class="eqgrp">📝 Mis listas</div>${mias.map(b=>eqFila(b)).join("")}
     <div class="eqrow"><input class="txt" id="eqMio" placeholder="Anotar algo para mí…" style="flex:1"><input type="date" class="txt" id="eqMioF" style="width:150px"><button class="small" id="eqMioOk">Anotar</button></div>
     ${hechas.length?`<details style="margin-top:8px"><summary class="cap2" style="cursor:pointer">Terminadas hace poco (${hechas.length})</summary>${hechas.map(b=>eqFila(b)).join("")}</details>`:""}</div>`;
-  eqWire(el);const ok=async()=>{const t=$("eqMio").value.trim();if(!t)return;const id="b"+eqId();await eqSet("bloques",id,{h:"mis:"+yo,t:"chk",txt:t,a:yo,de:yo,f:$("eqMioF").value||"",o:Date.now(),por:yo,m:Date.now()},EQB);drawEq();setTimeout(()=>{const i=$("eqMio");if(i)i.focus()},50)};
+  eqWire(el);const ok=async()=>{const t=$("eqMio").value.trim();if(!t)return;await eqSet("bloques","b"+eqId(),{h:"mis:"+yo,t:"chk",txt:t,a:yo,de:yo,f:$("eqMioF").value||"",o:Date.now(),por:yo,m:Date.now()},EQB);drawEq();setTimeout(()=>{const i=$("eqMio");if(i)i.focus()},50)};
   $("eqMioOk").onclick=ok;$("eqMio").onkeydown=e=>{if(e.key==="Enter")ok()}}
-/* ---------- Pedí yo ---------- */
-function eqPedi(el){const yo=eqYo(),T=eqTareas().filter(b=>b.de===yo&&b.a&&b.a!==yo),ab=T.filter(b=>!b.hecho).sort((a,b)=>(a.f||"9").localeCompare(b.f||"9")),he=T.filter(b=>b.hecho);
-  const porP={};ab.forEach(b=>(porP[b.a]=porP[b.a]||[]).push(b));
-  el.innerHTML=`<div class="card"><div style="font-size:18px;font-weight:600">Lo que pediste</div><div class="cap2">Para pedirle algo a alguien, escribe en cualquier hoja un checklist con su nombre y una fecha.</div>
-    ${Object.keys(porP).length?Object.entries(porP).map(([a,L])=>`<div class="eqgrp">${eqAv(a)} ${esc(eqNom(a))} · ${L.length} pendiente${L.length===1?"":"s"}${L.some(b=>eqEstado(b)[0]==="r")?' <span class="eqpill r">con atrasos</span>':""}</div>${L.map(b=>eqFila(b,"pedi")).join("")}`).join(""):'<div class="cap2" style="padding:10px 0">No tienes pedidos pendientes.</div>'}
-    ${he.length?`<details style="margin-top:8px"><summary class="cap2" style="cursor:pointer">Ya te respondieron (${he.length})</summary>${he.map(b=>eqFila(b,"pedi")).join("")}</details>`:""}</div>`;eqWire(el)}
+/* ---------- Solicitudes: lo que pedí y lo que me pidieron ---------- */
+function eqSol(el){const yo=eqYo(),C=Object.entries(EQC).map(([k,c])=>({...c,id:k}));
+  let h=`<div class="card"><div class="chips" id="eqSv"></div>`;
+  if(eqSolV==="pedi"){const nec=eqNecs().filter(n=>n.por===yo),T=eqTareas().filter(b=>b.de===yo&&b.a&&b.a!==yo&&!b.hecho).sort((a,b)=>(a.f||"9").localeCompare(b.f||"9")),con=C.filter(c=>c.de===yo&&!c.cerr);
+    const porP={};T.forEach(b=>(porP[b.a]=porP[b.a]||[]).push(b));
+    h+=nec.length?`<div class="eqgrp" style="color:var(--warn)">🏗 Necesidades de la obra que pediste</div>${nec.map(n=>{const E=n.ent||[],ok=E.filter(e=>e.ok).length;return`<div class="eqrow eqobra"><span class="eqob">🏗 OBRA</span><div class="t"><b>${esc(n.n)}</b><div class="eqbar"><div style="width:${E.length?ok/E.length*100:0}%"></div></div><div class="cap2">${ok} de ${E.length} entregados${n.f?" · límite "+esc(eqFd(n.f)):""} · <a class="lnk" data-ir="${esc(n.id)}">ver detalle</a></div></div>${E.filter(e=>!e.ok).map(e=>eqAv(e.a)).join("")}</div>`}).join("")}`:"";
+    h+=Object.keys(porP).length?Object.entries(porP).map(([a,L])=>`<div class="eqgrp">${eqAv(a)} ${esc(eqNom(a))} · ${L.length} pendiente${L.length===1?"":"s"}</div>${L.map(b=>eqFila(b,"pedi")).join("")}`).join(""):"";
+    h+=con.length?`<div class="eqgrp">💬 Tus consultas abiertas</div>${con.map(c=>eqFilaCon(c,"pedi")).join("")}`:"";
+    if(!nec.length&&!T.length&&!con.length)h+=`<div class="cap2" style="padding:10px 0">No tienes solicitudes abiertas. Para pedir algo: en cualquier documento escribe un checklist y toca <b>@</b> para elegir a la persona y la fecha, deja una consulta, o crea una <b>Necesidad de la obra</b>.</div>`}
+  else{const T=eqTareas().filter(b=>b.a===yo&&b.de&&b.de!==yo&&!b.hecho),nec=eqEntregas().filter(e=>e.a===yo&&!e.ok),con=C.filter(c=>c.a===yo&&!c.cerr);
+    h+=(nec.length?`<div class="eqgrp" style="color:var(--warn)">🏗 Necesidades de la obra</div>${nec.map(e=>eqFilaEnt(e)).join("")}`:"")+(T.length?`<div class="eqgrp">📥 Tareas</div>${T.map(b=>eqFila(b)).join("")}`:"")+(con.length?`<div class="eqgrp">💬 Consultas</div>${con.map(c=>eqFilaCon(c)).join("")}`:"");
+    if(!T.length&&!nec.length&&!con.length)h+=`<div class="cap2" style="padding:10px 0">Nadie te ha pedido nada pendiente.</div>`}
+  el.innerHTML=h+"</div>";
+  chips($("eqSv"),[{id:"pedi",label:"📤 Lo que pedí"},{id:"me",label:"📥 Lo que me pidieron"}],it=>eqSolV===it.id,it=>{eqSolV=it.id;drawEq()});eqWire(el)}
 /* ---------- Calendario ---------- */
 function eqCal(el){const yo=eqYo(),base=new Date();base.setHours(12,0,0,0);base.setDate(base.getDate()-((base.getDay()+6)%7)+eqSem*7);
   const D=[...Array(7)].map((_,i)=>{const d=new Date(base);d.setDate(base.getDate()+i);return fstr(d)}),h=hoy();
-  const T=eqTareas().filter(b=>b.f&&(eqCalM==="gen"||b.a===yo||b.de===yo));
+  const T=eqTareas().filter(b=>b.f&&(eqCalM==="gen"||b.a===yo||b.de===yo)),N=eqNecs().filter(n=>n.f&&(eqCalM==="gen"||n.por===yo||(n.ent||[]).some(e=>e.a===yo)));
   el.innerHTML=`<div class="card"><div class="fila" style="justify-content:space-between;flex-wrap:wrap;gap:8px"><div class="fila" style="gap:6px"><button class="small" id="eqCa">‹</button><b>Semana del ${esc(eqFd(D[0]))}</b><button class="small" id="eqCs">›</button>${eqSem?`<button class="lnk" id="eqCh">Hoy</button>`:""}</div>
     <div class="chips" id="eqCm"></div></div>
-    <div class="eqcal">${D.map((d,i)=>{const L=T.filter(b=>b.f===d);return`<div class="${d===h?"hoy":""}${i>4?" fin":""}"><div class="eqcd">${esc(eqFd(d))}</div>${L.map(b=>`<button class="eqce${b.hecho?" hecho":""}" data-ir="${esc(b.h||"")}" style="background:${eqColor(b.a||b.de)}">${b.hecho?"✓ ":""}${esc(eqIni(b.a))} · ${esc(b.txt)}</button>`).join("")}</div>`}).join("")}</div>
-    <div class="cap2" style="margin-top:6px">Cada color es una persona. Toca una tarea para ir a la hoja donde se pidió.</div></div>`;
+    <div class="eqcal">${D.map((d,i)=>`<div class="${d===h?"hoy":""}${i>4?" fin":""}"><div class="eqcd">${esc(eqFd(d))}</div>${N.filter(n=>n.f===d).map(n=>`<button class="eqce obra" data-ir="${esc(n.id)}">🏗 ${esc(n.n)}</button>`).join("")}${T.filter(b=>b.f===d).map(b=>`<button class="eqce${b.hecho?" hecho":""}" data-ir="${esc(b.h||"")}" style="background:${eqColor(b.a||b.de)}">${b.hecho?"✓ ":""}${esc(eqIni(b.a))} · ${esc(b.txt)}</button>`).join("")}</div>`).join("")}</div>
+    <div class="cap2" style="margin-top:6px">Cada color es una persona; en amarillo, las necesidades de la obra. Toca una para ir a su documento.</div></div>`;
   chips($("eqCm"),[{id:"gen",label:"General"},{id:"mio",label:"Solo mío"}],it=>eqCalM===it.id,it=>{eqCalM=it.id;drawEq()});
   $("eqCa").onclick=()=>{eqSem--;drawEq()};$("eqCs").onclick=()=>{eqSem++;drawEq()};const ch=$("eqCh");if(ch)ch.onclick=()=>{eqSem=0;drawEq()};eqWire(el)}
-/* ---------- Espacios, pestañas y bloques ---------- */
-const EQICO=["🏗","📋","🧱","🎨","🛒","✅","🦺","📐","🗓","💬"];
-function eqEspacios(el){const E=Object.entries(EQE).map(([k,v])=>({...v,id:k})).sort((a,b)=>(a.f0||0)-(b.f0||0));
-  if(eqEsp&&!EQE[eqEsp])eqEsp=null;if(!eqEsp&&E.length)eqEsp=E[0].id;
-  const H=Object.entries(EQH).map(([k,v])=>({...v,id:k})).filter(h=>h.esp===eqEsp).sort((a,b)=>(a.o||0)-(b.o||0));
-  if(eqHoja&&!H.some(h=>h.id===eqHoja))eqHoja=null;if(!eqHoja&&H.length)eqHoja=H[0].id;
-  el.innerHTML=`<div class="eqesp">${E.map(e=>`<button class="${e.id===eqEsp?"on":""}" data-es="${esc(e.id)}">${esc(e.ic||"📁")} ${esc(e.n)}</button>`).join("")}<button class="mas" id="eqEspN">+ Espacio</button></div>
-    ${eqForm==="esp"?`<div class="card" style="margin:0"><div class="lbl">Nombre del espacio</div><input class="txt" id="eqEn" placeholder="Coordinación semanal, Terminaciones T4, Adquisiciones…"><div class="chips" id="eqEi" style="margin-top:8px"></div><div class="fila" style="gap:8px;margin-top:8px"><button class="go small" id="eqEok" style="width:auto;margin:0">Crear</button><button class="lnk" id="eqEno">Cancelar</button></div></div>`:""}
-    ${!E.length&&eqForm!=="esp"?`<div class="card"><b>Todavía no hay espacios</b><div class="cap2" style="margin:6px 0 10px">Un espacio es como una carpeta del equipo: adentro van hojas en pestañas, donde todos pueden escribir, armar tablas, dibujar y pedirse cosas.</div><button class="go" id="eqEj" style="margin:0">Cargar un ejemplo con la reunión de coordinación</button></div>`:""}
-    ${eqEsp?`<div class="eqtabs">${H.map(h=>`<button class="${h.id===eqHoja?"on":""}" data-ho="${esc(h.id)}">${esc(h.n)}</button>`).join("")}<button class="mas" id="eqHn">+ Pestaña</button></div><div id="eqPag"></div>`:""}`;
-  el.querySelectorAll("[data-es]").forEach(b=>b.onclick=()=>{eqEsp=b.dataset.es;eqHoja=null;eqMenu=false;drawEq()});
-  el.querySelectorAll("[data-ho]").forEach(b=>b.onclick=()=>{if(eqHoja===b.dataset.ho){eqRenHoja(b);return}eqHoja=b.dataset.ho;eqMenu=false;drawEq()});
-  $("eqEspN").onclick=()=>{eqForm=eqForm==="esp"?null:"esp";drawEq();const i=$("eqEn");if(i)i.focus()};
-  if(eqForm==="esp"){let ic="🏗";chips($("eqEi"),EQICO.map(i=>({id:i,label:i})),it=>it.id===ic,it=>{ic=it.id;el.querySelectorAll("#eqEi .chip").forEach(c=>c.classList.toggle("on",c.textContent===ic))});
-    $("eqEno").onclick=()=>{eqForm=null;drawEq()};const ok=async()=>{const n=$("eqEn").value.trim();if(!n)return;const id="e"+eqId(),hid="h"+eqId();await eqSet("espacios",id,{n,ic,f0:Date.now(),por:eqYo()},EQE);await eqSet("hojas",hid,{esp:id,n:"Inicio",o:1},EQH);eqForm=null;eqEsp=id;eqHoja=hid;drawEq()};$("eqEok").onclick=ok;$("eqEn").onkeydown=e=>{if(e.key==="Enter")ok()}}
-  const ej=$("eqEj");if(ej)ej.onclick=eqEjemplo;
-  const hn=$("eqHn");if(hn)hn.onclick=async()=>{const id="h"+eqId();await eqSet("hojas",id,{esp:eqEsp,n:"Nueva pestaña",o:Date.now()},EQH);eqHoja=id;drawEq();const b=document.querySelector(`[data-ho="${id}"]`);if(b)eqRenHoja(b)};
-  if(eqHoja)eqPagina($("eqPag"))}
-function eqRenHoja(btn){const id=btn.dataset.ho,h=EQH[id];btn.outerHTML=`<span class="eqren"><input class="txt" id="eqRn" value="${esc(h.n)}"><button class="small" id="eqRok">OK</button><button class="small" id="eqRdel" style="color:var(--bad)">Eliminar</button></span>`;
-  const i=$("eqRn");i.focus();i.select();const ok=async()=>{const v=i.value.trim();if(v&&v!==h.n)await eqSet("hojas",id,{...h,n:v},EQH);drawEq()};$("eqRok").onclick=ok;i.onkeydown=e=>{if(e.key==="Enter")ok();if(e.key==="Escape")drawEq()};
-  $("eqRdel").onmousedown=e=>e.preventDefault();$("eqRdel").onclick=async e=>{const b=e.target;if(b.dataset.ok!=="1"){b.dataset.ok="1";b.textContent="¿Seguro?";return}for(const[k,x]of Object.entries(EQB))if(x.h===id)eqDel("bloques",k,EQB);await eqDel("hojas",id,EQH);eqHoja=null;drawEq()}}
+/* ---------- Documentos: áreas (carpetas) → documentos ---------- */
+function eqAreas(){let A=Object.entries(EQE).map(([k,v])=>({...v,id:k}));
+  if(!A.length&&db&&!eqAreas.ok){eqAreas.ok=1;EQAREAS.forEach(([ic,n],i)=>eqSet("espacios","a"+i+eqId(),{n,ic,f0:Date.now()+i,por:eqYo()},EQE));A=Object.entries(EQE).map(([k,v])=>({...v,id:k}))}
+  return A.sort((a,b)=>(a.f0||0)-(b.f0||0))}
+function eqDocs(el){if(eqHoja&&EQH[eqHoja])return eqDoc(el);eqHoja=null;const A=eqAreas(),H=eqHojas();
+  if(eqArea&&!EQE[eqArea])eqArea=null;
+  if(!eqArea){el.innerHTML=`<div class="card"><div style="font-size:18px;font-weight:600">📁 Documentos de la obra</div><div class="cap2">Cada área tiene su carpeta. Todos pueden ver y aportar en todas.</div>
+      <div class="eqfold">${A.map(a=>{const L=H.filter(h=>h.esp===a.id&&!h.arch),n=L.filter(h=>h.tipo==="nec").length;return`<button data-ar="${esc(a.id)}"><span>${esc(a.ic||"📁")}</span><b>${esc(a.n)}</b><small>${L.length} documento${L.length===1?"":"s"}${n?` · 🏗 ${n}`:""}</small></button>`}).join("")}${rol()==="ADM"?`<button id="eqArN" class="mas"><span>＋</span><b>Nueva área</b><small>Oficina técnica, Bodega…</small></button>`:""}</div>
+      ${!H.length?`<div class="eqmsg" style="margin-top:12px;background:var(--accent-soft);color:var(--ink)">¿Quieres ver cómo funciona? <button class="lnk" id="eqEj">Cargar un ejemplo</button> con una necesidad de la obra de RRHH y una reunión en Terreno.</div>`:""}
+      ${(()=>{const R=H.filter(h=>!h.arch&&!/^mis:/.test(h.id)).sort((a,b)=>(b.m||0)-(a.m||0)).slice(0,5);return R.length?`<div class="eqgrp">🕑 Editado hace poco</div>${R.map(eqDocFila).join("")}`:""})()}</div>`;
+    el.querySelectorAll("[data-ar]").forEach(b=>b.onclick=()=>{eqArea=b.dataset.ar;eqArch=false;drawEq()});
+    const an=$("eqArN");if(an)an.onclick=async()=>{const n=(prompt("Nombre de la nueva área")||"").trim();if(!n)return;const id="a"+eqId();await eqSet("espacios",id,{n,ic:"📁",f0:Date.now(),por:eqYo()},EQE);eqArea=id;drawEq()};
+    el.querySelectorAll("[data-doc]").forEach(b=>b.onclick=()=>eqIr(b.dataset.doc));const ej=$("eqEj");if(ej)ej.onclick=eqEjemplo;return}
+  const a=EQE[eqArea],L=H.filter(h=>h.esp===eqArea&&!!h.arch===eqArch).sort((x,y)=>(y.m||y.f0||0)-(x.m||x.f0||0)),nArch=H.filter(h=>h.esp===eqArea&&h.arch).length;
+  el.innerHTML=`<div class="card"><div class="fila" style="gap:8px"><button class="lnk" id="eqAtr">← Documentos</button></div><div style="font-size:20px;font-weight:700;margin:4px 0 8px">${esc(a.ic||"📁")} ${esc(a.n)}${eqArch?" · archivados":""}</div>
+    ${eqArch?"":`<div class="eqnew">${Object.entries(EQTIPOS).map(([k,[i,n]])=>`<button data-nt="${k}"${k==="nec"?' class="obra"':""}><span>${i}</span>${n}</button>`).join("")}</div>`}
+    ${L.length?L.map(eqDocFila).join(""):`<div class="cap2" style="padding:12px 0">${eqArch?"No hay documentos archivados.":"Todavía no hay documentos. Crea el primero con los botones de arriba."}</div>`}
+    ${nArch||eqArch?`<button class="lnk" id="eqArc" style="margin-top:10px">${eqArch?"← Ver documentos activos":"🗄 Archivados ("+nArch+")"}</button>`:""}</div>`;
+  $("eqAtr").onclick=()=>{eqArea=null;eqArch=false;drawEq()};const ac=$("eqArc");if(ac)ac.onclick=()=>{eqArch=!eqArch;drawEq()};
+  el.querySelectorAll("[data-nt]").forEach(b=>b.onclick=()=>eqCrearDoc(b.dataset.nt));el.querySelectorAll("[data-doc]").forEach(b=>b.onclick=()=>eqIr(b.dataset.doc))}
+function eqDocFila(h){const t=EQTIPOS[h.tipo||"doc"]||EQTIPOS.doc,nc=Object.values(EQC).filter(c=>c.h===h.id&&!c.cerr).length,E=h.ent||[];
+  return`<button class="eqdoc" data-doc="${esc(h.id)}"><span class="eqdi">${t[0]}</span><span style="flex:1;min-width:0;text-align:left"><b>${esc(h.n||"Sin título")}</b><br><span class="cap2">${t[1]}${h.tipo==="nec"?` · ${E.filter(e=>e.ok).length} de ${E.length} entregados`:""}${h.m?" · editado "+esc(eqHace(h.m)):""}${nc?` · 💬 ${nc} consulta${nc===1?"":"s"} abierta${nc===1?"":"s"}`:""}${(EQE[h.esp]&&eqArea!==h.esp)?" · "+esc(EQE[h.esp].n):""}</span></span><span class="cap2">›</span></button>`}
+async function eqCrearDoc(tipo){const id="h"+eqId(),yo=eqYo(),base={esp:eqArea,tipo,n:"",por:yo,f0:Date.now(),m:Date.now(),o:Date.now()};
+  if(tipo==="nec")Object.assign(base,{n:"",para:"",sino:"",f:"",rep:0,ent:[{a:"",que:"",ok:false}]});
+  await eqSet("hojas",id,base,EQH);
+  if(tipo==="pla")await eqSet("bloques","b"+eqId(),{h:id,t:"tab",o:1,por:yo,m:Date.now(),tn:"",cols:[{n:"Ítem",tp:"txt"},{n:"Responsable",tp:"per"},{n:"Fecha",tp:"fec"},{n:"Cantidad",tp:"num"},{n:"Estado",tp:"est"}],filas:[["","","","","hacer"],["","","","","hacer"],["","","","","hacer"]],vista:"tabla"},EQB);
+  eqNueva=id;eqIr(id);setTimeout(()=>{const t=$("eqDt");if(t)t.focus()},80)}
+/* ---------- un documento ---------- */
+function eqDoc(el){const h=EQH[eqHoja],a=EQE[h.esp]||{},t=EQTIPOS[h.tipo||"doc"]||EQTIPOS.doc,puede=rol()==="ADM"||h.por===eqYo();
+  el.innerHTML=`<div class="card eqdocc"><div class="fila" style="gap:8px;flex-wrap:wrap"><button class="lnk" id="eqAtr">← ${esc(a.ic||"📁")} ${esc(a.n||"Documentos")}</button><span style="flex:1"></span>
+      <button class="small" id="eqArch">${h.arch?"↩ Desarchivar":"🗄 Archivar"}</button>${puede?`<button class="small" id="eqBorr" style="color:var(--bad)">Eliminar</button>`:""}</div>
+    ${h.tipo==="nec"?`<span class="eqob" style="margin-top:8px;display:inline-block">🏗 NECESIDAD DE LA OBRA</span>`:`<div class="cap2" style="margin-top:6px">${t[0]} ${t[1]}${h.por?" · creado por "+esc(eqNom(h.por)):""}${h.m?" · editado "+esc(eqHace(h.m)):""}</div>`}
+    <div class="eqdt" id="eqDt" contenteditable="true" data-ph="${h.tipo==="nec"?"¿Qué necesita la obra?":"Título del documento"}">${esc(h.n||"")}</div>
+    <div id="eqCuerpo"></div><div id="eqCons"></div></div>`;
+  $("eqAtr").onclick=()=>{eqHoja=null;drawEq()};
+  const dt=$("eqDt");dt.onblur=()=>{const v=dt.innerText.trim();if(v!==(EQH[eqHoja]||{}).n)eqSet("hojas",eqHoja,{...EQH[eqHoja],n:v,m:Date.now()},EQH)};dt.onkeydown=e=>{if(e.key==="Enter"){e.preventDefault();dt.blur()}};
+  $("eqArch").onclick=async()=>{await eqSet("hojas",eqHoja,{...h,arch:!h.arch,m:Date.now()},EQH);eqMsg=h.arch?"Documento activo otra vez.":"Documento archivado en "+(a.n||"su área")+".";eqHoja=null;drawEq()};
+  const bo=$("eqBorr");if(bo)bo.onclick=async()=>{if(bo.dataset.ok!=="1"){bo.dataset.ok="1";bo.textContent="¿Seguro? toca de nuevo";return}
+    for(const[k,x]of Object.entries(EQB))if(x.h===eqHoja)eqDel("bloques",k,EQB);for(const[k,x]of Object.entries(EQC))if(x.h===eqHoja)eqDel("consultas",k,EQC);await eqDel("hojas",eqHoja,EQH);eqHoja=null;drawEq()};
+  if(h.tipo==="nec")eqNec($("eqCuerpo"),h);else if(h.tipo==="plano")eqPlano($("eqCuerpo"),h);else eqPagina($("eqCuerpo"));
+  eqConsultas($("eqCons"),h)}
+/* ---------- Necesidad de la obra ---------- */
+function eqNec(el,h){const E=h.ent||[],ok=E.filter(e=>e.ok).length,yo=eqYo(),ed=h.por===yo||rol()==="ADM";
+  el.innerHTML=`<div class="eqnec">
+    <div class="eqnf"><label>¿Para qué se necesita?</label><div class="eqtxt eqin" contenteditable="${ed}" data-nk="para" data-ph="Ej: para pagar los sueldos del 30">${esc(h.para||"")}</div></div>
+    <div class="eqnf"><label>¿Qué pasa si no llega a tiempo?</label><div class="eqtxt eqin" contenteditable="${ed}" data-nk="sino" data-ph="Ej: los maestros no reciben bonos ni tratos">${esc(h.sino||"")}</div></div>
+    <div class="fila" style="gap:12px;flex-wrap:wrap"><div class="eqnf"><label>Fecha límite</label><input type="date" class="txt" data-nk="f" value="${esc(h.f||"")}"${ed?"":" disabled"}></div>
+      <div class="eqnf"><label>¿Se repite?</label><select class="txt" data-nk="rep"${ed?"":" disabled"}><option value="0">No, es una vez</option>${[...Array(28)].map((_,i)=>`<option value="${i+1}"${+h.rep===i+1?" selected":""}>Cada mes, el día ${i+1}</option>`).join("")}</select></div></div>
+    <div class="eqgrp" style="margin-top:14px">Qué se necesita de cada uno · ${ok} de ${E.length} entregados</div><div class="eqbar"><div style="width:${E.length?ok/E.length*100:0}%"></div></div>
+    ${E.map((e,i)=>`<div class="eqent${e.ok?" ok":""}">${e.a?eqAv(e.a):'<span class="eqav" style="background:var(--line)">?</span>'}
+      <div style="flex:1;min-width:0">${ed?`<select class="eqsel" data-ea="${i}">${eqPerOpts(e.a)}</select>`:`<b>${esc(eqNom(e.a))}</b>`}<div class="eqtxt" contenteditable="${ed}" data-eq="${i}" data-ph="Qué necesitas de esta persona">${esc(e.que||"")}</div></div>
+      ${e.ok?`<span class="eqpill g">Entregado ${esc(eqFd(e.fok))}</span>`:e.a===yo||ed?`<button class="small" data-eok="${i}">✓ Entregado</button>`:`<span class="eqpill ${eqEstado({f:h.f})[0]}">${eqEstado({f:h.f})[1]}</span>`}
+      ${ed?`<button class="lnk" data-ex="${i}" style="color:var(--muted)" aria-label="Quitar">✕</button>`:""}</div>`).join("")}
+    ${ed?`<button class="small" id="eqEntN" style="margin-top:6px">+ Agregar persona</button>`:""}
+    ${E.length&&ok===E.length?`<div class="eqmsg" style="margin-top:10px">✅ Todos entregaron.${+h.rep?` Al archivarla se crea sola la del próximo mes (día ${h.rep}).`:""}</div>${ed?`<button class="go" id="eqNecFin" style="margin-top:8px">Cerrar y archivar${+h.rep?" · crear la del próximo mes":""}</button>`:""}`:""}</div>`;
+  const save=p=>{const c=EQH[eqHoja];eqSet("hojas",eqHoja,{...c,...p,m:Date.now()},EQH)};
+  el.querySelectorAll("[data-nk]").forEach(x=>{if(x.isContentEditable)x.onblur=()=>{const v=x.innerText.trim();if(v!==(EQH[eqHoja]||{})[x.dataset.nk])save({[x.dataset.nk]:v})};else x.onchange=()=>{save({[x.dataset.nk]:x.dataset.nk==="rep"?+x.value:x.value});drawEq()}});
+  const setE=(i,p)=>{const L=(EQH[eqHoja].ent||[]).map(x=>({...x}));L[i]={...L[i],...p};save({ent:L})};
+  el.querySelectorAll("[data-ea]").forEach(s=>s.onchange=()=>{let v=s.value;if(v==="+"){const n=(prompt("Nombre de la persona")||"").trim();if(!n){drawEq();return}v="n:"+n}setE(+s.dataset.ea,{a:v});drawEq()});
+  el.querySelectorAll("[data-eq]").forEach(x=>x.onblur=()=>setE(+x.dataset.eq,{que:x.innerText.trim()}));
+  el.querySelectorAll("[data-eok]").forEach(b=>b.onclick=()=>{setE(+b.dataset.eok,{ok:true,fok:hoy()});drawEq()});
+  el.querySelectorAll("[data-ex]").forEach(b=>b.onclick=()=>{save({ent:(EQH[eqHoja].ent||[]).filter((x,i)=>i!==+b.dataset.ex)});drawEq()});
+  const en=$("eqEntN");if(en)en.onclick=()=>{save({ent:(EQH[eqHoja].ent||[]).concat([{a:"",que:"",ok:false}])});drawEq()};
+  const fi=$("eqNecFin");if(fi)fi.onclick=async()=>{const c=EQH[eqHoja];await eqSet("hojas",eqHoja,{...c,arch:true,m:Date.now()},EQH);
+    if(+c.rep){const d=c.f?new Date(c.f+"T12:00:00"):new Date();d.setMonth(d.getMonth()+1);d.setDate(Math.min(+c.rep,28));const id="h"+eqId();await eqSet("hojas",id,{...c,arch:false,f:fstr(d),f0:Date.now(),m:Date.now(),ent:(c.ent||[]).map(e=>({a:e.a,que:e.que,ok:false}))},EQH);eqMsg="Archivada. Ya quedó creada la del próximo mes: "+eqFd(fstr(d))+".";eqHoja=id}
+    else{eqMsg="Necesidad cerrada y archivada.";eqHoja=null}drawEq()}}
+/* ---------- Plano o imagen con marcas ---------- */
+function eqPlano(el,h){const P=h.pins||[],C=Object.entries(EQC).map(([k,c])=>({...c,id:k})).filter(c=>c.h===eqHoja);
+  if(!h.foto&&!h.fotoData){el.innerHTML=`<div class="eqhoja" style="padding:20px;text-align:center"><div style="font-size:40px">📐</div><div class="cap2" style="margin:6px 0 12px">Sube el plano o la foto que quieres marcar (imagen o PDF).</div><label class="go" style="display:inline-block;width:auto;padding:10px 18px;cursor:pointer">Elegir archivo<input type="file" id="eqPf" accept="image/*,application/pdf" hidden></label><div class="err" id="eqPe"></div></div>`;
+    $("eqPf").onchange=async e=>{const f=e.target.files[0];if(!f)return;$("eqPe").style.color="var(--muted)";$("eqPe").textContent="Subiendo…";
+      try{const img=await pzPlano(f,1),up=await subirFoto(img.blob);await eqSet("hojas",eqHoja,{...EQH[eqHoja],...up,w:img.w,hh:img.h,n:EQH[eqHoja].n||f.name.replace(/\.[^.]+$/,""),m:Date.now()},EQH);drawEq()}
+      catch(x){$("eqPe").style.color="";$("eqPe").textContent="No se pudo leer el archivo. Prueba con una imagen."}};return}
+  el.innerHTML=`<div class="fila" style="gap:8px;margin:8px 0"><button class="small${eqPin?" go":""}" id="eqPinB" style="${eqPin?"width:auto;margin:0":""}">📍 ${eqPin?"Toca el plano donde quieres marcar":"Marcar y consultar"}</button><span class="cap2">${P.length} marca${P.length===1?"":"s"}</span></div>
+    <div class="eqplano${eqPin?" marcando":""}" id="eqPl"><img src="${esc(fotoSrc(h).replace("sz=w1200","sz=w2400"))}" alt="" draggable="false">${P.map((p,i)=>{const c=C.find(x=>x.pin===p.id);return`<button class="eqpin${c&&c.cerr?" ok":""}" data-pin="${esc(p.id)}" style="left:${p.x*100}%;top:${p.y*100}%">${i+1}</button>`}).join("")}</div>`;
+  $("eqPinB").onclick=()=>{eqPin=!eqPin;drawEq()};
+  $("eqPl").onclick=async e=>{if(e.target.dataset.pin){const t=document.querySelector(`[data-cpin="${CSS.escape(e.target.dataset.pin)}"]`);if(t){t.scrollIntoView({behavior:"smooth",block:"center"});t.classList.add("flash");setTimeout(()=>t.classList.remove("flash"),1200)}return}
+    if(!eqPin)return;const r=e.currentTarget.getBoundingClientRect(),pid="p"+eqId(),x=(e.clientX-r.left)/r.width,y=(e.clientY-r.top)/r.height;
+    await eqSet("hojas",eqHoja,{...EQH[eqHoja],pins:(EQH[eqHoja].pins||[]).concat([{id:pid,x:+x.toFixed(4),y:+y.toFixed(4)}]),m:Date.now()},EQH);eqPin=false;eqNuevaPin=pid;drawEq();setTimeout(()=>{const t=$("eqCt");if(t)t.focus()},80)}}
+let eqNuevaPin=null;
+/* ---------- consultas con @persona (en cualquier documento) ---------- */
+function eqConsultas(el,h){const yo=eqYo(),P=h.pins||[],C=Object.entries(EQC).map(([k,c])=>({...c,id:k})).filter(c=>c.h===eqHoja).sort((a,b)=>(a.cerr-b.cerr)||(a.f-b.f));
+  el.innerHTML=`<div class="eqgrp" style="margin-top:18px">💬 Consultas y notas ${C.filter(c=>!c.cerr).length?`· ${C.filter(c=>!c.cerr).length} abierta${C.filter(c=>!c.cerr).length===1?"":"s"}`:""}</div>
+    ${C.map(c=>{const pi=P.findIndex(p=>p.id===c.pin);return`<div class="eqcon${c.cerr?" cerr":""}"${c.pin?` data-cpin="${esc(c.pin)}"`:""}><div class="fila" style="gap:8px;align-items:flex-start">${eqAv(c.de)}<div style="flex:1;min-width:0">
+      <div class="cap2">${pi>=0?`<b class="eqpinr">${pi+1}</b> `:""}<b>${esc(eqNom(c.de))}</b>${c.a?" → "+esc(eqNom(c.a)):""} · ${esc(eqHace(c.f))}${c.cerr?" · ✓ resuelta":""}</div><div>${esc(c.txt)}</div>
+      ${(c.resp||[]).map(r=>`<div class="eqresp"><b>${esc(eqNom(r.de))}</b> <span class="cap2">${esc(eqHace(r.f))}</span><br>${esc(r.txt)}</div>`).join("")}
+      ${c.cerr?"":`<div class="fila" style="gap:6px;margin-top:6px"><input class="txt" data-rt="${esc(c.id)}" placeholder="Responder…" style="flex:1;padding:6px 10px"><button class="small" data-rs="${esc(c.id)}">Enviar</button>${c.de===yo||c.a===yo||rol()==="ADM"?`<button class="small" data-rc="${esc(c.id)}">✓ Resolver</button>`:""}</div>`}</div></div></div>`}).join("")}
+    <div class="eqcnew">${eqNuevaPin?`<div class="cap2" style="margin-bottom:4px">📍 Consulta para la marca ${P.findIndex(p=>p.id===eqNuevaPin)+1}</div>`:""}<textarea class="txt" id="eqCt" rows="2" placeholder="Escribe una nota o consulta…"></textarea>
+      <div class="fila" style="gap:6px;margin-top:6px;flex-wrap:wrap"><span class="cap2">@ Para:</span><select class="eqsel" id="eqCa2">${eqPerOpts("")}</select><span style="flex:1"></span>${eqNuevaPin?`<button class="lnk" id="eqCpX">Quitar marca</button>`:""}<button class="go small" id="eqCs2" style="width:auto;margin:0;padding:8px 14px">Publicar</button></div></div>`;
+  const pub=async()=>{const t=$("eqCt").value.trim();if(!t)return;let a=$("eqCa2").value;if(a==="+"){const n=(prompt("Nombre de la persona")||"").trim();a=n?"n:"+n:""}
+    await eqSet("consultas","c"+eqId(),{h:eqHoja,pin:eqNuevaPin||"",txt:t,de:yo,a,f:Date.now(),resp:[],cerr:false},EQC);eqSet("hojas",eqHoja,{...EQH[eqHoja],m:Date.now()},EQH);
+    if(a&&a!==yo)eqMsg=eqNom(a)+" verá tu consulta en “Mi trabajo”.";eqNuevaPin=null;drawEq()};
+  $("eqCs2").onclick=pub;$("eqCt").onkeydown=e=>{if(e.key==="Enter"&&(e.ctrlKey||e.metaKey))pub()};
+  const px=$("eqCpX");if(px)px.onclick=async()=>{await eqSet("hojas",eqHoja,{...EQH[eqHoja],pins:(EQH[eqHoja].pins||[]).filter(p=>p.id!==eqNuevaPin)},EQH);eqNuevaPin=null;drawEq()};
+  const resp=async id=>{const i=el.querySelector(`[data-rt="${CSS.escape(id)}"]`),t=i&&i.value.trim();if(!t)return;const c=EQC[id];await eqSet("consultas",id,{...c,resp:(c.resp||[]).concat([{de:yo,txt:t,f:Date.now()}])},EQC);drawEq()};
+  el.querySelectorAll("[data-rs]").forEach(b=>b.onclick=()=>resp(b.dataset.rs));el.querySelectorAll("[data-rt]").forEach(i=>i.onkeydown=e=>{if(e.key==="Enter")resp(i.dataset.rt)});
+  el.querySelectorAll("[data-rc]").forEach(b=>b.onclick=async()=>{const c=EQC[b.dataset.rc];await eqSet("consultas",b.dataset.rc,{...c,cerr:true,fc:Date.now(),porc:yo},EQC);drawEq()})}
+/* ---------- bloques de un documento (Word + Excel + dibujo) ---------- */
 const eqBlq=h=>Object.entries(EQB).map(([k,v])=>({...v,id:k})).filter(b=>b.h===h).sort((a,b)=>(a.o||0)-(b.o||0));
 function eqPagina(el){const B=eqBlq(eqHoja);
   el.innerHTML=`<div class="eqhoja">${B.map(b=>`<div class="eqb" data-b="${esc(b.id)}"><button class="eqh" data-bm="${esc(b.id)}" aria-label="Opciones del bloque">⋮⋮</button><div class="eqbc">${eqBloqueHtml(b)}</div></div>`).join("")}
-    ${!B.length?'<div class="cap2" style="padding:8px 4px">Hoja en blanco. Toca <b>+ Agregar</b> para escribir, hacer un checklist, una tabla o un dibujo.</div>':""}
-    <div class="eqadd"><button id="eqAdd">+ Agregar</button>${eqMenu?`<div class="eqmenu">${[["tit","☰","Título"],["txt","✍","Texto"],["chk","☑","Checklist / pedir algo"],["tab","▦","Tabla"],["dib","✏","Dibujo"]].map(([t,i,n])=>`<button data-nb="${t}"><span>${i}</span>${n}</button>`).join("")}</div>`:""}</div></div>`;
+    ${!B.length?'<div class="cap2" style="padding:8px 12px">Toca <b>+ Agregar</b> para escribir, hacer una lista de tareas, una tabla, un dibujo o pegar una foto.</div>':""}
+    <div class="eqadd"><button id="eqAdd">+ Agregar</button>${eqMenu?`<div class="eqmenu">${[["txt","✍","Texto"],["tit","☰","Título"],["chk","☑","Tarea o pedido"],["tab","▦","Tabla"],["dib","✏","Dibujo"],["img","📷","Foto"]].map(([t,i,n])=>`<button data-nb="${t}"><span>${i}</span>${n}</button>`).join("")}</div>`:""}</div></div><input type="file" id="eqImgF" accept="image/*" hidden>`;
   $("eqAdd").onclick=()=>{eqMenu=!eqMenu;eqPagina(el)};
-  el.querySelectorAll("[data-nb]").forEach(b=>b.onclick=()=>eqNuevo(b.dataset.nb));
+  el.querySelectorAll("[data-nb]").forEach(b=>b.onclick=()=>{if(b.dataset.nb==="img"){$("eqImgF").click();return}eqNuevo(b.dataset.nb)});
+  $("eqImgF").onchange=async e=>{const f=e.target.files[0];e.target.value="";if(!f)return;try{const up=await subirFoto(await comprimir(f,1600,.8));eqNuevo("img",null,up)}catch(x){}};
   el.querySelectorAll("[data-bm]").forEach(b=>b.onclick=()=>eqOpcBloque(b.dataset.bm,b));
   B.forEach(b=>eqBloqueWire(b,el.querySelector(`[data-b="${CSS.escape(b.id)}"] .eqbc`)))}
-async function eqNuevo(t,tras){const B=eqBlq(eqHoja),i=tras?B.findIndex(b=>b.id===tras):-1,o=i>=0?(i+1<B.length?(B[i].o+B[i+1].o)/2:B[i].o+1):(B.length?B[B.length-1].o+1:1),id="b"+eqId(),yo=eqYo();
-  const D={tit:{txt:""},txt:{txt:""},chk:{txt:"",hecho:false,a:"",f:"",de:yo},tab:{cols:[{n:"Tarea",tp:"txt"},{n:"Responsable",tp:"per"},{n:"Fecha",tp:"fec"},{n:"Estado",tp:"est"},{n:"Cantidad",tp:"num"}],filas:[["","","","hacer",""],["","","","hacer",""]],vista:"tabla"},dib:{tr:[]}}[t];
-  eqMenu=false;await eqSet("bloques",id,{h:eqHoja,t,o,por:yo,m:Date.now(),...D},EQB);drawEq();
+async function eqNuevo(t,tras,extra){const B=eqBlq(eqHoja),i=tras?B.findIndex(b=>b.id===tras):-1,o=i>=0?(i+1<B.length?(B[i].o+B[i+1].o)/2:B[i].o+1):(B.length?B[B.length-1].o+1:1),id="b"+eqId(),yo=eqYo();
+  const D={tit:{txt:""},txt:{txt:""},chk:{txt:"",hecho:false,a:"",f:"",de:yo},img:{...(extra||{})},tab:{tn:"",cols:[{n:"Ítem",tp:"txt"},{n:"Responsable",tp:"per"},{n:"Fecha",tp:"fec"},{n:"Cantidad",tp:"num"},{n:"Estado",tp:"est"}],filas:[["","","","","hacer"],["","","","","hacer"]],vista:"tabla"},dib:{tr:[]}}[t];
+  eqMenu=false;await eqSet("bloques",id,{h:eqHoja,t,o,por:yo,m:Date.now(),...D},EQB);eqSet("hojas",eqHoja,{...EQH[eqHoja],m:Date.now()},EQH);drawEq();
   setTimeout(()=>{const n=document.querySelector(`[data-b="${CSS.escape(id)}"] [contenteditable]`);if(n)n.focus()},60);return id}
 function eqOpcBloque(id,btn){const b=EQB[id];if(!b)return;const B=eqBlq(eqHoja),i=B.findIndex(x=>x.id===id);
   const m=document.createElement("div");m.className="eqpop";m.innerHTML=`<button data-o="up"${i===0?" disabled":""}>↑ Subir</button><button data-o="dn"${i===B.length-1?" disabled":""}>↓ Bajar</button><button data-o="dup">⧉ Duplicar</button><button data-o="del" style="color:var(--bad)">🗑 Eliminar</button>`;
@@ -2499,12 +2632,14 @@ function eqOpcBloque(id,btn){const b=EQB[id];if(!b)return;const B=eqBlq(eqHoja),
     if(op==="del")await eqDel("bloques",id,EQB);
     if(op==="up"||op==="dn"){const j=op==="up"?i-1:i+1,x=B[j];await eqSet("bloques",id,{...b,o:x.o},EQB);await eqSet("bloques",x.id,{...EQB[x.id],o:b.o},EQB)}
     if(op==="dup"){const nb=JSON.parse(JSON.stringify(b));delete nb.id;nb.o=i+1<B.length?(b.o+B[i+1].o)/2:b.o+1;await eqSet("bloques","b"+eqId(),nb,EQB)}drawEq()})}
-function eqPerOpts(sel){const G=eqGente();return`<option value="">Sin asignar</option>${Object.keys(G).filter(k=>!/^n:/.test(k)).map(k=>`<option value="${esc(k)}"${k===sel?" selected":""}>${esc(G[k]||"Persona")}</option>`).join("")}${Object.keys(G).filter(k=>/^n:/.test(k)).map(k=>`<option value="${esc(k)}"${k===sel?" selected":""}>${esc(G[k])}</option>`).join("")}<option value="+">+ Otra persona…</option>`}
+function eqPerOpts(sel){const G=eqGente();return`<option value="">${sel===undefined?"":"Sin asignar"}</option>${Object.keys(G).filter(k=>!/^n:/.test(k)).map(k=>`<option value="${esc(k)}"${k===sel?" selected":""}>${esc(G[k]||"Persona")}</option>`).join("")}${Object.keys(G).filter(k=>/^n:/.test(k)).map(k=>`<option value="${esc(k)}"${k===sel?" selected":""}>${esc(G[k])}</option>`).join("")}<option value="+">+ Otra persona…</option>`}
 function eqBloqueHtml(b){
   if(b.t==="tit")return`<div class="eqtit" contenteditable="true" data-ph="Título">${esc(b.txt||"")}</div>`;
   if(b.t==="txt")return`<div class="eqtxt" contenteditable="true" data-ph="Escribe aquí…">${esc(b.txt||"")}</div>`;
-  if(b.t==="chk"){const st=eqEstado(b);return`<div class="eqchk${b.hecho?" hecho":""}"><input type="checkbox"${b.hecho?" checked":""} data-k="hecho"><div class="eqtxt" contenteditable="true" data-ph="Tarea o pedido…">${esc(b.txt||"")}</div>
-    <span class="eqmeta"><select data-k="a" class="eqsel" title="Responsable">${eqPerOpts(b.a)}</select><input type="date" data-k="f" value="${esc(b.f||"")}" class="eqsel" title="Fecha">${(b.a||b.f)&&!b.hecho?`<span class="eqpill ${st[0]}">${st[1]}</span>`:""}${b.de&&b.de!==eqYo()&&b.a?`<span class="cap2">pidió ${esc(eqNom(b.de))}</span>`:""}</span></div>`}
+  if(b.t==="img")return`<img class="eqimg" src="${esc(fotoSrc(b))}" alt="">`;
+  if(b.t==="chk"){const st=eqEstado(b),ab=eqEdit===b.id;return`<div class="eqchk${b.hecho?" hecho":""}"><input type="checkbox"${b.hecho?" checked":""} data-k="hecho"><div class="eqtxt" contenteditable="true" data-ph="Tarea o pedido…">${esc(b.txt||"")}</div>
+    <span class="eqmeta">${b.a?eqAv(b.a):""}${b.f?`<span class="cap2">${esc(eqFd(b.f))}</span>`:""}${(b.a||b.f)&&!b.hecho&&st[0]!=="n"?`<span class="eqpill ${st[0]}">${st[1]}</span>`:""}<button class="eqat${ab?" on":""}" data-at="1" title="Asignar persona y fecha">@</button></span>
+    ${ab?`<div class="eqatp"><select data-k="a" class="eqsel">${eqPerOpts(b.a)}</select><input type="date" data-k="f" value="${esc(b.f||"")}" class="eqsel"><button class="small" data-atx="1">Listo</button></div>`:""}</div>`}
   if(b.t==="tab")return eqTablaHtml(b);
   if(b.t==="dib")return`<div class="eqdib"><div class="fila" style="gap:6px;margin-bottom:6px">${["#1d2326","#b23a2a","#1f5f8b","#2f7d4f"].map((c,i)=>`<button class="pzcol${i===0?" on":""}" data-dc="${c}" style="background:${c};width:24px;height:24px"></button>`).join("")}<span style="flex:1"></span><button class="small" data-dl="1">Borrar todo</button></div><canvas></canvas></div>`;
   return""}
@@ -2520,12 +2655,13 @@ function eqTablaHtml(b){const C=b.cols,F=b.filas,tot=C.map((c,j)=>c.tp==="num"?F
       ${F.map((r,i)=>`<tr>${C.map((c,j)=>`<td>${celda(c,j,r[j]??"",i)}</td>`).join("")}<td><button class="lnk" data-fx="${i}" aria-label="Quitar fila" style="color:var(--muted)">✕</button></td></tr>`).join("")}
       ${tot.some(x=>x!==null)?`<tr class="eqtot">${tot.map((t,j)=>`<td>${t===null?(j===0?"Total":""):`<b>${t.toLocaleString("es-CL",{maximumFractionDigits:2})}</b>`}</td>`).join("")}<td></td></tr>`:""}</table></div>
       <div class="fila" style="gap:6px;margin-top:6px"><button class="small" data-tf="f">+ Fila</button><button class="small" data-tf="c">+ Columna</button>${C.length>1?`<button class="small" data-tf="cx">− Última columna</button>`:""}</div>`}</div>`}
-function eqBloqueWire(b,el){if(!el)return;const id=b.id,save=p=>{const cur=EQB[id];if(!cur)return;eqSet("bloques",id,{...cur,...p,m:Date.now()},EQB)};
+function eqBloqueWire(b,el){if(!el)return;const id=b.id,save=p=>{const cur=EQB[id];if(!cur)return;eqSet("bloques",id,{...cur,...p,m:Date.now()},EQB);const hh=EQH[cur.h];if(hh&&Date.now()-(hh.m||0)>60000)eqSet("hojas",cur.h,{...hh,m:Date.now()},EQH)};
   el.querySelectorAll("[contenteditable]").forEach(n=>{n.onblur=()=>{const k=n.dataset.k||"txt",v=n.innerText.replace(/\s+$/,"");if((EQB[id]||{})[k]!==v)save({[k]:v})};
     if(b.t==="chk")n.onkeydown=async e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();n.blur();const nid=await eqNuevo("chk",id);const a=EQB[id]&&EQB[id].a;if(a&&EQB[nid]){}}
       else if(e.key==="Backspace"&&!n.innerText.trim()){e.preventDefault();const B=eqBlq(eqHoja),i=B.findIndex(x=>x.id===id);await eqDel("bloques",id,EQB);drawEq();const p=B[i-1];if(p)setTimeout(()=>{const q=document.querySelector(`[data-b="${CSS.escape(p.id)}"] [contenteditable]`);if(q){q.focus();const s=getSelection(),r=document.createRange();r.selectNodeContents(q);r.collapse(false);s.removeAllRanges();s.addRange(r)}},60)}}});
+  el.querySelectorAll("[data-at]").forEach(x=>x.onclick=()=>{eqEdit=eqEdit===id?null:id;drawEq()});el.querySelectorAll("[data-atx]").forEach(x=>x.onclick=()=>{eqEdit=null;drawEq()});
   el.querySelectorAll("[data-k=hecho]").forEach(c=>c.onchange=()=>{save({hecho:c.checked,fh:c.checked?hoy():""});drawEq()});
-  el.querySelectorAll("select[data-k=a]").forEach(s=>s.onchange=()=>{let v=s.value;if(v==="+"){const n=(prompt("Nombre de la persona")||"").trim();if(!n){s.value=b.a||"";return}v="n:"+n}save({a:v,de:EQB[id].de||eqYo()});if(v&&v!==eqYo())eqMsg="Listo: "+eqNom(v)+" lo verá en “Me pidieron”.";drawEq()});
+  el.querySelectorAll("select[data-k=a]").forEach(s=>s.onchange=()=>{let v=s.value;if(v==="+"){const n=(prompt("Nombre de la persona")||"").trim();if(!n){s.value=b.a||"";return}v="n:"+n}save({a:v,de:EQB[id].de||eqYo()});if(v&&v!==eqYo())eqMsg="Listo: "+eqNom(v)+" lo verá en “Mi trabajo”.";drawEq()});
   el.querySelectorAll("input[data-k=f]").forEach(s=>s.onchange=()=>{save({f:s.value});drawEq()});
   if(b.t==="tab"){const T=()=>EQB[id];
     el.querySelectorAll("[data-vw]").forEach(x=>x.onclick=()=>{save({vista:x.dataset.vw});drawEq()});
@@ -2546,17 +2682,20 @@ function eqBloqueWire(b,el){if(!el)return;const id=b.id,save=p=>{const cur=EQB[i
     cv.onpointerup=cv.onpointercancel=()=>{if(!pts)return;const P=pzSimpl?pzSimpl(pts,1.2):pts;if(P.length===1)P.push([P[0][0]+.5,P[0][1]+.5]);pts=null;save({tr:(EQB[id].tr||[]).concat([{c:col,p:P.map(p=>Math.round(p[0])+","+Math.round(p[1])).join(" ")}])})};
     el.querySelectorAll("[data-dc]").forEach(x=>x.onclick=()=>{col=x.dataset.dc;el.querySelectorAll("[data-dc]").forEach(y=>y.classList.toggle("on",y===x))});
     el.querySelector("[data-dl]").onclick=()=>{save({tr:[]});requestAnimationFrame(pint)}}}
-async function eqEjemplo(){const yo=eqYo(),e="e"+eqId(),h1="h"+eqId(),h2="h"+eqId(),h3="h"+eqId(),d=n=>{const x=new Date();x.setDate(x.getDate()+n);return fstr(x)};
-  eqSet("espacios",e,{n:"Coordinación semanal",ic:"🏗",f0:Date.now(),por:yo},EQE);
-  eqSet("hojas",h1,{esp:e,n:"Reunión "+new Date().toLocaleDateString("es-CL",{day:"numeric",month:"numeric"}),o:1},EQH);
-  eqSet("hojas",h2,{esp:e,n:"Programa hormigón",o:2},EQH);eqSet("hojas",h3,{esp:e,n:"Croquis",o:3},EQH);
+
+async function eqEjemplo(){const yo=eqYo(),A=eqAreas(),ar=n=>(A.find(a=>a.n===n)||A[0]||{}).id,d=n=>{const x=new Date();x.setDate(x.getDate()+n);return fstr(x)};
+  const h1="h"+eqId(),h2="h"+eqId(),h3="h"+eqId();
+  eqSet("hojas",h1,{esp:ar("RRHH"),tipo:"nec",n:"Bonos, tratos y salidas de maestros del mes",para:"Para pagar los sueldos a fin de mes.",sino:"Los maestros no reciben bonos ni tratos a tiempo y los finiquitos se atrasan.",f:d(3),rep:25,por:yo,f0:Date.now(),m:Date.now(),
+    ent:[{a:"n:Juan",que:"Torres 4 y 5: bonos, tratos y quién sale o se queda",ok:true,fok:hoy()},{a:"n:Nico",que:"Torres 6 y 7: bonos, tratos y quién sale o se queda",ok:false},{a:yo,que:"Torres 1 a 3: faenas por vencer y renovaciones",ok:false}]},EQH);
+  eqSet("hojas",h2,{esp:ar("Terreno"),tipo:"doc",n:"Reunión de coordinación",por:yo,f0:Date.now(),m:Date.now()},EQH);
   let o=1;const B=(h,x)=>eqSet("bloques","b"+eqId(),{h,o:o++,por:yo,m:Date.now(),...x},EQB);
-  B(h1,{t:"tit",txt:"Reunión de coordinación"});B(h1,{t:"txt",txt:"Temas de la semana. Para pedirle algo a alguien, elige su nombre y una fecha: le aparece en “Me pidieron”."});
-  const L=[["Validación de andamio con correo Layher","",0,true],["Programación de hormigón semanal","n:Juan",1],["Cerrar bonos término de OG",yo,3],["Validación fierro marquesina en Torre 6","n:Nico",2],["Llegada de Sikaflex 1A (aprobación de Fco)",yo,-1],["Ver pedido de ripio restante para Torre 1","n:Nico",0],["Entrega piso 1 Torre 5: picar rasgos de ventana","n:Juan",4],["Término de impermeabilización de rasgos","n:Ana",1]];
-  for(const[t,a,dd,he]of L)B(h1,{t:"chk",txt:t,a,f:a?d(dd):"",de:yo,hecho:!!he});
-  B(h2,{t:"tab",tn:"Hormigón semanal",cols:[{n:"Elemento",tp:"txt"},{n:"Día",tp:"fec"},{n:"m³",tp:"num"},{n:"Responsable",tp:"per"},{n:"Estado",tp:"est"}],filas:[["Losa P3 T4",d(-1),"0","n:Juan","hecho"],["Muros T6",d(0),"72","n:Juan","hecho"],["Losa P4 T4",d(1),"96","n:Nico","curso"],["Muros T7",d(2),"84","n:Juan","hacer"],["Radier T1",d(3),"0","n:Nico","bloq"]],vista:"tabla"});
-  B(h3,{t:"txt",txt:"Rasgos de ventana a picar, Torre 5 piso 1"});B(h3,{t:"dib",tr:[{c:"#5f676b",p:"60,40 940,40 940,400 60,400 60,40"},{c:"#5f676b",p:"500,40 500,400"},{c:"#b23a2a",p:"200,30 260,10 330,12 380,30 360,60 280,70 210,55 200,30"}]});
-  eqEsp=e;eqHoja=h1;drawEq()}
+  B(h2,{t:"txt",txt:"Temas de la semana. Toca @ en una línea para asignarla a alguien con fecha."});
+  [["Validación de andamio con correo Layher","",0,true],["Programación de hormigón semanal","n:Juan",1],["Cerrar bonos término de OG",yo,3],["Validación fierro marquesina en Torre 6","n:Nico",2],["Llegada de Sikaflex 1A (aprobación de Fco)",yo,-1],["Ver pedido de ripio restante para Torre 1","n:Nico",0],["Revisar notas sin anotar en la reunión",""]].forEach(([t,a,dd,he])=>B(h2,{t:"chk",txt:t,a,f:a?d(dd):"",de:yo,hecho:!!he}));
+  B(h2,{t:"tit",txt:"Programa de hormigón"});
+  B(h2,{t:"tab",tn:"",cols:[{n:"Elemento",tp:"txt"},{n:"Día",tp:"fec"},{n:"m³",tp:"num"},{n:"Responsable",tp:"per"},{n:"Estado",tp:"est"}],filas:[["Losa P3 T4",d(-1),"0","n:Juan","hecho"],["Muros T6",d(0),"72","n:Juan","hecho"],["Losa P4 T4",d(1),"96","n:Nico","curso"],["Muros T7",d(2),"84","n:Juan","hacer"]],vista:"tabla"});
+  eqSet("consultas","c"+eqId(),{h:h2,pin:"",txt:"¿Confirmamos la bomba para el jueves?",de:"n:Juan",a:yo,f:Date.now()-3600e3,resp:[],cerr:false},EQC);
+  eqSet("consultas","c"+eqId(),{h:h1,pin:"",txt:"Mañana a primera hora te mando la planilla de T6 y T7.",de:"n:Nico",a:yo,f:Date.now()-1800e3,resp:[],cerr:false},EQC);
+  eqArea=null;eqHoja=null;eqV="mi";eqMsg="Listo: se cargó un ejemplo en RRHH y Terreno.";drawEq()}
 
 /* ---------- perfiles ---------- */
 const ROLN={ADM:"Administrador",EC:"Encargado de calidad (EC)",REV:"Revisor",SUP:"Supervisor",PT:"Profesional de terreno (PT)"};
