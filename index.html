@@ -300,7 +300,7 @@ body::before{background:var(--top)}
     </div>
     <button class="admlink" data-go="adm" id="btnAdm" hidden>Administración ⚙</button>
     <div class="cap2" id="quien" style="text-align:center"></div>
-    <div class="cap2" id="verApp" style="opacity:.7;text-align:center">Tepi Control VLV · versión V2 (instalable, base V1.30) · 23 nov 2026</div>
+    <div class="cap2" id="verApp" style="opacity:.7;text-align:center">Tepi Control VLV · versión V2 (instalable, base V1.31) · 24 nov 2026</div>
   </section>
 
   <!-- MATERIALES: selección -->
@@ -746,7 +746,7 @@ const ICO_M={mat:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" str
   rec:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 9l2 2 4-4M9 16h6"/></svg>',
   res:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a9 9 0 1 0 9 9h-9z"/><path d="M15 3.5A9 9 0 0 1 20.5 9H15z"/></svg>'};
 const PERRO=extra=>`<svg class="perro" viewBox="0 0 100 100" aria-hidden="true"><path d="M78 34q9-6 6-15" stroke="#c9965f" stroke-width="6" fill="none" stroke-linecap="round"/><path d="M24 44q-6 14 4 22l6-18z" fill="#7a5236"/><path d="M76 44q6 14-4 22l-6-18z" fill="#7a5236"/><ellipse cx="50" cy="60" rx="24" ry="22" fill="#c9965f"/><ellipse cx="50" cy="68" rx="13" ry="10" fill="#f3dcc0"/><path d="M37 56q4-4 8 0" stroke="#123f37" stroke-width="3" fill="none" stroke-linecap="round"/><circle cx="59" cy="56" r="3.4" fill="#123f37"/><ellipse cx="50" cy="64" rx="5" ry="3.6" fill="#3d2818"/><path d="M45 71q5 5 10 0" stroke="#3d2818" stroke-width="2.4" fill="#e8737a" stroke-linecap="round"/><path d="M28 42a22 18 0 0 1 44 0z" fill="#f6c7a8"/><rect x="24" y="40" width="52" height="5" rx="2.5" fill="#f6c7a8"/><path d="M32 80h36" stroke="#d6453a" stroke-width="5" stroke-linecap="round"/>${extra||""}</svg>`;
-const PERRO_X={SUP:'<rect x="62" y="70" width="18" height="12" rx="2" fill="#e38b5c"/><path d="M62 76h18M71 70v6" stroke="#c2683d" stroke-width="1.4"/>',PT:'<rect x="64" y="66" width="14" height="18" rx="2" fill="#fff"/><path d="M67 71h8M67 75h8M67 79h5" stroke="#123f37" stroke-width="1.5"/>',EC:'<circle cx="72" cy="74" r="7" fill="none" stroke="#f7c948" stroke-width="3"/><path d="M77 79l6 6" stroke="#f7c948" stroke-width="3" stroke-linecap="round"/>',ADM:""};
+const PERRO_X={REV:'<rect x="63" y="66" width="15" height="19" rx="2" fill="#fff" stroke="#3a6ea5" stroke-width="2"/><path d="M66 72h9M66 76h9M66 80h6" stroke="#3a6ea5" stroke-width="1.6"/>',SUP:'<rect x="62" y="70" width="18" height="12" rx="2" fill="#e38b5c"/><path d="M62 76h18M71 70v6" stroke="#c2683d" stroke-width="1.4"/>',PT:'<rect x="64" y="66" width="14" height="18" rx="2" fill="#fff"/><path d="M67 71h8M67 75h8M67 79h5" stroke="#123f37" stroke-width="1.5"/>',EC:'<circle cx="72" cy="74" r="7" fill="none" stroke="#f7c948" stroke-width="3"/><path d="M77 79l6 6" stroke="#f7c948" stroke-width="3" stroke-linecap="round"/>',ADM:""};
 let iniCache={t:0,v:null};
 function datosHoy(){const now=Date.now();if(iniCache.v&&now-iniCache.t<15000)return iniCache.v;const h=hoy();let u=0,a=0,obs=0,dObs=0,atr=0,fot=0;
   let vj=0;Object.entries(S.reg||{}).forEach(([k,r])=>{if(r&&r.dis>0&&!(r.con>0)){u++;if(vencida(r))vj++;const p=k.split("|"),I=ins(p[1]);if(I&&I.part&&hecho(p[0],I.part))a++}});
@@ -759,14 +759,15 @@ function datosHoy(){const now=Date.now();if(iniCache.v&&now-iniCache.t<15000)ret
 function pintarInicio(){const e=$("iniMat");if(!e)return;const r=rol(),D=datosHoy(),pl=(n,a,b)=>n+" "+(n===1?a:b);
   e.innerHTML=D.u?pl(D.u,"ficha en uso","fichas en uso")+(D.a?` <span class="pill" style="background:var(--bad-soft);color:var(--bad)">${pl(D.a,"alerta","alertas")}</span>`:""):"Sin fichas en uso";
   $("iniRec").textContent=D.obs?pl(D.obs,"observación abierta","observaciones abiertas"):"Sin observaciones abiertas";$("iniAva").textContent=D.dAtr?pl(D.dAtr,"depto con atrasos","deptos con atrasos"):"Al día con el programa";
-  const prim={SUP:"mat",PT:"ava",EC:"rec"}[r]||"",vis={ADM:["mat","ava","rec","res"],SUP:["mat","rec","ava"],PT:["ava","rec","mat"],EC:["rec","ava","mat"]}[r]||["mat","ava","rec"];
+  const prim={SUP:"mat",PT:"ava",EC:"rec",REV:"rec"}[r]||"",vis={ADM:["mat","ava","rec","res"],SUP:["mat","rec","ava"],PT:["ava","rec","mat"],EC:["rec","ava","mat"],REV:["rec","ava","mat"]}[r]||["mat","ava","rec"];
   document.querySelectorAll(".igrid .mm").forEach(b=>{const g=b.dataset.go,i=vis.indexOf(g);b.hidden=i<0;b.style.order=i<0?99:i;b.classList.toggle("prim",g===prim);
     const ic=b.querySelector(".mico");if(ic&&!ic.innerHTML)ic.innerHTML=ICO_M[g];
     if(g===prim&&!b.querySelector(".mtx")){const w=document.createElement("span");w.className="mtx";[...b.querySelectorAll(":scope>b,:scope>span:not(.mtx)")].forEach(x=>w.appendChild(x));b.appendChild(w)}});
   const L={ADM:[[D.vj,"fichas abiertas hace más de 3 días","ficha abierta hace más de 3 días","bad"],[D.avi,"deptos listos para revisar","depto listo para revisar","bad"],[D.a,"fichas para cerrar","ficha para cerrar","bad"],[D.obs,"observaciones abiertas","observación abierta","acc"],[D.dAtr,"deptos con partidas atrasadas","depto con partidas atrasadas","acc"],[D.fot,"fotos de levantamiento por revisar","foto de levantamiento por revisar","acc"]],
     SUP:[[D.vj,"fichas abiertas hace más de 3 días","ficha abierta hace más de 3 días","bad"],[D.a,"fichas para cerrar","ficha para cerrar","bad"],[D.u,"fichas en uso","ficha en uso","acc"],[D.obs,"observaciones abiertas","observación abierta","acc"]],
     PT:[[D.dAtr,"deptos con partidas atrasadas","depto con partidas atrasadas","bad"],[D.dObs,"deptos con observaciones","depto con observaciones","acc"]],
-    EC:[[D.avi,"deptos listos para revisar","depto listo para revisar","bad"],[D.obs,"observaciones abiertas","observación abierta","bad"],[D.dObs,"deptos con observaciones","depto con observaciones","acc"],[D.fot,"fotos por revisar","foto por revisar","acc"]]}[r]||[];
+    EC:[[D.avi,"deptos listos para revisar","depto listo para revisar","bad"],[D.obs,"observaciones abiertas","observación abierta","bad"],[D.dObs,"deptos con observaciones","depto con observaciones","acc"],[D.fot,"fotos por revisar","foto por revisar","acc"]],
+    REV:[[D.avi,"deptos listos para revisar","depto listo para revisar","bad"],[D.obs,"observaciones abiertas","observación abierta","bad"],[D.dObs,"deptos con observaciones","depto con observaciones","acc"],[D.fot,"fotos por revisar","foto por revisar","acc"]]}[r]||[];
   const li=L.filter(x=>x[0]>0).slice(0,3);let nom=(ME.nombre||"").trim().split(/\s+/)[0]||"";
   const f=new Date(),dia=f.toLocaleDateString("es-CL",{weekday:"long",day:"numeric",month:"long"});
   $("iniHero").innerHTML=`<div class="hero"><div class="hola">¡Hola${nom?", "+esc(nom):""}!</div><div class="fe">${esc(dia.charAt(0).toUpperCase()+dia.slice(1))} · ${esc(ROLN[r]||"")}</div>${PERRO(PERRO_X[r])}</div>
@@ -1670,8 +1671,9 @@ const mkGrupos=(modo)=>(modo==="recinto"?recList():partRec(recK)).map(n=>({nombr
 function drawForm(l){const box=$("recForm");box.innerHTML="";const rb=$("recBtns");if(rb)rb.innerHTML="";if(!recD||recK==null)return;
   if(aprK(recD,recK))return;if(recQ&&(S.etapa[recD]??-1)<recK)return;
   if(!draft){const n=l?l.rev+1:1,wrap=document.createElement("div");wrap.style.cssText="display:flex;flex-direction:column;gap:10px";
-    if(!(recQ?puede("calidad"):puede("revision"))){box.innerHTML='<div class="note">'+(recQ?"La revisión de calidad la hacen el administrador y el EC (10% de recepción por etapa).":"Crear revisiones y aprobar etapas: administrador y EC (10% de recepción por etapa).")+(puede("avisar")?" Tu perfil puede ver revisiones, subir fotos de levantamientos y avisar deptos listos para revisar.":" Tu perfil puede ver revisiones.")+'</div>';return}
-    if(l&&!pendCount(l)){const ap=document.createElement("button");ap.className="go";ap.textContent=recQ?"Cerrar etapa "+recK+" para calidad":"Aprobar etapa "+recK;
+    if(!(recQ?puede("calidad"):puede("revision"))){box.innerHTML='<div class="note">'+(recQ?"La revisión de calidad la hacen el administrador y el EC (10% de recepción por etapa).":"Crear revisiones: administrador, EC y revisor. Aprobar etapas: administrador y EC.")+(puede("avisar")?" Tu perfil puede ver revisiones, subir fotos de levantamientos y avisar deptos listos para revisar.":" Tu perfil puede ver revisiones.")+'</div>';return}
+    if(l&&!pendCount(l)&&!recQ&&!puede("aprobar")){const nt=document.createElement("div");nt.className="note";nt.textContent="Sin observaciones pendientes: la etapa queda lista para que el EC o administración la apruebe.";wrap.appendChild(nt)}
+    else if(l&&!pendCount(l)){const ap=document.createElement("button");ap.className="go";ap.textContent=recQ?"Cerrar etapa "+recK+" para calidad":"Aprobar etapa "+recK;
       ap.onclick=async()=>{if(recQ){marcarCal(recD,recK);recAviso=dNom(recD)+": etapa "+recK+" cerrada para calidad."}else{marcarEtapa(recD,recK);syncObsAv(recD,recK);{const d0=recD,k0=recK;autoPdf(()=>pdfActa(d0,k0,true))}recAviso=dNom(recD)+": etapa "+recK+" aprobada."}if(S.avisos[avisoK(recD,recK)]){delete S.avisos[avisoK(recD,recK)];S.avisos={...S.avisos};persist()}drawRec()};wrap.appendChild(ap)}
     else{if(l&&pendCount(l)&&puede("aprobar")&&!recQ){const pc=document.createElement("details");pc.className="acc";const rI=revIdOf(l),its=l.items.filter(it=>!levAcept(rI,it.id));let tipo="";
         pc.innerHTML=`<summary><span class="axn">Cerrar la etapa con pendientes no restrictivos</span><span class="axc">${its.length} pendientes</span></summary><div class="axl" style="gap:8px">
@@ -2006,8 +2008,8 @@ function drawAvB(){const box=$("admAvB");if(!box)return;const B=avBloque();
     AVB.ult={t,prev};AVB.msg="Listo: "+B.L.length+" partidas marcadas en torre "+t+nm+", etapa "+AVB.k+".";refrescar();drawAvB()};
   const u=$("avbUndo");if(u)u.onclick=()=>{const {t,prev}=AVB.ult;AV[t]=prev;persistAv(t);registrar("Avance","Se deshizo el último avance en bloque de la torre "+t,null);AVB.ult=null;AVB.msg="Se deshizo el bloque.";refrescar();drawAvB()}}
 const TEMAS=[{id:"avisos",n:"Deptos listos para revisar",c:"🔔 Deptos listos"},{id:"obs",n:"Observaciones y fotos por revisar",c:"Observaciones"},{id:"fichas",n:"Fichas abiertas hace más de 3 días",c:"Fichas +3 días"},{id:"avance",n:"Deptos con partidas atrasadas",c:"Atrasos de avance"}];
-const TEMAS_BASE={ADM:["avisos","obs","fichas","avance"],EC:["avisos","obs"],SUP:["fichas","obs"],PT:["avisos","obs","fichas","avance"]};
-function drawNot(){const box=$("admNot");if(!box)return;const C=JSON.parse(JSON.stringify(ADM.notif||{})),PF=["SUP","PT","EC","ADM"];C.perfil=C.perfil||{};C.persona=C.persona||{};
+const TEMAS_BASE={ADM:["avisos","obs","fichas","avance"],EC:["avisos","obs"],REV:["avisos","obs"],SUP:["fichas","obs"],PT:["avisos","obs","fichas","avance"]};
+function drawNot(){const box=$("admNot");if(!box)return;const C=JSON.parse(JSON.stringify(ADM.notif||{})),PF=["SUP","PT","EC","REV","ADM"];C.perfil=C.perfil||{};C.persona=C.persona||{};
   const tP=r=>C.perfil[r]||TEMAS_BASE[r]||[],G=(window.TEPI&&TEPI.gente)||{},PR=(window.TEPI&&TEPI.perfiles)||{},gente=Object.keys(G).map(r=>({r,n:G[r],p:PR[r]||""})).sort((a,b)=>(a.p+a.n).localeCompare(b.p+b.n));
   const chipsT=(lst,k)=>TEMAS.map(t=>`<button class="chip sm${lst.includes(t.id)?" on":""}" data-k="${k}" data-t="${t.id}">${esc(t.c)}</button>`).join("");
   box.innerHTML=`<div class="cap2">Qué aviso le llega a cada uno en su celular, si tiene la app instalada y activó los avisos. 🔔 Deptos listos: cuando alguien avisa que un depto está listo para revisar (cada 10 minutos). Observaciones: abiertas y fotos de levantamiento por revisar. Fichas +3 días: fichas abiertas hace más de 3 días. Atrasos de avance: deptos con partidas pasadas de fecha. Los resúmenes llegan a las 8:00.</div>
@@ -2067,17 +2069,18 @@ async function iniciarAdm(){
   pintarPerfil()}
 
 /* ---------- perfiles ---------- */
-const ROLN={ADM:"Administrador",EC:"Encargado de calidad (EC)",SUP:"Supervisor",PT:"Profesional de terreno (PT)"};
+const ROLN={ADM:"Administrador",EC:"Encargado de calidad (EC)",REV:"Revisor",SUP:"Supervisor",PT:"Profesional de terreno (PT)"};
 let ME={uid:"local",rol:"ADM",dueno:true,nombre:"Prueba local"},USR=null,verComo=null;
 const rol=()=>verComo||ME.rol;
 const ecOk=()=>!!(ADM.roles&&ADM.roles.ecAutoriza);
 function puede(a){const r=rol();if(r==="ADM")return true;
-  if(a==="revision"||a==="aprobar")return r==="EC"&&ecOk();
+  if(a==="revision")return(r==="EC"&&ecOk())||r==="REV";
+  if(a==="aprobar")return r==="EC"&&ecOk();
   if(a==="calidad")return r==="EC"&&!!(ADM.roles&&ADM.roles.ecCal);
-  if(a==="avisar")return r==="SUP"||r==="PT"||r==="ADM";
+  if(a==="avisar")return r==="SUP"||r==="PT"||r==="REV"||r==="ADM";
   if(a==="avance"||a==="materiales"||a==="subirFoto")return r==="SUP"||r==="PT";
   return false}
-function resolverRol(){if(!db){ME.rol="ADM";ME.dueno=true;return}if(window.TEPI&&TEPI.perfil){ME.rol=TEPI.perfil;ME.dueno=ME.rol==="ADM";return}const L=(ADM.roles&&ADM.roles.lista)||{};ME.rol=ME.dueno?"ADM":(L[ME.uid]||"PT")}
+function resolverRol(){if(!db){ME.rol="ADM";ME.dueno=true;return}if(window.TEPI&&TEPI.perfil){ME.rol=TEPI.perfil;ME.dueno=ME.rol==="ADM";return}const L=(ADM.roles&&ADM.roles.lista)||{};const pf=window.TEPI&&TEPI.perfil;ME.rol=ME.dueno?"ADM":(L[ME.uid]||(ROLN[pf]&&pf!=="ADM"?pf:"")||"PT")}
 async function iniciarUsuario(){if(!db)return;
   try{USR=await window.claude.use("user");if(USR){const m=await USR.me();ME={uid:m.id||"anonimo",dueno:!!m.isOwner,rol:"PT",nombre:m.name||""}}}catch(e){USR=null}
   resolverRol()}
@@ -2094,11 +2097,11 @@ async function drawPerf(){const box=$("admPerf");if(!box)return;const R=ADM.role
     <label class="fila" style="gap:8px;font-size:14px;padding-top:10px;cursor:pointer"><input type="checkbox" id="ecAut"${R.ecAutoriza?" checked":""}> Habilitar a EC (encargado de calidad) como revisor general: crear revisiones de control y aprobar etapas</label>
     <label class="fila" style="gap:8px;font-size:14px;padding-top:8px;cursor:pointer"><input type="checkbox" id="ecCal"${R.ecCal?" checked":""}> Habilitar a EC el cierre de etapamiento de calidad: revisión de calidad (10% por torre y etapa) sobre deptos con la etapa cerrada</label>
     <div style="font-size:14px;padding-top:12px">Personas con perfil asignado</div>
-    <div>${ids.length?ids.map(i=>`<div class="hrow"><span data-nm="${esc(i)}"></span><div class="fila"><select data-rol="${esc(i)}">${["PT","SUP","EC"].map(r=>`<option value="${r}"${L[i]===r?" selected":""}>${ROLN[r]}</option>`).join("")}</select><button class="lnk" data-quita="${esc(i)}">Quitar</button></div></div>`).join(""):'<div class="cap2">Nadie todavía. Quien entre sin perfil asignado queda como PT (profesional de terreno).</div>'}</div>
+    <div>${ids.length?ids.map(i=>`<div class="hrow"><span data-nm="${esc(i)}"></span><div class="fila"><select data-rol="${esc(i)}">${["PT","SUP","EC","REV"].map(r=>`<option value="${r}"${L[i]===r?" selected":""}>${ROLN[r]}</option>`).join("")}</select><button class="lnk" data-quita="${esc(i)}">Quitar</button></div></div>`).join(""):'<div class="cap2">Nadie todavía. Quien entre sin perfil asignado queda como PT (profesional de terreno).</div>'}</div>
     ${window.TEPI?'<div class="cap2" style="padding-top:8px">Las personas, perfiles y claves se manejan en la hoja Usuarios del Google Sheet de la app. El perfil de la hoja manda sobre esta lista.</div>':USR?`<input class="txt" id="perBus" placeholder="Buscar persona por nombre para agregarla" style="margin-top:10px"><div id="perRes"></div>`:'<div class="cap2" style="padding-top:8px">Para agregar personas, abre la app desde claude.ai.</div>'}
     <div class="err" id="perMsg"></div>`;
   box.querySelectorAll("[data-nm]").forEach(s=>s.textContent=nm[s.dataset.nm]||"Persona sin nombre visible");
-  chips($("vcChips"),[{id:null,label:"Mi perfil"},...["EC","SUP","PT"].map(r=>({id:r,label:ROLN[r]}))],it=>verComo===it.id,it=>{verComo=it.id;pintarPerfil();drawPerf()});
+  chips($("vcChips"),[{id:null,label:"Mi perfil"},...["EC","REV","SUP","PT"].map(r=>({id:r,label:ROLN[r]}))],it=>verComo===it.id,it=>{verComo=it.id;pintarPerfil();drawPerf()});
   const guardarR=async(nuevo,desc)=>{try{await guardarAdm("roles",nuevo);await registrar("Administración",desc,null);drawPerf()}catch(e){$("perMsg").textContent="No se pudo guardar el perfil."}};
   $("ecCal").onchange=e=>guardarR({...R,lista:L,ecCal:e.target.checked},e.target.checked?"Se habilitó a EC para la revisión de calidad":"Se quitó a EC la revisión de calidad");
   $("ecAut").onchange=e=>guardarR({...R,lista:L,ecAutoriza:e.target.checked},e.target.checked?"Se autorizó a EC para revisiones y cierre de etapas":"Se quitó la autorización a EC");
@@ -2177,7 +2180,7 @@ function levHtml(l){const rI=revIdOf(l);
       ${st==="rechazada"&&x.mot?`<div class="cap2" style="color:var(--bad)">Motivo del rechazo: ${esc(x.mot)}</div>`:""}
       <div class="fila">${rol()==="ADM"&&st!=="aceptada"&&st!=="enviada"?`<button class="small" data-hab="${id}" data-it="${it.id}">${x.hab?"Quitar permiso de foto":"Permitir levantar con foto"}</button>`:""}
       ${x.hab&&puede("subirFoto")&&st!=="aceptada"&&st!=="enviada"?`<label class="small fb">Subir foto de levantamiento<input type="file" accept="image/*" data-fl="${id}" hidden></label>`:""}
-      ${st==="enviada"&&rol()==="ADM"?`<button class="small hecho" data-acep="${id}">Aceptar levantamiento</button><input class="txt" data-mot="${id}" placeholder="Motivo si rechazas" style="flex:1;min-width:150px"><button class="small" data-rech="${id}">Rechazar</button>`:""}</div></div>`},N3=3,its=l.items;
+      ${st==="enviada"&&(rol()==="ADM"||rol()==="REV")?`<button class="small hecho" data-acep="${id}">Aceptar levantamiento</button><input class="txt" data-mot="${id}" placeholder="Motivo si rechazas" style="flex:1;min-width:150px"><button class="small" data-rech="${id}">Rechazar</button>`:""}</div></div>`},N3=3,its=l.items;
   return`<div style="display:flex;flex-direction:column;gap:8px">${its.slice(0,N3).map((it,i)=>one(it,i)).join("")}${its.length>N3?`<details class="vtodo"><summary class="lnk" style="padding:4px 0;cursor:pointer;list-style:none">Ver ${its.length-N3} pendiente${its.length-N3>1?"s":""} más ▾</summary><div style="display:flex;flex-direction:column;gap:8px;padding-top:8px">${its.slice(N3).map((it,i)=>one(it,i+N3)).join("")}</div></details>`:""}<div class="err" id="levErr"></div></div>`}
 function atarLev(l){const box=$("recHist"),rI=revIdOf(l),nom=dNom(recD)+" etapa "+recK,err=t=>{const e=$("levErr");if(e)e.textContent=t};
   const it=id=>l.items.find(x=>levId(rI,x.id)===id);
