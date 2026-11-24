@@ -43,9 +43,9 @@ main{max-width:720px;margin:0 auto;padding-block:16px 48px;padding-left:max(16px
 .avb{background:#fff4cc;color:#5e430a;border:1px solid #f2d78a;border-radius:10px;padding:8px 10px;font-size:14px;margin:4px 0 8px}
 .dp.qc{box-shadow:0 0 0 2px #fff,0 0 0 4px var(--cal),0 0 8px 2px var(--cal)}
 .dp .avi{position:absolute;left:-5px;top:-6px;font-size:11px;line-height:1}
-:root{--mmat:#fdeee3;--mmatb:#f6c7a8;--mmatt:#5c2f19;--mava:#e6f2df;--mavab:#b9dba3;--mavat:#1f4d23;--mrec:#fdf3d4;--mrecb:#f2d78a;--mrect:#5e430a;--mres:#e9eef5;--mresb:#c3d0e2;--mrest:#22385a}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--mmat:#3a2a20;--mmatb:#6b4632;--mmatt:#f6c7a8;--mava:#1f3324;--mavab:#3f6a46;--mavat:#b9dba3;--mrec:#3a3219;--mrecb:#6e5c22;--mrect:#f2d78a;--mres:#222c3a;--mresb:#3d4d66;--mrest:#c3d0e2}}
-:root[data-theme="dark"]{--mmat:#3a2a20;--mmatb:#6b4632;--mmatt:#f6c7a8;--mava:#1f3324;--mavab:#3f6a46;--mavat:#b9dba3;--mrec:#3a3219;--mrecb:#6e5c22;--mrect:#f2d78a;--mres:#222c3a;--mresb:#3d4d66;--mrest:#c3d0e2}
+:root{--mmat:#fdeee3;--mmatb:#f6c7a8;--mmatt:#5c2f19;--mava:#e6f2df;--mavab:#b9dba3;--mavat:#1f4d23;--mrec:#fdf3d4;--mrecb:#f2d78a;--mrect:#5e430a;--mres:#e9eef5;--mresb:#c3d0e2;--mrest:#22385a;--mpiz:#efe8f7;--mpizb:#cdbbe6;--mpizt:#3e2a5c}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--mmat:#3a2a20;--mmatb:#6b4632;--mmatt:#f6c7a8;--mava:#1f3324;--mavab:#3f6a46;--mavat:#b9dba3;--mrec:#3a3219;--mrecb:#6e5c22;--mrect:#f2d78a;--mres:#222c3a;--mresb:#3d4d66;--mrest:#c3d0e2;--mpiz:#2d2539;--mpizb:#55457a;--mpizt:#d6c7ef;--mpiz:#2d2539;--mpizb:#55457a;--mpizt:#d6c7ef}}
+:root[data-theme="dark"]{--mmat:#3a2a20;--mmatb:#6b4632;--mmatt:#f6c7a8;--mava:#1f3324;--mavab:#3f6a46;--mavat:#b9dba3;--mrec:#3a3219;--mrecb:#6e5c22;--mrect:#f2d78a;--mres:#222c3a;--mresb:#3d4d66;--mrest:#c3d0e2;--mpiz:#2d2539;--mpizb:#55457a;--mpizt:#d6c7ef}
 .igrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .bigbtn.mm{border-width:2px;border-style:solid;border-radius:20px;padding:14px;min-height:118px;justify-content:flex-start}
 .bigbtn.mm b{font-size:20px;line-height:1.1;margin-top:4px}.bigbtn.mm span{font-size:13px}
@@ -55,6 +55,7 @@ main{max-width:720px;margin:0 auto;padding-block:16px 48px;padding-left:max(16px
 .bigbtn.mava{background:var(--mava);border-color:var(--mavab);color:var(--mavat)}.mava b,.mava span{color:var(--mavat)}
 .bigbtn.mrec{background:var(--mrec);border-color:var(--mrecb);color:var(--mrect)}.mrec b,.mrec span{color:var(--mrect)}
 .bigbtn.mres{background:var(--mres);border-color:var(--mresb);color:var(--mrest)}.mres b,.mres span{color:var(--mrest)}
+.bigbtn.mpiz{background:var(--mpiz);border-color:var(--mpizb);color:var(--mpizt)}.mpiz b,.mpiz span{color:var(--mpizt)}
 .mico{display:block;width:34px;height:34px;flex:none}.mico svg{width:34px;height:34px}
 .rpf{display:grid;grid-template-columns:26px repeat(8,minmax(0,1fr));gap:4px;align-items:center;padding:3px 0}.rpd{position:relative;min-width:0;height:44px;padding:0;border:1px solid var(--line);background:var(--bg);border-radius:10px;font:inherit;font-size:15px;font-weight:600;color:var(--ink);cursor:pointer}.rpd.al{border:2px solid var(--bad)}
 #rpT{gap:6px}#rpT .chip{padding:7px 12px;min-width:0}
@@ -277,6 +278,51 @@ body::before{background:var(--top)}
 .seg button{border-radius:14px}
 .small{border-radius:12px}
 .dp.ms{border-radius:9px}
+
+/* pizarras */
+#v-piz{display:flex;flex-direction:column;gap:10px}
+.pzc{display:flex;align-items:center;gap:12px;width:100%;padding:12px 4px;border:none;border-top:1px solid var(--line);background:none;color:var(--ink);font:inherit;cursor:pointer}
+.pzk{font-size:24px;width:40px;height:40px;display:grid;place-items:center;border-radius:10px;background:var(--accent-soft)}
+.pzbar{display:flex;align-items:center;gap:10px}
+.pztools{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.pzb{display:flex;flex-direction:column;align-items:center;gap:1px;min-width:54px;padding:6px 6px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink);font:inherit;cursor:pointer}
+.pzb span{font-size:18px;line-height:1.1}.pzb small{font-size:11px;color:var(--muted)}
+.pzb.on{border-color:var(--accent);background:var(--accent-soft)}.pzb.on small{color:var(--accent)}
+.pzcol{width:28px;height:28px;border-radius:50%;border:2px solid var(--surface);box-shadow:0 0 0 1px var(--line);cursor:pointer;padding:0}
+.pzcol.on{box-shadow:0 0 0 3px var(--accent)}.pzsep{width:1px;height:24px;background:var(--line);margin:0 4px}
+.pzvp{position:relative;height:72vh;min-height:380px;overflow:hidden;border:1px solid var(--line);border-radius:12px;background:#e9e8e3;touch-action:none;user-select:none;-webkit-user-select:none}
+.pzw{position:absolute;left:0;top:0;transform-origin:0 0;background:#fff;box-shadow:0 1px 8px rgba(0,0,0,.18)}
+.pzw.puntos{background-image:radial-gradient(#cfd3d6 1.6px,transparent 1.6px);background-size:40px 40px}
+.pzw.t-lapiz,.pzw.t-resaltar{cursor:crosshair}.pzw.t-lapiz *,.pzw.t-resaltar *{pointer-events:none}
+.pzw.t-texto,.pzw.t-tabla{cursor:text}.pzw.t-borrar{cursor:not-allowed}
+.pzf{position:absolute;left:0;top:0;width:100%;height:100%;object-fit:contain;pointer-events:none}
+.pzs{position:absolute;left:0;top:0;overflow:visible;pointer-events:none}
+.pzs polyline{fill:none;stroke-linecap:round;stroke-linejoin:round}
+.pzs .hit{stroke:transparent}.pzw.t-borrar .pzs g{pointer-events:stroke;cursor:not-allowed}.pzw.t-borrar .pzs g:hover polyline:not(.hit){opacity:.4}
+.pzi{position:absolute}.pzi img{width:100%;height:100%;object-fit:cover;display:block;pointer-events:none;border-radius:4px}
+.pzn{position:absolute;min-height:80px;padding:14px 16px;font-size:26px;line-height:1.3;border-radius:6px;box-shadow:0 2px 6px rgba(0,0,0,.18);white-space:pre-wrap;word-break:break-word;outline:none}
+.pzt{position:absolute;width:max-content;border-collapse:collapse;background:#fff;color:#1d2326;font-size:24px;box-shadow:0 2px 6px rgba(0,0,0,.15)}
+.pzt td{border:2px solid #2b2f31;padding:8px 12px;min-height:44px;height:44px;vertical-align:top;white-space:pre-wrap;outline:none}
+.pzt td.th{background:#eef0ec;font-weight:700;text-align:left!important}.pzt,.pzn,.pza{font-family:var(--body),system-ui,sans-serif}.pzt td:focus{background:#fffbe0}
+.pza{position:absolute;display:flex;gap:12px;align-items:center;width:340px;padding:14px 16px;background:#fff;color:#1d2326;border:2px solid #c9cdd0;border-radius:10px;box-shadow:0 2px 6px rgba(0,0,0,.12);font-size:22px;cursor:pointer}
+.pza b{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.pza small{display:block;color:#5f676b;font-size:16px}.pzai{font-size:40px}
+.pzw .sel{outline:4px solid var(--accent);outline-offset:3px}
+.pzh{position:absolute;right:-14px;bottom:-14px;width:28px;height:28px;border-radius:50%;background:var(--accent);border:3px solid #fff;cursor:nwse-resize;pointer-events:auto!important}
+.pzw.t-mover .pzn,.pzw.t-mover .pzi,.pzw.t-mover .pzt,.pzw.t-mover .pza{cursor:grab}
+.pzw.t-borrar .pzn:hover,.pzw.t-borrar .pzi:hover,.pzw.t-borrar .pzt:hover,.pzw.t-borrar .pza:hover{opacity:.45}
+.pzsem>div{position:absolute;top:0;bottom:0;border-right:2px solid #e2e4e1;pointer-events:none}.pzsem{position:absolute;inset:0;pointer-events:none}
+.pzsem b{display:block;padding:18px 20px;font-size:30px;color:#5f676b;border-bottom:2px solid #e2e4e1;background:#f7f7f4}
+.pzcal{position:absolute;inset:0;pointer-events:none;color:#5f676b}
+.pzcalt{position:absolute;left:24px;top:8px;font-size:34px;font-weight:700;color:#1d2326}
+.pzcalh{position:absolute;top:62px;height:48px;line-height:48px;text-align:center;font-size:22px;font-weight:700;background:#f2f3f0;border-right:1px solid #e2e4e1}
+.pzcald{position:absolute;border-right:1px solid #e2e4e1;border-bottom:1px solid #e2e4e1;padding:10px 14px;font-size:24px;font-weight:700;box-sizing:border-box}
+.pztabs{display:flex;gap:6px;overflow-x:auto;padding-bottom:2px;align-items:center}
+.pztab{flex:none;padding:7px 12px;border:1px solid var(--line);border-radius:10px 10px 0 0;background:var(--bg);color:var(--muted);font:inherit;font-size:14px;cursor:pointer;display:flex;gap:6px;align-items:center;white-space:nowrap}
+.pztab.on{background:var(--surface);color:var(--ink);border-color:var(--accent);font-weight:700}.pztab.mas{border-style:dashed;color:var(--accent)}
+.pzon{color:#2f9e5b;font-weight:700;font-size:13px}#iniOn{font-size:14px;padding:8px 12px;border-radius:12px;background:var(--surface);border:1px solid var(--line)}
+.pzav{display:inline-grid;place-items:center;width:28px;height:28px;border-radius:50%;background:#2f9e5b;color:#fff;font-weight:700;font-size:13px;margin-left:-4px;border:2px solid var(--surface)}
+.pzt tr.pzhd td,.pzt td.pzhn{background:#e9ecef;color:#5f676b;font-size:18px;font-weight:700;text-align:center;min-width:0!important;height:auto;padding:4px 8px}
+.pzcald.fuera{background:#fafaf8}.pzcald.dom{background:#fbf6f4}.pzcald.hoy{background:#e3eef6;color:#1f5f8b}
 </style>
 
 <header class="top">
@@ -292,15 +338,17 @@ body::before{background:var(--top)}
     
     <div class="note" id="vacio" hidden>Todavía no hay datos guardados en la nube. <button class="small" id="cargarPrueba">Cargar datos de prueba</button></div>
     <div id="iniHero"></div>
+    <div id="iniOn" hidden></div>
     <div class="igrid">
     <button class="bigbtn mm mmat" data-go="mat"><i class="mico"></i><b>Materiales</b><span id="iniMat">Fichas por depto</span></button>
     <button class="bigbtn mm mava" data-go="ava"><i class="mico"></i><b>Avance</b><span id="iniAva">Recorrido y grilla</span></button>
     <button class="bigbtn mm mrec" data-go="rec"><i class="mico"></i><b>Recepción de etapa</b><span id="iniRec">Revisiones y observaciones</span></button>
+    <button class="bigbtn mm mpiz" data-go="piz"><i class="mico"></i><b>Pizarras</b><span>Reuniones, planos y planificación</span></button>
     <button class="bigbtn mm mres" data-go="res"><i class="mico"></i><b>Resumen</b><span>Indicadores</span></button>
     </div>
     <button class="admlink" data-go="adm" id="btnAdm" hidden>Administración ⚙</button>
     <div class="cap2" id="quien" style="text-align:center"></div>
-    <div class="cap2" id="verApp" style="opacity:.7;text-align:center">Tepi Control VLV · versión V2 (instalable, base V1.31) · 24 nov 2026</div>
+    <div class="cap2" id="verApp" style="opacity:.7;text-align:center">Tepi Control VLV · versión V2 (instalable, base V1.32) · 24 nov 2026</div>
   </section>
 
   <!-- MATERIALES: selección -->
@@ -378,6 +426,7 @@ body::before{background:var(--top)}
   </section>
 
   <!-- ADMINISTRACIÓN -->
+  <section id="v-piz" hidden></section>
   <section id="v-adm" hidden style="display:flex;flex-direction:column;gap:12px">
     <div class="note">Solo tú ves esta sección. Lo que cargues aquí actualiza la app para todos.</div>
     <h2>Perfiles</h2>
@@ -599,7 +648,7 @@ window.addEventListener("error",function(e){ver((e.message||"Error")+(e.lineno?"
   function mezclar(a,b){Object.keys(b).forEach(k=>{const v=b[k];if(v===null)delete a[k];else if(v&&typeof v==="object"&&!Array.isArray(v)&&a[k]&&typeof a[k]==="object"&&!Array.isArray(a[k]))mezclar(a[k],v);else a[k]=clon(v)});return a}
   function aplicarLocal(o){if(o.op==="delete")delete DOCS[o.p];else if(o.op==="update"&&DOCS[o.p])mezclar(DOCS[o.p].d,o.d||{});else DOCS[o.p]={v:(DOCS[o.p]||{}).v||0,d:clon(o.d||{})}}
   function conIds(x){if(x==null)return x;let t=JSON.stringify(x);if(t.indexOf("tmp")<0)return x;Object.keys(MAPA).forEach(a=>{t=t.split(a).join(MAPA[a])});return JSON.parse(t)}
-  function permitido(op,p){const pf=SES.yo.perfil;if(pf==="ADM")return true;if(p.indexOf("admin/")===0)return false;if(op==="delete")return p.indexOf("recepciones/")===0||p.indexOf("levantes/")===0;return true}
+  function permitido(op,p){const pf=SES.yo.perfil;if(pf==="ADM")return true;if(p.indexOf("admin/")===0)return false;if(op==="delete")return p.indexOf("recepciones/")===0||p.indexOf("levantes/")===0||p.indexOf("pizEl/")===0||p.indexOf("pizarras/")===0;return true}
   async function enviar(){if(enviando||!SES||!COLA.length)return;enviando=true;
     try{while(COLA.length){const o=COLA[0];let r=null;
       try{if(o.op==="foto")r=await run("subirFoto",SES.token,o.b64,o.tipo);
@@ -662,7 +711,7 @@ window.addEventListener("error",function(e){ver((e.message||"Error")+(e.lineno?"
     profiles:async ids=>{const o={};ids.forEach(i=>o[i]={id:i,name:(window.TEPI.gente||{})[i]||""});return o},search:async()=>[]};
 
   const fileUrl=id=>{if(MAPA[id])id=MAPA[id];return/^tmp/.test(id)?(FC[id]||""):"https://drive.google.com/file/d/"+encodeURIComponent(id)+"/view"};
-  window.TEPI={perfil:null,yo:null,gente:{},fotoUrl,fileUrl,fotoData,salir,estado,guardarDoc,borrarDoc,pendientes:()=>COLA.length,v2:true};
+  window.TEPI={perfil:null,yo:null,gente:{},fotoUrl,fileUrl,fotoData,salir,estado,guardarDoc,borrarDoc,presencia:d=>SES?run("presencia",SES.token,d||""):Promise.resolve(null),pendientes:()=>COLA.length,v2:true};
   let promptInst=null;
   function botonInstalar(){const h=document.querySelector("header.top");if(!h||$("tpInst"))return;const st=window.matchMedia&&matchMedia("(display-mode: standalone)").matches||navigator.standalone;if(st)return;
     const b=document.createElement("button");b.id="tpInst";b.textContent="Instalar app";b.style.cssText="margin-left:8px;font-size:13px;background:#f6c7a8;color:#8a4a2c;border:0;border-radius:8px;padding:5px 10px;font-weight:600";
@@ -741,7 +790,7 @@ async function flush(){if(writing||!dirty)return;writing=true;dirty=false;const 
   try{await escribir(db.doc("obra/estado"),sSync,snap);sSync=snap;setSync("Guardado en la nube")}catch(e){setSync("No se guardó en la nube");dirty=true;setTimeout(flush,5000)}
   writing=false;if(dirty)flush();else refrescarEstado()}
 async function refrescarEstado(){try{const sn=await db.doc("obra/estado").get();if(dirty||writing||!sn.exists)return;S=norm(limpiar(JSON.parse(JSON.stringify(sn.data()))));sSync=JSON.parse(JSON.stringify(S));refrescar()}catch(e){}}
-const ICO_M={mat:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l9-5 9 5v8l-9 5-9-5z"/><path d="M3 8l9 5 9-5M12 13v8"/></svg>',
+const ICO_M={piz:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21l4-4 4 4M7 13l3-3 2 2 4-4"/></svg>',mat:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l9-5 9 5v8l-9 5-9-5z"/><path d="M3 8l9 5 9-5M12 13v8"/></svg>',
   ava:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 20V11M11 20V4M17 20v-7M22 20H2"/></svg>',
   rec:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 9l2 2 4-4M9 16h6"/></svg>',
   res:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a9 9 0 1 0 9 9h-9z"/><path d="M15 3.5A9 9 0 0 1 20.5 9H15z"/></svg>'};
@@ -759,7 +808,7 @@ function datosHoy(){const now=Date.now();if(iniCache.v&&now-iniCache.t<15000)ret
 function pintarInicio(){const e=$("iniMat");if(!e)return;const r=rol(),D=datosHoy(),pl=(n,a,b)=>n+" "+(n===1?a:b);
   e.innerHTML=D.u?pl(D.u,"ficha en uso","fichas en uso")+(D.a?` <span class="pill" style="background:var(--bad-soft);color:var(--bad)">${pl(D.a,"alerta","alertas")}</span>`:""):"Sin fichas en uso";
   $("iniRec").textContent=D.obs?pl(D.obs,"observación abierta","observaciones abiertas"):"Sin observaciones abiertas";$("iniAva").textContent=D.dAtr?pl(D.dAtr,"depto con atrasos","deptos con atrasos"):"Al día con el programa";
-  const prim={SUP:"mat",PT:"ava",EC:"rec",REV:"rec"}[r]||"",vis={ADM:["mat","ava","rec","res"],SUP:["mat","rec","ava"],PT:["ava","rec","mat"],EC:["rec","ava","mat"],REV:["rec","ava","mat"]}[r]||["mat","ava","rec"];
+  const prim={SUP:"mat",PT:"ava",EC:"rec",REV:"rec"}[r]||"",vis={ADM:["mat","ava","rec","piz","res"],SUP:["mat","rec","ava","piz"],PT:["ava","rec","mat","piz"],EC:["rec","ava","mat","piz"],REV:["rec","ava","mat","piz"]}[r]||["mat","ava","rec","piz"];
   document.querySelectorAll(".igrid .mm").forEach(b=>{const g=b.dataset.go,i=vis.indexOf(g);b.hidden=i<0;b.style.order=i<0?99:i;b.classList.toggle("prim",g===prim);
     const ic=b.querySelector(".mico");if(ic&&!ic.innerHTML)ic.innerHTML=ICO_M[g];
     if(g===prim&&!b.querySelector(".mtx")){const w=document.createElement("span");w.className="mtx";[...b.querySelectorAll(":scope>b,:scope>span:not(.mtx)")].forEach(x=>w.appendChild(x));b.appendChild(w)}});
@@ -834,12 +883,12 @@ const extQ=(r,t)=>r1(((r&&r.ext)||[]).filter(x=>!t||x.t===t).reduce((a,x)=>a+(+x
 function desv(t,c){if(!c)return{txt:"Sin consumo",cls:"neu"};if(!t)return{txt:"No aplica",cls:"neu"};const v=(t-c)/t*100;return{txt:(v>0?"+":"")+v.toFixed(1)+"%",cls:v<0?"bad":"good"}}
 
 let tendI="yeso",selD=new Set(),selI=new Set(),avaD=null,resI="todos",hist=[];
-const VIEWS={inicio:"Tepi Control VLV",mat:"Materiales",fichas:"Fichas",lote:"Reparto rápido",cierre:"Cierre rápido",ava:"Avance",rec:"Recepción de etapa",res:"Resumen",adm:"Administración"};
+const VIEWS={inicio:"Tepi Control VLV",mat:"Materiales",fichas:"Fichas",lote:"Reparto rápido",cierre:"Cierre rápido",ava:"Avance",rec:"Recepción de etapa",piz:"Pizarras",res:"Resumen",adm:"Administración"};
 function show(v,push=true){if((v==="adm"||v==="res")&&ME.rol!=="ADM")v="inicio";
   if(push&&cur)hist.push(cur);cur=v;
   for(const k in VIEWS)$("v-"+k).hidden=k!==v;
   $("ttl").textContent=VIEWS[v];if(v!=="ava"&&typeof drawSheet==="function"){rgSel=null;drawSheet()}$("back").hidden=v==="inicio";
-  ({mat:drawSel,fichas:drawFichas,lote:drawLote,cierre:drawCierre,ava:drawAva,res:drawRes,rec:drawRec,adm:drawAdm})[v]?.();
+  ({mat:drawSel,fichas:drawFichas,lote:drawLote,cierre:drawCierre,ava:drawAva,res:drawRes,rec:drawRec,piz:drawPiz,adm:drawAdm})[v]?.();try{pzPresencia();pzPintarOn()}catch(e){}
   window.scrollTo(0,0);
 }
 let cur=null;
@@ -2067,6 +2116,233 @@ async function iniciarAdm(){
     db.collection("levantes").onSnapshot(qs=>{const L={};qs.docs.forEach(d=>L[d.id]=JSON.parse(JSON.stringify(d.data())));LEV=L;refrescar()},e=>{});
     if(ME.dueno)db.collection("bitacora").orderBy("t","desc").limit(300).onSnapshot(qs=>{BIT=qs.docs.map(d=>({id:d.id,...JSON.parse(JSON.stringify(d.data()))}));if(cur==="adm")drawBit()},e=>{})}
   pintarPerfil()}
+
+/* ---------- pizarras: páginas con dibujo, notas, tablas tipo Excel, fotos, archivos y planos, compartidas ---------- */
+let PZB={},PZE={},pzCur=null,pzPg="p1",pzTool="mover",pzCol="#1d2326",pzV=null,pzUndo=[],pzForm=null,pzPend=false,pzSel=null,pzCel=null,pzBorrarB=null,pzPgForm=null,pzRen=false;
+const PZW=2000,PZCOL=["#1d2326","#b23a2a","#1f5f8b","#2f7d4f","#d18a1e","#7a4fa0"],PZNOTA=["#fff3a8","#d9ecff","#dff3e4","#ffe0d6"],PZCELBG=["","#fff3a8","#dff3e4","#ffe0d6","#d9ecff"];
+const PZTOOLS=[["mover","✋","Mover"],["lapiz","✏️","Lápiz"],["resaltar","🖍","Resaltar"],["texto","📝","Texto"],["tabla","▦","Tabla"],["foto","📷","Foto"],["archivo","📎","Archivo"],["borrar","🧽","Borrar"]];
+const PZTIPOS=[["hoja","📄","Hoja en blanco"],["libre","🗒","Libre"],["semana","🗓","Semana"],["calendario","📅","Calendario"],["plano","📐","Plano"]];
+const PZH0={hoja:2828,libre:1400,semana:1300,calendario:1500,plano:1400};
+const pzId=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+const pzYo=()=>({por:ME.uid||"",pn:(ME.nombre||"").trim().split(/\s+/)[0]||ROLN[rol()]||""});
+const pzPags=B=>B&&Array.isArray(B.pags)&&B.pags.length?B.pags:[{id:"p1",n:"Página 1",tipo:(B&&B.tipo)||"libre",mes:B&&B.mes,foto:B&&B.foto,fotoData:B&&B.fotoData,h:(B&&B.h)||1400}];
+const pzPag=()=>{const P=pzPags(PZB[pzCur]);return P.find(p=>p.id===pzPg)||P[0]};
+function pzSub(){if(!db||pzSub.ok)return;pzSub.ok=1;
+  db.collection("pizarras").onSnapshot(qs=>{const R={};qs.docs.forEach(d=>R[d.id]=JSON.parse(JSON.stringify(d.data())));PZB=R;if(cur==="piz")pzRefresh(true)},()=>{});
+  db.collection("pizEl").onSnapshot(qs=>{const R={};qs.docs.forEach(d=>R[d.id]=JSON.parse(JSON.stringify(d.data())));PZE=R;if(cur==="piz")pzRefresh()},()=>{})}
+function pzRefresh(tabs){if(pzCur){if(!PZB[pzCur]){pzCur=null;drawPiz();return}setTimeout(()=>{if(pzCur&&cur==="piz"){if(tabs&&!pzRen)pzTabs();pzRender()}},0)}else drawPizLista()}
+function drawPiz(){pzSub();if(pzCur&&PZB[pzCur])drawPizTablero();else{pzCur=null;drawPizLista()}}
+const pzEls=b=>Object.entries(PZE).filter(([k])=>k.split("~")[0]===b).map(([k,v])=>({...v,id:k}));
+function drawPizLista(){const box=$("v-piz");if(!box)return;const L=Object.entries(PZB).map(([id,b])=>({...b,id})).map(b=>{const E=pzEls(b.id);b.n2=E.length;b.np=pzPags(b).length;b.ult=Math.max(b.f0||0,...E.map(e=>e.m||e.z||0));return b}).sort((a,b)=>b.ult-a.ult);
+  const ico=t=>(PZTIPOS.find(x=>x[0]===t)||PZTIPOS[1])[1],aqui=id=>pzEnLinea("piz:"+id);
+  box.innerHTML=`<div class="card"><div class="card-h"><b>Pizarras</b><button class="go small" id="pzNueva" style="width:auto;margin:0;padding:8px 14px">+ Nueva pizarra</button></div><div id="pzForm"></div>
+    ${L.length?L.map(b=>{const a=aqui(b.id);return`<button class="pzc" data-pz="${esc(b.id)}"><span class="pzk">${ico(pzPags(b)[0].tipo)}</span><span style="flex:1;text-align:left;min-width:0"><b>${esc(b.n||"Sin nombre")}</b><br><span class="cap2">${b.ref?esc(b.ref)+" · ":""}${b.np} página${b.np===1?"":"s"} · ${b.n2} elemento${b.n2===1?"":"s"}${b.ult?" · "+new Date(b.ult).toLocaleDateString("es-CL",{day:"numeric",month:"short"}):""}</span>${a.length?`<br><span class="pzon">● ${esc(a.map(x=>x.n).join(", "))} ${a.length===1?"está":"están"} aquí</span>`:""}</span><span class="cap2">›</span></button>`}).join(""):'<div class="cap2" style="padding:10px 0">Todavía no hay pizarras. Crea la primera para una reunión, la planificación de la semana o para marcar un plano.</div>'}</div>`;
+  $("pzNueva").onclick=()=>{pzForm=pzForm?null:{tipo:"hoja",n:"",ref:"",pag:1,mes:hoy().slice(0,7)};drawPizForm()};drawPizForm();
+  box.querySelectorAll("[data-pz]").forEach(b=>b.onclick=()=>pzAbrir(b.dataset.pz))}
+function pzAbrir(id,pg){pzCur=id;pzPg=pg||pzPags(PZB[id])[0].id;pzV=null;pzUndo=[];pzSel=null;pzCel=null;pzPgForm=null;drawPizTablero();pzPresencia()}
+// formulario de tipo de página (sirve para la pizarra nueva y para agregar páginas)
+function pzTipoForm(f,pre){return`<div class="lbl" style="margin-top:10px">Tipo</div><div class="chips" id="${pre}Tipo"></div>
+    ${f.tipo==="calendario"?`<div class="lbl" style="margin-top:10px">Mes</div><input class="txt" id="${pre}Mes" type="month" value="${esc(f.mes)}" style="max-width:200px">`:""}
+    ${f.tipo==="plano"?`<div class="lbl" style="margin-top:10px">Plano (imagen o PDF)</div><label class="small fb" style="display:inline-block">${f.file?"📄 "+esc(f.file.name):"Elegir archivo"}<input type="file" id="${pre}F" accept="image/*,application/pdf" hidden></label>
+      ${f.file&&/pdf/i.test(f.file.type)?`<span class="cap2" style="margin-left:8px">Página del PDF <input class="txt" id="${pre}Pg" type="number" min="1" value="${f.pag}" style="width:64px;display:inline-block"></span>`:""}`:""}`}
+function pzTipoWire(f,pre,redraw,keep){chips($(pre+"Tipo"),PZTIPOS.map(([id,i,n])=>({id,label:i+" "+n})),it=>f.tipo===it.id,it=>{keep();f.tipo=it.id;redraw()});
+  const ms=$(pre+"Mes");if(ms)ms.onchange=()=>{f.mes=ms.value||f.mes};
+  const fi=$(pre+"F");if(fi)fi.onchange=()=>{keep();f.file=fi.files[0]||null;if(f.file&&f.n!==undefined&&!f.n)f.n=f.file.name.replace(/\.[^.]+$/,"");redraw()};
+  const pg=$(pre+"Pg");if(pg)pg.onchange=()=>{f.pag=Math.max(1,+pg.value||1)}}
+async function pzNuevaPag(f,n){const P={id:"p"+pzId(),n,tipo:f.tipo,h:PZH0[f.tipo]||1400};if(f.tipo==="calendario")P.mes=f.mes||hoy().slice(0,7);
+  if(f.tipo==="plano"){const img=await pzPlano(f.file,f.pag);Object.assign(P,await subirFoto(img.blob),{h:Math.round(PZW*img.h/img.w)})}return P}
+function drawPizForm(){const F=$("pzForm");if(!F)return;if(!pzForm){F.innerHTML="";return}const f=pzForm;
+  F.innerHTML=`<div class="card" style="margin:10px 0;padding:12px"><div class="lbl">Nombre</div><input class="txt" id="pzN" placeholder="Reunión de coordinación lunes" value="${esc(f.n)}">
+    ${pzTipoForm(f,"pz")}
+    <div class="lbl" style="margin-top:10px">¿De qué es? <span class="cap2">(opcional)</span></div><input class="txt" id="pzR" placeholder="Semana 48, Torre 4, Tipología B" value="${esc(f.ref)}">
+    <div class="err" id="pzErr"></div><button class="save" id="pzCrear">Crear pizarra</button></div>`;
+  pzTipoWire(f,"pz",drawPizForm,()=>{f.n=$("pzN").value;f.ref=$("pzR").value});
+  $("pzCrear").onclick=async()=>{const er=t=>$("pzErr").textContent=t,n=$("pzN").value.trim();f.ref=$("pzR").value.trim();if(!n)return er("Ponle un nombre");if(f.tipo==="plano"&&!f.file)return er("Elige la imagen o el PDF del plano");
+    const bt=$("pzCrear");bt.disabled=true;bt.textContent="Creando…";
+    try{const id="pz"+pzId(),P=await pzNuevaPag(f,f.tipo==="plano"?"Plano":f.tipo==="calendario"?pzMesN(f.mes).replace(/^./,c=>c.toUpperCase()):"Página 1"),B={n,ref:f.ref,f0:Date.now(),...pzYo(),pags:[P]};
+      if(db)await db.collection("pizarras").doc(id).set(B);PZB[id]=B;registrar("Pizarras","Nueva pizarra: "+n+(f.ref?" ("+f.ref+")":""),null).catch(()=>{});
+      pzForm=null;pzAbrir(id,P.id)}
+    catch(x){bt.disabled=false;bt.textContent="Crear pizarra";er(x&&x.message==="pdf"?"No se pudo leer el PDF. Prueba con una imagen del plano.":"No se pudo crear la pizarra.")}}}
+async function pzPlano(file,pag){ // devuelve {blob,w,h} en JPEG de hasta 2400 px
+  let cv;
+  if(/pdf/i.test(file.type)||/\.pdf$/i.test(file.name)){
+    try{if(!window.pdfjsLib)await cargar("https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js");pdfjsLib.GlobalWorkerOptions.workerSrc="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+      const pdf=await pdfjsLib.getDocument({data:await file.arrayBuffer()}).promise,pg=await pdf.getPage(Math.min(pag||1,pdf.numPages)),v0=pg.getViewport({scale:1}),s=Math.min(4,2400/Math.max(v0.width,v0.height)),vp=pg.getViewport({scale:s});
+      cv=document.createElement("canvas");cv.width=Math.round(vp.width);cv.height=Math.round(vp.height);const cx=cv.getContext("2d");cx.fillStyle="#fff";cx.fillRect(0,0,cv.width,cv.height);await pg.render({canvasContext:cx,viewport:vp}).promise}
+    catch(e){throw new Error("pdf")}}
+  else{const im=await new Promise((ok,no)=>{const i=new Image();i.onload=()=>ok(i);i.onerror=no;i.src=URL.createObjectURL(file)}),s=Math.min(1,2400/Math.max(im.width,im.height));
+    cv=document.createElement("canvas");cv.width=Math.round(im.width*s);cv.height=Math.round(im.height*s);const cx=cv.getContext("2d");cx.fillStyle="#fff";cx.fillRect(0,0,cv.width,cv.height);cx.drawImage(im,0,0,cv.width,cv.height)}
+  const blob=await new Promise(ok=>cv.toBlob(ok,"image/jpeg",.82));return{blob,w:cv.width,h:cv.height}}
+async function pzGuardarB(B){PZB[pzCur]=B;if(db)await db.collection("pizarras").doc(pzCur).set(B).catch(()=>{})}
+function drawPizTablero(){const box=$("v-piz"),B=PZB[pzCur];if(!box||!B)return drawPizLista();
+  const puedeBorrar=rol()==="ADM"||B.por===ME.uid;
+  box.innerHTML=`<div class="pzbar"><button class="lnk" id="pzVolver">← Pizarras</button><b style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(B.n)}${B.ref?` <span class="cap2">· ${esc(B.ref)}</span>`:""}</b><span id="pzOn"></span>${puedeBorrar?`<button class="lnk" id="pzDel" style="color:var(--bad)">${pzBorrarB===pzCur?"¿Seguro? toca de nuevo":"Eliminar"}</button>`:""}</div>
+    <div class="pztabs" id="pzTabs"></div><div id="pzPgF"></div>
+    <div class="pztools" id="pzTools">${PZTOOLS.map(([k,i,n])=>`<button class="pzb${pzTool===k?" on":""}" data-tool="${k}" title="${n}"><span>${i}</span><small>${n}</small></button>`).join("")}</div>
+    <div class="pztools" id="pzOpts"></div>
+    <div class="pzvp" id="pzVp"><div class="pzw" id="pzW"></div></div>
+    <input type="file" id="pzFoto" accept="image/*" hidden><input type="file" id="pzArch" hidden><div class="err" id="pzMsg"></div>`;
+  $("pzVolver").onclick=()=>{pzCur=null;pzSel=null;pzBorrarB=null;drawPizLista();pzPresencia()};
+  const dl=$("pzDel");if(dl)dl.onclick=async()=>{if(pzBorrarB!==pzCur){pzBorrarB=pzCur;dl.textContent="¿Seguro? toca de nuevo";return}
+    const id=pzCur,n=B.n;pzBorrarB=null;pzCur=null;for(const e of pzEls(id)){delete PZE[e.id];if(db)db.collection("pizEl").doc(e.id).delete().catch(()=>{})}
+    delete PZB[id];if(db)await db.collection("pizarras").doc(id).delete().catch(()=>{});registrar("Pizarras","Pizarra eliminada: "+n,null).catch(()=>{});drawPizLista()};
+  box.querySelectorAll("[data-tool]").forEach(b=>b.onclick=()=>{const t=b.dataset.tool;if(t==="foto"){$("pzFoto").click();return}if(t==="archivo"){$("pzArch").click();return}pzTool=t;pzSel=null;pzCel=null;box.querySelectorAll("[data-tool]").forEach(x=>x.classList.toggle("on",x.dataset.tool===t));pzOpts();pzRender(true)});
+  $("pzFoto").onchange=async e=>{const f=e.target.files[0];e.target.value="";if(!f)return;try{const bl=await comprimir(f,1600,.8),up=await subirFoto(bl),im=await new Promise(ok=>{const i=new Image();i.onload=()=>ok(i);i.onerror=()=>ok({width:4,height:3});i.src=URL.createObjectURL(bl)});
+      const c=pzCentro(),w=Math.min(600,PZW*.4),h=Math.round(w*im.height/im.width);pzGuardar(pzCur+"~"+pzId(),{t:"im",x:Math.round(c.x-w/2),y:Math.round(c.y-h/2),w:Math.round(w),h,...up},true);pzElegir("mover")}catch(x){}};
+  $("pzArch").onchange=async e=>{const f=e.target.files[0];e.target.value="";if(!f)return;const m=$("pzMsg");
+    if(f.size>15e6){m.textContent="El archivo pesa más de 15 MB. Súbelo a Drive y pega el link en una nota.";return}
+    m.style.color="var(--muted)";m.textContent="Subiendo "+f.name+"…";
+    try{if(!assets)throw 0;const u=await assets.upload(f,{type:f.type||"application/octet-stream"}),c=pzCentro();
+      pzGuardar(pzCur+"~"+pzId(),{t:"ar",x:Math.round(c.x-170),y:Math.round(c.y-45),n:f.name,id:u.id,tp:f.type||"",kb:Math.round(f.size/1024)},true);m.textContent="";pzElegir("mover")}
+    catch(x){m.style.color="";m.textContent="No se pudo subir "+f.name+". Prueba con PDF, imagen, Word o Excel."}};
+  pzTabs();pzOpts();pzRender(true);pzGestos();pzPintarOn();if(!pzV)pzAjustar()}
+function pzElegir(t){pzTool=t;document.querySelectorAll("#pzTools [data-tool]").forEach(x=>x.classList.toggle("on",x.dataset.tool===t));pzOpts();pzRender(true)}
+function pzTabs(){const T=$("pzTabs"),B=PZB[pzCur];if(!T||!B)return;const P=pzPags(B);if(!P.some(p=>p.id===pzPg))pzPg=P[0].id;
+  T.innerHTML=P.map(p=>p.id===pzPg&&pzRen?`<span class="pztab on"><input class="txt" id="pzRenI" value="${esc(p.n)}" style="width:150px;padding:4px 8px"><button class="small" id="pzRenOk">OK</button>${P.length>1?`<button class="small" id="pzPgDel" style="color:var(--bad)">Eliminar página</button>`:""}</span>`
+    :`<button class="pztab${p.id===pzPg?" on":""}" data-pg="${esc(p.id)}">${(PZTIPOS.find(x=>x[0]===p.tipo)||PZTIPOS[1])[1]} ${esc(p.n)}</button>`).join("")+`<button class="pztab mas" id="pzPgMas">+ Página</button>`;
+  T.querySelectorAll("[data-pg]").forEach(b=>b.onclick=()=>{if(b.dataset.pg===pzPg){pzRen=true;pzTabs();const i=$("pzRenI");if(i){i.focus();i.select()}return}pzPg=b.dataset.pg;pzSel=null;pzCel=null;pzV=null;pzTabs();pzOpts();pzRender(true);pzAjustar()});
+  $("pzPgMas").onclick=()=>{pzPgForm=pzPgForm?null:{tipo:"hoja",pag:1,mes:hoy().slice(0,7)};pzPgDraw()};
+  const ok=$("pzRenOk");if(ok){const fin=async()=>{const v=$("pzRenI").value.trim();pzRen=false;if(v){const B2={...B,pags:P.map(p=>p.id===pzPg?{...p,n:v}:p)};await pzGuardarB(B2)}pzTabs()};ok.onclick=fin;$("pzRenI").onkeydown=e=>{if(e.key==="Enter")fin();if(e.key==="Escape"){pzRen=false;pzTabs()}}}
+  const dp=$("pzPgDel");if(dp)dp.onclick=async()=>{if(dp.dataset.ok!=="1"){dp.dataset.ok="1";dp.textContent="¿Seguro? toca de nuevo";return}
+    const id=pzPg;for(const e of pzEls(pzCur).filter(e=>(e.pg||"p1")===id)){delete PZE[e.id];if(db)db.collection("pizEl").doc(e.id).delete().catch(()=>{})}
+    pzRen=false;const Q=P.filter(p=>p.id!==id);await pzGuardarB({...B,pags:Q});pzPg=Q[0].id;pzV=null;pzTabs();pzRender(true);pzAjustar()}}
+function pzPgDraw(){const F=$("pzPgF");if(!F)return;if(!pzPgForm){F.innerHTML="";return}const f=pzPgForm;
+  F.innerHTML=`<div class="card" style="margin:0;padding:10px 12px">${pzTipoForm(f,"pg")}<div class="err" id="pgErr"></div><div class="fila" style="gap:8px;margin-top:8px"><button class="go small" id="pgOk" style="width:auto;margin:0">Agregar página</button><button class="lnk" id="pgNo">Cancelar</button></div></div>`;
+  pzTipoWire(f,"pg",pzPgDraw,()=>{});$("pgNo").onclick=()=>{pzPgForm=null;pzPgDraw()};
+  $("pgOk").onclick=async()=>{if(f.tipo==="plano"&&!f.file){$("pgErr").textContent="Elige la imagen o el PDF del plano";return}const bt=$("pgOk");bt.disabled=true;bt.textContent="Agregando…";
+    try{const B=PZB[pzCur],P=pzPags(B),n=f.tipo==="plano"?(f.file.name.replace(/\.[^.]+$/,"").slice(0,30)||"Plano"):f.tipo==="calendario"?pzMesN(f.mes).replace(/^./,c=>c.toUpperCase()):"Página "+(P.length+1),np=await pzNuevaPag(f,n);
+      await pzGuardarB({...B,pags:P.concat([np])});pzPgForm=null;pzPg=np.id;pzV=null;pzSel=null;pzPgDraw();pzTabs();pzRender(true);pzAjustar()}
+    catch(x){bt.disabled=false;bt.textContent="Agregar página";$("pgErr").textContent=x&&x.message==="pdf"?"No se pudo leer el PDF. Prueba con una imagen.":"No se pudo agregar la página."}}}
+const pzMesN=m=>{const[y,mm]=String(m||"").split("-").map(Number);return y?new Date(y,mm-1,1).toLocaleDateString("es-CL",{month:"long",year:"numeric"}):""};
+function pzCal(mes,H){const[y,m]=String(mes||hoy().slice(0,7)).split("-").map(Number),d0=(new Date(y,m-1,1).getDay()+6)%7,nd=new Date(y,m,0).getDate(),fil=Math.ceil((d0+nd)/7),cw=PZW/7,top=110,rh=(H-top)/fil,hoyS=hoy();
+  const D=["Lunes","Martes","Miércoles","Jueves","Viernes","Sábado","Domingo"];let h=`<div class="pzcalt">${esc(pzMesN(mes).replace(/^./,c=>c.toUpperCase()))}</div>`;
+  D.forEach((d,i)=>h+=`<div class="pzcalh" style="left:${i*cw}px;width:${cw}px">${d}</div>`);
+  for(let i=0;i<fil*7;i++){const n=i-d0+1,x=(i%7)*cw,yy=top+Math.floor(i/7)*rh,ok=n>=1&&n<=nd,iso=ok?y+"-"+String(m).padStart(2,"0")+"-"+String(n).padStart(2,"0"):"";
+    h+=`<div class="pzcald${ok?"":" fuera"}${iso===hoyS?" hoy":""}${i%7===6?" dom":""}" style="left:${x}px;top:${yy}px;width:${cw}px;height:${rh}px">${ok?n:""}</div>`}
+  return`<div class="pzcal">${h}</div>`}
+const pzIcoA=(t,n)=>/pdf/i.test(t)||/\.pdf$/i.test(n)?"📕":/sheet|excel/i.test(t)||/\.xlsx?$/i.test(n)?"📗":/word|document/i.test(t)||/\.docx?$/i.test(n)?"📘":/image/i.test(t)?"🖼":"📄";
+function pzOpts(){const o=$("pzOpts");if(!o)return;const dib=pzTool==="lapiz"||pzTool==="resaltar"||pzTool==="texto",T=pzSel&&PZE[pzSel]&&PZE[pzSel].t==="ta";
+  o.innerHTML=(dib?PZCOL.map(c=>`<button class="pzcol${pzCol===c?" on":""}" data-col="${c}" style="background:${c}" aria-label="Color"></button>`).join(""):"")+
+    (T?`<span class="pzsep"></span><button class="small" data-tb="f+">+ Fila</button><button class="small" data-tb="c+">+ Columna</button><button class="small" data-tb="f-">− Fila</button><button class="small" data-tb="c-">− Columna</button>${pzCel?`<button class="small" data-tb="b" style="font-weight:800">N</button>${PZCELBG.map(c=>`<button class="pzcol" data-tb="bg${c}" style="width:24px;height:24px;background:${c||"#fff"}" aria-label="Fondo de celda"></button>`).join("")}<button class="small" data-tb="sum" title="Suma de la columna">Σ Suma</button>`:""}`:"")+
+    `<span style="flex:1"></span><button class="small" id="pzDes"${pzUndo.length?"":" disabled"}>↶ Deshacer</button><button class="small" id="pzAj">⤢ Ver todo</button>`;
+  o.querySelectorAll("[data-col]").forEach(b=>b.onclick=()=>{pzCol=b.dataset.col;pzOpts()});
+  o.querySelectorAll("[data-tb]").forEach(b=>{b.onmousedown=e=>e.preventDefault();b.onclick=()=>pzTabla(pzSel,b.dataset.tb)});
+  $("pzDes").onclick=()=>{const id=pzUndo.pop();if(id)pzQuitar(id);pzOpts()};$("pzAj").onclick=()=>{pzAjustar()}}
+/* tablas tipo Excel: A1, =A1+B2, =SUMA(A2:A9), PROMEDIO, MIN, MAX, CONTAR */
+const pzColL=c=>{let s="";c++;while(c>0){const m=(c-1)%26;s=String.fromCharCode(65+m)+s;c=Math.floor((c-1)/26)}return s};
+const pzRef=s=>{const m=/^([A-Z]+)(\d+)$/.exec(s);if(!m)return null;let c=0;for(const ch of m[1])c=c*26+ch.charCodeAt(0)-64;return[+m[2]-1,c-1]};
+const pzNum=v=>{if(typeof v==="number")return v;const t=String(v||"").trim().replace(/\$|\s/g,"");if(!t)return 0;const n=Number(/,\d{1,3}$/.test(t)&&!/\.\d{3},/.test(t)?t.replace(/\./g,"").replace(",","."):t.replace(/,/g,""));return isFinite(n)?n:NaN};
+function pzEval(C,r,c,vis){const raw=String((C[r]||[])[c]??"");if(raw[0]!=="=")return raw;const k=r+","+c;if((vis=vis||new Set()).has(k))return"#CICLO";vis.add(k);
+  const val=s=>{const p=pzRef(s);if(!p)return NaN;const v=pzEval(C,p[0],p[1],new Set(vis));return pzNum(v)};
+  const rango=(a,b)=>{const p=pzRef(a),q=pzRef(b),L=[];if(!p||!q)return L;for(let i=Math.min(p[0],q[0]);i<=Math.max(p[0],q[0]);i++)for(let j=Math.min(p[1],q[1]);j<=Math.max(p[1],q[1]);j++){const v=pzEval(C,i,j,new Set(vis));if(String(v).trim()!==""&&!isNaN(pzNum(v)))L.push(pzNum(v))}return L};
+  try{let e=raw.slice(1).toUpperCase().replace(/;/g,",");
+    e=e.replace(/(SUMA|SUM|PROMEDIO|AVERAGE|MIN|MAX|CONTAR|COUNT)\(([A-Z]+\d+):([A-Z]+\d+)\)/g,(m,f,a,b)=>{const L=rango(a,b),s=L.reduce((x,y)=>x+y,0);
+      return"("+(/SUM/.test(f)?s:/PROM|AVER/.test(f)?(L.length?s/L.length:0):f==="MIN"?(L.length?Math.min(...L):0):f==="MAX"?(L.length?Math.max(...L):0):L.length)+")"});
+    e=e.replace(/[A-Z]+\d+/g,m=>"("+val(m)+")").replace(/(\d),(\d)/g,"$1.$2");
+    if(!/^[\d\s+\-*/().eE]*$/.test(e)||/[A-DF-Z]/i.test(e.replace(/e[+-]?\d/gi,"")))return"#ERROR";
+    const n=Function("return("+e+")")();if(!isFinite(n))return"#DIV/0";return Math.round(n*1000)/1000}catch(x){return"#ERROR"}}
+const pzVer=v=>typeof v==="number"?v.toLocaleString("es-CL",{maximumFractionDigits:3}):v;
+function pzTabla(id,op){const e=PZE[id];if(!e||e.t!=="ta")return;const C=e.cel.map(r=>r.slice()),F={...(e.fmt||{})},k=pzCel?pzCel.r+","+pzCel.c:null;
+  if(op==="f+")C.splice(pzCel?pzCel.r+1:C.length,0,new Array(C[0].length).fill(""));if(op==="c+")C.forEach(r=>r.splice(pzCel?pzCel.c+1:r.length,0,""));
+  if(op==="f-"&&C.length>1)C.splice(pzCel?pzCel.r:C.length-1,1);if(op==="c-"&&C[0].length>1)C.forEach(r=>r.splice(pzCel?pzCel.c:r.length-1,1));
+  if(op==="b"&&k){F[k]={...(F[k]||{}),b:F[k]&&F[k].b?0:1}}
+  if(op.startsWith("bg")&&k){F[k]={...(F[k]||{}),bg:op.slice(2)}}
+  if(op==="sum"&&pzCel){const c=pzCel.c,L=pzColL(c);let last=C.length-1;while(last>0&&String(C[last][c]).trim()==="")last--;C.push(new Array(C[0].length).fill(""));C[C.length-1][c]="=SUMA("+L+"2:"+L+(last+1)+")"}
+  if(/^[fc][+-]$/.test(op))Object.keys(F).forEach(x=>delete F[x]);
+  pzGuardar(id,{...e,cel:C,fmt:F});pzRender(true);pzOpts();if(pzCel){const td=$("pzW").querySelector(`[data-e="${CSS.escape(id)}"] td[data-r="${Math.min(pzCel.r,C.length-1)}"][data-c="${Math.min(pzCel.c,C[0].length-1)}"]`);if(td)td.focus()}}
+function pzPH(){const p=pzPag();return(p&&p.h)||1400}
+function pzAjustar(){const vp=$("pzVp");if(!vp)return;const W=vp.clientWidth,H=vp.clientHeight,hh=pzPH(),s=pzPag().tipo==="hoja"?W/PZW:Math.min(W/PZW,H/hh);pzV={s,x:(W-PZW*s)/2,y:pzPag().tipo==="hoja"?0:Math.max(0,(H-hh*s)/2)};pzAplicar()}
+function pzAplicar(){const w=$("pzW");if(w&&pzV)w.style.transform=`translate(${pzV.x}px,${pzV.y}px) scale(${pzV.s})`}
+function pzCentro(){const vp=$("pzVp");return{x:(vp.clientWidth/2-pzV.x)/pzV.s,y:(vp.clientHeight/2-pzV.y)/pzV.s}}
+function pzSemana(){const D=["Lunes","Martes","Miércoles","Jueves","Viernes","Sábado"],cw=PZW/6;
+  return`<div class="pzsem">${D.map((d,i)=>`<div style="left:${i*cw}px;width:${cw}px"><b>${d}</b></div>`).join("")}</div>`}
+function pzRender(forzar){const w=$("pzW"),B=PZB[pzCur];if(!w||!B)return;
+  if(!forzar&&w.contains(document.activeElement)&&document.activeElement.isContentEditable){pzPend=true;return}pzPend=false;
+  const pg=pzPag(),E=pzEls(pzCur).filter(e=>(e.pg||"p1")===pg.id).sort((a,b)=>(a.z||0)-(b.z||0)),H=pzPH();
+  w.className="pzw t-"+pzTool+(pg.tipo==="libre"?" puntos":"");w.style.width=PZW+"px";w.style.height=H+"px";
+  const ed=pzTool==="texto"||pzTool==="tabla";
+  w.innerHTML=(pg.tipo==="plano"?`<img class="pzf" src="${esc(fotoSrc(pg).replace("sz=w1200","sz=w2400"))}" draggable="false" alt="">`:pg.tipo==="semana"?pzSemana():pg.tipo==="calendario"?pzCal(pg.mes,H):"")+
+    E.filter(e=>e.t==="im").map(e=>`<div class="pzi${pzSel===e.id?" sel":""}" data-e="${esc(e.id)}" style="left:${e.x}px;top:${e.y}px;width:${e.w}px;height:${e.h}px"><img src="${esc(fotoSrc(e))}" draggable="false" alt="">${pzSel===e.id?'<span class="pzh" data-h="1"></span>':""}</div>`).join("")+
+    `<svg class="pzs" width="${PZW}" height="${H}" viewBox="0 0 ${PZW} ${H}">${E.filter(e=>e.t==="tr").map(e=>`<g data-e="${esc(e.id)}"><polyline class="hit" points="${e.p}" stroke-width="${Math.max(e.a*2,24)}"/><polyline points="${e.p}" stroke="${e.c}" stroke-width="${e.a}" opacity="${e.r?.35:1}"/></g>`).join("")}</svg>`+
+    E.filter(e=>e.t==="no").map(e=>`<div class="pzn${pzSel===e.id?" sel":""}" data-e="${esc(e.id)}" style="left:${e.x}px;top:${e.y}px;width:${e.w}px;background:${e.c||PZNOTA[0]};color:#1d2326"${ed?' contenteditable="true"':""}>${esc(e.txt||"")}</div>`).join("")+
+    E.filter(e=>e.t==="ar").map(e=>`<div class="pza${pzSel===e.id?" sel":""}" data-e="${esc(e.id)}" style="left:${e.x}px;top:${e.y}px"><span class="pzai">${pzIcoA(e.tp,e.n)}</span><span style="min-width:0"><b>${esc(e.n)}</b><small>${e.kb>=1024?(e.kb/1024).toFixed(1)+" MB":e.kb+" KB"}${e.pn?" · "+esc(e.pn):""} · toca para abrir</small></span></div>`).join("")+
+    E.filter(e=>e.t==="ta").map(e=>{const F=e.fmt||{},S=pzSel===e.id&&ed;
+      return`<table class="pzt${pzSel===e.id?" sel":""}" data-e="${esc(e.id)}" style="left:${e.x}px;top:${e.y}px">${S?`<tr class="pzhd"><td></td>${e.cel[0].map((x,j)=>`<td>${pzColL(j)}</td>`).join("")}</tr>`:""}${e.cel.map((r,i)=>`<tr>${S?`<td class="pzhn">${i+1}</td>`:""}${r.map((c,j)=>{const f=F[i+","+j]||{},v=pzEval(e.cel,i,j),num=typeof v==="number";
+        return`<td data-r="${i}" data-c="${j}" data-raw="${esc(c)}" style="min-width:${e.cw||170}px;max-width:520px${f.bg?";background:"+f.bg:""}${f.b?";font-weight:800":""}${num?";text-align:right":""}"${i===0?' class="th"':""}${ed?' contenteditable="true"':""}>${esc(String(pzVer(v)))}</td>`}).join("")}</tr>`).join("")}</table>`}).join("");
+  pzAplicar();
+  w.querySelectorAll(".pzn[contenteditable]").forEach(n=>{n.onfocus=()=>{pzSel=n.dataset.e};n.onblur=()=>{const id=n.dataset.e,e=PZE[id];if(!e)return;const t=n.innerText.replace(/\s+$/,"");
+    if(!t){pzQuitar(id)}else if(t!==e.txt)pzGuardar(id,{...e,txt:t});pzLuego()}});
+  w.querySelectorAll(".pzt td[contenteditable]").forEach(td=>{
+    td.onfocus=()=>{const id=td.closest("[data-e]").dataset.e,ch=pzSel!==id;pzSel=id;pzCel={r:+td.dataset.r,c:+td.dataset.c};if(td.dataset.raw!==td.innerText)td.innerText=td.dataset.raw;pzOpts();
+      if(ch&&pzTool!=="mover"){pzRender(true);const t2=w.querySelector(`[data-e="${CSS.escape(id)}"] td[data-r="${pzCel.r}"][data-c="${pzCel.c}"]`);if(t2)t2.focus()}};
+    td.onblur=()=>{const tb=td.closest("[data-e]"),id=tb.dataset.e,e=PZE[id];if(!e)return;const r=+td.dataset.r,c=+td.dataset.c,t=td.innerText.replace(/\s+$/,"");
+      if(e.cel[r]&&e.cel[r][c]!==t){const C=e.cel.map(x=>x.slice());C[r][c]=t;pzGuardar(id,{...e,cel:C})}pzRecalc(tb,id);pzLuego()};
+    td.onkeydown=ev=>{const r=+td.dataset.r,c=+td.dataset.c,tb=td.closest("[data-e]"),id=tb.dataset.e,ir=(rr,cc)=>{const n=tb.querySelector(`td[data-r="${rr}"][data-c="${cc}"]`);if(n){ev.preventDefault();n.focus();const s=getSelection(),g=document.createRange();g.selectNodeContents(n);g.collapse(false);s.removeAllRanges();s.addRange(g)}return!!n};
+      const sel=getSelection(),pos=sel.rangeCount?sel.getRangeAt(0).startOffset:0,len=td.innerText.length;
+      if(ev.key==="Enter"&&!ev.shiftKey){ev.preventDefault();if(!ir(r+1,c)){td.blur();pzTabla(id,"f+");setTimeout(()=>{const n=$("pzW").querySelector(`[data-e="${CSS.escape(id)}"] td[data-r="${r+1}"][data-c="${c}"]`);if(n)n.focus()},30)}}
+      else if(ev.key==="Tab"){if(ir(r,c+(ev.shiftKey?-1:1))||ir(r+(ev.shiftKey?-1:1),ev.shiftKey?99:0)){}else ev.preventDefault()}
+      else if(ev.key==="ArrowDown")ir(r+1,c);else if(ev.key==="ArrowUp")ir(r-1,c);
+      else if(ev.key==="ArrowRight"&&pos>=len)ir(r,c+1);else if(ev.key==="ArrowLeft"&&pos===0)ir(r,c-1);
+      else if((ev.ctrlKey||ev.metaKey)&&ev.key.toLowerCase()==="b"){ev.preventDefault();pzTabla(id,"b")}}})}
+function pzRecalc(tb,id){const e=PZE[id];if(!e||!tb)return;tb.querySelectorAll("td[data-r]").forEach(td=>{if(td===document.activeElement)return;const r=+td.dataset.r,c=+td.dataset.c,raw=(e.cel[r]||[])[c]??"",v=pzEval(e.cel,r,c);
+  td.dataset.raw=raw;const t=String(pzVer(v));if(td.innerText!==t)td.innerText=t;td.style.textAlign=typeof v==="number"?"right":""})}
+function pzLuego(){setTimeout(()=>{const a=document.activeElement,w=$("pzW");if(pzPend&&!(w&&a&&w.contains(a)&&a.isContentEditable))pzRender()},0)}
+function pzGuardar(id,data,nuevo){const d={...data,...(nuevo?{...pzYo(),z:Date.now(),pg:data.pg||pzPg}:{}),m:Date.now()};PZE[id]=d;if(nuevo){pzUndo.push(id);pzOpts()}
+  if(db)db.collection("pizEl").doc(id).set(d).catch(()=>{})}
+function pzQuitar(id){delete PZE[id];if(pzSel===id){pzSel=null;pzCel=null}pzUndo=pzUndo.filter(x=>x!==id);if(db)db.collection("pizEl").doc(id).delete().catch(()=>{});pzRender(true);pzOpts()}
+function pzSimpl(P,tol){if(P.length<3)return P;const d2=(p,a,b)=>{const dx=b[0]-a[0],dy=b[1]-a[1],l=dx*dx+dy*dy;let t=l?((p[0]-a[0])*dx+(p[1]-a[1])*dy)/l:0;t=Math.max(0,Math.min(1,t));const x=a[0]+t*dx-p[0],y=a[1]+t*dy-p[1];return x*x+y*y};
+  const keep=new Uint8Array(P.length);keep[0]=keep[P.length-1]=1;const st=[[0,P.length-1]];
+  while(st.length){const[a,b]=st.pop();let m=0,k=-1;for(let i=a+1;i<b;i++){const d=d2(P[i],P[a],P[b]);if(d>m){m=d;k=i}}if(m>tol*tol){keep[k]=1;st.push([a,k],[k,b])}}
+  return P.filter((p,i)=>keep[i])}
+function pzGestos(){const vp=$("pzVp");if(!vp)return;const P=new Map();let g=null,lapiz=false;
+  const mundo=(cx,cy)=>{const r=vp.getBoundingClientRect();return{x:(cx-r.left-pzV.x)/pzV.s,y:(cy-r.top-pzV.y)/pzV.s}};
+  const pinch=()=>{const[a,b]=[...P.values()];return{d:Math.hypot(a.x-b.x,a.y-b.y),mx:(a.x+b.x)/2,my:(a.y+b.y)/2}};
+  const fin=()=>{if(g&&g.t==="draw"){const pts=pzSimpl(g.pts,1.6/Math.max(pzV.s,.3));if(g.el)g.el.remove();if(pts.length>1||g.pts.length===1){const q=pts.length>1?pts:[g.pts[0],[g.pts[0][0]+.5,g.pts[0][1]+.5]];
+      pzGuardar(pzCur+"~"+pzId(),{t:"tr",p:q.map(p=>Math.round(p[0])+","+Math.round(p[1])).join(" "),c:pzCol,a:g.r?28:6,r:g.r?1:0},true);pzRender()}}
+    if(g&&g.t==="move"&&g.cambio){const e=PZE[g.id];if(e)pzGuardar(g.id,{...e,...g.nuevo})}
+    else if(g&&g.t==="move"&&g.e.t==="ar"&&g.e.id){try{window.open(archUrl(g.e.id),"_blank","noopener")}catch(x){}}g=null;if(pzPend)pzRender()};
+  vp.onpointerdown=ev=>{const tg=ev.target;
+    if(tg.isContentEditable&&(pzTool==="texto"||pzTool==="tabla"))return;
+    if(ev.pointerType==="pen")lapiz=true;if(lapiz&&ev.pointerType==="touch"&&(pzTool==="lapiz"||pzTool==="resaltar"))return;
+    P.set(ev.pointerId,{x:ev.clientX,y:ev.clientY});try{vp.setPointerCapture(ev.pointerId)}catch(e){}
+    if(P.size===2){if(g&&g.t==="draw"&&g.el)g.el.remove();const p=pinch();g={t:"pinch",d0:p.d,s0:pzV.s,x0:pzV.x,y0:pzV.y,mx:p.mx,my:p.my};return}
+    if(P.size>2)return;const w=mundo(ev.clientX,ev.clientY),el=tg.closest&&tg.closest("[data-e]"),id=el&&el.dataset.e;
+    if(pzTool==="lapiz"||pzTool==="resaltar"){const r=pzTool==="resaltar",pl=document.createElementNS("http://www.w3.org/2000/svg","polyline");pl.setAttribute("stroke",pzCol);pl.setAttribute("stroke-width",r?28:6);if(r)pl.setAttribute("opacity",".35");
+      $("pzW").querySelector("svg").appendChild(pl);g={t:"draw",r,pts:[[w.x,w.y]],el:pl};pl.setAttribute("points",w.x+","+w.y);return}
+    if(pzTool==="borrar"){if(id)pzQuitar(id);g={t:"pan",sx:ev.clientX,sy:ev.clientY,x0:pzV.x,y0:pzV.y};return}
+    if((pzTool==="texto"||pzTool==="tabla")&&!id&&document.activeElement&&document.activeElement.isContentEditable&&$("pzW").contains(document.activeElement)){document.activeElement.blur();return}
+    if(pzTool==="texto"&&!id){ev.preventDefault();const nid=pzCur+"~"+pzId();pzGuardar(nid,{t:"no",x:Math.round(w.x),y:Math.round(w.y),w:pzPag().tipo==="hoja"?1200:300,txt:"",c:pzPag().tipo==="hoja"&&pzCol==="#1d2326"?"transparent":pzCol==="#1d2326"?PZNOTA[0]:PZNOTA[(PZCOL.indexOf(pzCol))%PZNOTA.length]},true);pzRender(true);
+      P.delete(ev.pointerId);const fo=()=>{const n=$("pzW").querySelector(`[data-e="${CSS.escape(nid)}"]`);if(n&&document.activeElement!==n)n.focus()};fo();setTimeout(fo,40);return}
+    if(pzTool==="tabla"&&!id){ev.preventDefault();const nid=pzCur+"~"+pzId();pzGuardar(nid,{t:"ta",x:Math.round(w.x),y:Math.round(w.y),cw:170,cel:[["","",""],["","",""],["","",""]]},true);pzSel=nid;pzRender(true);pzOpts();
+      P.delete(ev.pointerId);const fo=()=>{const td=$("pzW").querySelector(`[data-e="${CSS.escape(nid)}"] td[data-r="0"][data-c="0"]`);if(td&&!$("pzW").querySelector(`[data-e="${CSS.escape(nid)}"]`).contains(document.activeElement))td.focus()};fo();setTimeout(fo,40);return}
+    if(pzTool==="mover"&&id&&PZE[id]&&PZE[id].t!=="tr"){const e=PZE[id];if(pzSel!==id){pzSel=id;pzCel=null;pzRender(true);pzOpts()}
+      g={t:"move",id,sx:w.x,sy:w.y,e,res:!!tg.dataset.h,nuevo:{},cambio:false};return}
+    if(pzSel&&pzTool==="mover"){pzSel=null;pzCel=null;pzRender(true);pzOpts()}
+    g={t:"pan",sx:ev.clientX,sy:ev.clientY,x0:pzV.x,y0:pzV.y}};
+  vp.onpointermove=ev=>{if(!P.has(ev.pointerId))return;P.set(ev.pointerId,{x:ev.clientX,y:ev.clientY});if(!g)return;
+    if(g.t==="pinch"&&P.size===2){const p=pinch(),s=Math.max(.08,Math.min(4,g.s0*p.d/g.d0)),r=vp.getBoundingClientRect(),ax=g.mx-r.left,ay=g.my-r.top,wx=(ax-g.x0)/g.s0,wy=(ay-g.y0)/g.s0;
+      pzV={s,x:p.mx-r.left-wx*s,y:p.my-r.top-wy*s};pzAplicar();return}
+    if(g.t==="pan"){pzV={...pzV,x:g.x0+ev.clientX-g.sx,y:g.y0+ev.clientY-g.sy};pzAplicar();return}
+    const w=mundo(ev.clientX,ev.clientY);
+    if(g.t==="draw"){const l=g.pts[g.pts.length-1];if(Math.hypot(w.x-l[0],w.y-l[1])*pzV.s<1.5)return;g.pts.push([w.x,w.y]);g.el.setAttribute("points",g.pts.map(p=>p[0].toFixed(1)+","+p[1].toFixed(1)).join(" "));return}
+    if(g.t==="move"){const dx=w.x-g.sx,dy=w.y-g.sy;if(!g.cambio&&Math.hypot(dx,dy)*pzV.s<6)return;const el=$("pzW").querySelector(`[data-e="${CSS.escape(g.id)}"]`);if(!el)return;g.cambio=true;
+      if(g.res){const W2=Math.max(60,Math.round(g.e.w+dx)),H2=Math.round(W2*g.e.h/g.e.w);g.nuevo={w:W2,h:H2};el.style.width=W2+"px";el.style.height=H2+"px"}
+      else{g.nuevo={x:Math.round(g.e.x+dx),y:Math.round(g.e.y+dy)};el.style.left=g.nuevo.x+"px";el.style.top=g.nuevo.y+"px"}}};
+  const up=ev=>{if(!P.has(ev.pointerId))return;P.delete(ev.pointerId);if(g&&g.t==="pinch"){if(P.size===0)g=null;else{const[a]=[...P.values()];g={t:"pan",sx:a.x,sy:a.y,x0:pzV.x,y0:pzV.y}}return}if(P.size===0)fin()};
+  vp.onpointerup=up;vp.onpointercancel=up;
+  vp.onwheel=ev=>{ev.preventDefault();const r=vp.getBoundingClientRect(),ax=ev.clientX-r.left,ay=ev.clientY-r.top;
+    if(ev.ctrlKey||ev.metaKey||Math.abs(ev.deltaY)>=50&&!ev.deltaX){const s=Math.max(.08,Math.min(4,pzV.s*Math.exp(-ev.deltaY*(ev.ctrlKey?.01:.0015)))),wx=(ax-pzV.x)/pzV.s,wy=(ay-pzV.y)/pzV.s;pzV={s,x:ax-wx*s,y:ay-wy*s}}
+    else pzV={...pzV,x:pzV.x-ev.deltaX,y:pzV.y-ev.deltaY};pzAplicar()}}
+/* ---------- quién está en línea (V1 y V2: se avisa al servidor cada 25 s) ---------- */
+let EN_LINEA=[];
+const pzEnLinea=d=>EN_LINEA.filter(x=>!x.yo&&(!d||x.d===d));
+const DONDE_N={inicio:"Inicio",mat:"Materiales",fichas:"Materiales",lote:"Materiales",cierre:"Materiales",ava:"Avance",rec:"Recepción de etapa",res:"Resumen",adm:"Administración",piz:"Pizarras"};
+function pzDonde(){return cur==="piz"&&pzCur?"piz:"+pzCur:(cur||"inicio")}
+async function pzPresencia(){if(!(window.TEPI&&TEPI.presencia))return;try{const r=await TEPI.presencia(pzDonde());if(r&&Array.isArray(r.l)){EN_LINEA=r.l;pzPintarOn();if(cur==="piz"&&!pzCur)drawPizLista()}}catch(e){}}
+function pzPintarOn(){const o=$("pzOn");if(o){const a=pzEnLinea("piz:"+pzCur);o.innerHTML=a.map(x=>`<span class="pzav" title="${esc(x.n)} está en esta pizarra">${esc((x.n||"?").trim().slice(0,1).toUpperCase())}</span>`).join("")}
+  const i=$("iniOn");if(i){const L=pzEnLinea();i.innerHTML=L.length?`<span class="pzon">●</span> En línea: ${L.map(x=>`<b>${esc(x.n)}</b> <span class="cap2">(${esc(/^piz:/.test(x.d)?"Pizarra "+((PZB[x.d.slice(4)]||{}).n||""):DONDE_N[x.d]||"")})</span>`).join(", ")}`:"";i.hidden=!L.length}}
+setInterval(()=>{if(document.visibilityState==="visible")pzPresencia()},25000);setTimeout(pzPresencia,3000);
+document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible")pzPresencia()});
 
 /* ---------- perfiles ---------- */
 const ROLN={ADM:"Administrador",EC:"Encargado de calidad (EC)",REV:"Revisor",SUP:"Supervisor",PT:"Profesional de terreno (PT)"};
