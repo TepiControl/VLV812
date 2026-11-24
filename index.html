@@ -394,7 +394,7 @@ body::before{background:var(--top)}
     </div>
     <button class="admlink" data-go="adm" id="btnAdm" hidden>Administración ⚙</button>
     <div class="cap2" id="quien" style="text-align:center"></div>
-    <div class="cap2" id="verApp" style="opacity:.7;text-align:center">Tepi Control VLV · versión V2 (instalable, base V1.33) · 24 nov 2026</div>
+    <div class="cap2" id="verApp" style="opacity:.7;text-align:center">Tepi Control VLV · versión V2 (instalable, base V1.34) · 24 nov 2026</div>
   </section>
 
   <!-- MATERIALES: selección -->
@@ -855,7 +855,7 @@ function datosHoy(){const now=Date.now();if(iniCache.v&&now-iniCache.t<15000)ret
 function pintarInicio(){const e=$("iniMat");if(!e)return;const r=rol(),D=datosHoy(),pl=(n,a,b)=>n+" "+(n===1?a:b);
   e.innerHTML=D.u?pl(D.u,"ficha en uso","fichas en uso")+(D.a?` <span class="pill" style="background:var(--bad-soft);color:var(--bad)">${pl(D.a,"alerta","alertas")}</span>`:""):"Sin fichas en uso";
   $("iniRec").textContent=D.obs?pl(D.obs,"observación abierta","observaciones abiertas"):"Sin observaciones abiertas";$("iniAva").textContent=D.dAtr?pl(D.dAtr,"depto con atrasos","deptos con atrasos"):"Al día con el programa";
-  const prim={SUP:"mat",PT:"ava",EC:"rec",REV:"rec"}[r]||"",vis={ADM:["mat","ava","rec","eq","res"],SUP:["mat","rec","ava","eq"],PT:["ava","rec","mat","eq"],EC:["rec","ava","mat","eq"],REV:["rec","ava","mat","eq"]}[r]||["mat","ava","rec","eq"];
+  const prim={SUP:"mat",PT:"ava",EC:"rec",REV:"rec"}[r]||"",vis={ADM:["mat","ava","rec","eq","res"],SUP:["mat","rec","ava"],PT:["ava","rec","mat"],EC:["rec","ava","mat"],REV:["rec","ava","mat"]}[r]||["mat","ava","rec"];
   document.querySelectorAll(".igrid .mm").forEach(b=>{const g=b.dataset.go,i=vis.indexOf(g);b.hidden=i<0;b.style.order=i<0?99:i;b.classList.toggle("prim",g===prim);
     const ic=b.querySelector(".mico");if(ic&&!ic.innerHTML)ic.innerHTML=ICO_M[g];
     if(g===prim&&!b.querySelector(".mtx")){const w=document.createElement("span");w.className="mtx";[...b.querySelectorAll(":scope>b,:scope>span:not(.mtx)")].forEach(x=>w.appendChild(x));b.appendChild(w)}});
@@ -935,7 +935,7 @@ function show(v,push=true){if((v==="adm"||v==="res")&&ME.rol!=="ADM")v="inicio";
   if(push&&cur)hist.push(cur);cur=v;
   for(const k in VIEWS)$("v-"+k).hidden=k!==v;
   $("ttl").textContent=VIEWS[v];if(v!=="ava"&&typeof drawSheet==="function"){rgSel=null;drawSheet()}$("back").hidden=v==="inicio";
-  ({mat:drawSel,fichas:drawFichas,lote:drawLote,cierre:drawCierre,ava:drawAva,res:drawRes,rec:drawRec,piz:drawPiz,eq:drawEq,adm:drawAdm})[v]?.();try{pzPresencia();pzPintarOn()}catch(e){}
+  ({mat:drawSel,fichas:drawFichas,lote:drawLote,cierre:drawCierre,ava:drawAva,res:drawRes,rec:drawRec,piz:drawPiz,eq:()=>{if(rol()!=="ADM"){show("inicio");return}drawEq()},adm:drawAdm})[v]?.();try{pzPresencia();pzPintarOn()}catch(e){}
   window.scrollTo(0,0);
 }
 let cur=null;
