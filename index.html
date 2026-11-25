@@ -284,13 +284,21 @@ body::before{background:var(--top)}
 .rcseg{display:flex;align-items:center;gap:4px;overflow-x:auto;scrollbar-width:none}.rcseg::-webkit-scrollbar{display:none}
 .rcl{font-size:12px;font-weight:700;color:var(--muted);margin-right:4px;text-transform:uppercase;letter-spacing:.04em}
 .rcseg button{flex:1 1 0;min-width:0;height:36px;padding:0 2px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);font:inherit;font-weight:700;cursor:pointer}
-.rcseg button:nth-of-type(1){flex:2.2 1 0;font-size:14px}.rcseg button.on{background:var(--accent);border-color:var(--accent);color:#fff}
+#rcFT button:nth-of-type(1){flex:2.2 1 0;font-size:14px}
+#rgK button:last-child{flex:1.5 1 0;font-size:13px}.rcseg button.on{background:var(--accent);border-color:var(--accent);color:#fff}
 .rcpills{display:flex;flex-wrap:wrap;gap:6px}
 .rcpills button{display:flex;align-items:center;gap:6px;height:34px;padding:0 10px;border:1px solid var(--line);border-radius:17px;background:var(--surface);color:var(--ink);font:inherit;font-size:14px;cursor:pointer}
 .rcpills button i{width:14px;height:14px;border-radius:4px;display:inline-grid;place-items:center;font-style:normal;font-size:10px;color:#fff}
 .rcpills button b{font-variant-numeric:tabular-nums;color:var(--muted);font-weight:700}
 .rcpills button.on{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent) inset;background:var(--accent-soft)}.rcpills button.on b{color:var(--accent)}
 .rcpills i.obl{background:var(--bad)}
+.rcseg.sm button{font-size:14px;font-weight:600}
+.avtabs{flex-wrap:nowrap;gap:4px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:4px}
+.avtabs button{min-width:0;flex:1 1 0;border:0;border-radius:10px;padding:9px 2px;font-size:14px;background:transparent}
+.seg.avtabs button.on,.seg.avtabs button.on.okb{background:var(--accent);border-color:var(--accent);color:#fff}
+.avfr{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.avfr input[type=date]{width:136px;font-size:14px;height:36px;padding:0 8px}
+.avrap{display:flex;align-items:center;gap:6px;height:36px;padding:0 8px;white-space:nowrap;border:1px solid var(--line);border-radius:10px;cursor:pointer;font-size:14px;margin-left:auto}
+.avrap input{margin:0}.avrap:has(input:checked){border-color:var(--accent);background:var(--accent-soft);color:var(--accent);font-weight:700}
 .rcley summary{cursor:pointer;font-size:13px;color:var(--muted);padding:4px 0}.rcley .leyenda{margin-top:6px}
 /* equipo */
 #v-eq{display:flex;flex-direction:column;gap:10px}
@@ -436,7 +444,7 @@ body::before{background:var(--top)}
     </div>
     <button class="admlink" data-go="adm" id="btnAdm" hidden>Administración ⚙</button>
     <div class="cap2" id="quien" style="text-align:center"></div>
-    <div class="cap2" id="verApp" style="opacity:.7;text-align:center">Tepi Control VLV · versión V2 (instalable, base V1.36) · 25 nov 2026</div>
+    <div class="cap2" id="verApp" style="opacity:.7;text-align:center">Tepi Control VLV · versión V2 (instalable, base V1.37) · 25 nov 2026</div>
   </section>
 
   <!-- MATERIALES: selección -->
@@ -465,19 +473,19 @@ body::before{background:var(--top)}
 
   <!-- AVANCE -->
   <section id="v-ava" hidden style="display:flex;flex-direction:column;gap:14px">
-    <div class="seg" id="avTabs"><button data-t="ruta" id="avTabRuta">Recorrido</button><button data-t="reg">Grilla</button><button data-t="sem">Semana</button><button data-t="gen">Avance general</button></div>
+    <div class="seg avtabs" id="avTabs"><button data-t="ruta" id="avTabRuta">Recorrido</button><button data-t="reg">Grilla</button><button data-t="sem">Semana</button><button data-t="gen">General</button></div>
     <div id="av-ruta" hidden style="display:flex;flex-direction:column;gap:12px"></div>
     <div id="av-reg" style="display:flex;flex-direction:column;gap:12px">
-      <h2>1. Torre</h2><div class="chips" id="rgT"></div>
-      <h2>2. Etapa</h2><div class="chips" id="rgK"></div>
-      <div class="card" style="gap:8px">
-        <div class="fila" style="justify-content:space-between"><span style="font-size:15px">Fecha de ejecución</span><input type="date" id="avFecha" class="txt" style="width:170px"></div>
-        <label class="fila" style="gap:8px;font-size:14px;cursor:pointer"><input type="checkbox" id="rgRap"> Toque rápido: un toque marca o desmarca terminado con esta fecha</label>
+      <div class="rcbox">
+        <div class="rcseg" id="rgT"></div>
+        <div class="rcseg" id="rgK"></div>
+        <div class="avfr"><input type="date" id="avFecha" class="txt" title="Fecha de ejecución"><label class="avrap"><input type="checkbox" id="rgRap"><span>⚡ Toque rápido</span></label></div>
+        <div class="cap2" id="rgRapTx" hidden>Toque rápido activo: cada toque marca o desmarca terminado con la fecha elegida.</div>
       </div>
       <div class="err" id="avMsg"></div>
       <div class="tw"><table class="mz" id="tReg"></table></div>
       <div class="sheet" id="sheet" hidden></div>
-      <div class="cap2"><span class="dn"></span> terminado · <span class="dn" style="background:#cfe9d8"></span> ↑ adelantado · <span class="at"></span> atrasado según programa · <span class="ac"></span> atrasado con causa (naranjo) · <span class="pn"></span> pendiente. Toca una casilla para ver el detalle, marcarla o poner la causa.</div>
+      <details class="rcley"><summary>¿Qué significa cada color?</summary><div class="cap2" style="margin-top:6px"><span class="dn"></span> terminado · <span class="dn" style="background:#cfe9d8"></span> ↑ adelantado · <span class="at"></span> atrasado según programa · <span class="ac"></span> atrasado con causa (naranjo) · <span class="pn"></span> pendiente. Toca una casilla para ver el detalle, marcarla o poner la causa.</div></details>
     </div>
     <div id="av-sem" hidden style="display:flex;flex-direction:column;gap:12px">
       <div class="fila" style="justify-content:space-between"><button class="small" id="avSemPrev">‹ Anterior</button><b id="avSemLbl"></b><button class="small" id="avSemNext">Siguiente ›</button></div>
@@ -982,6 +990,7 @@ let cur=null;
 $("back").onclick=()=>show(hist.pop()||"inicio",false);
 document.querySelectorAll("[data-go]").forEach(b=>b.onclick=()=>show(b.dataset.go));
 
+function segRow(el,label,items,isOn,onTap){el.innerHTML=`<span class="rcl">${label}</span>`+items.map((it,i)=>`<button class="${isOn(it)?"on":""}" data-i="${i}">${it.label}</button>`).join("");el.querySelectorAll("button").forEach(b=>b.onclick=()=>onTap(items[+b.dataset.i]))}
 function chips(el,items,isOn,onTap){
   el.innerHTML="";items.forEach(it=>{const b=document.createElement("button");b.className="chip"+(isOn(it)?" on":"");b.textContent=it.label;b.onclick=()=>{onTap(it);};el.appendChild(b)});
 }
@@ -1475,18 +1484,18 @@ function _drawRuta(){const box=$("av-ruta"),h=hoy();box.innerHTML="";const ed=pu
     const celda=d=>`<button class="dp ms${sel.has(d.id)?" on":""}" data-d="${d.id}" style="height:36px">${d.id.slice(1)}<small>${d.tipo}</small></button>`;
     const primero=L.find(d=>sel.has(d.id));
     box.innerHTML=`${Object.keys(RT.marc).length?`<div class="note">Llevas ${Object.keys(RT.marc).length} ${Object.keys(RT.marc).length===1?"partida marcada":"partidas marcadas"} en este recorrido. Puedes seguir en otra torre o terminar.<div style="margin-top:6px"><button class="small" id="rtVerRes">Terminar y ver resumen</button></div></div>`:""}
-      <h2>1. Torre</h2><div class="chips" id="rtT"></div>
-      ${RT.t?`<h2>2. Deptos que recorres hoy</h2>
-      <div class="chips"><button class="chip sm" data-q="todos">Todos</button><button class="chip sm" data-q="n1">Núcleo 1</button><button class="chip sm" data-q="n2">Núcleo 2</button><button class="chip sm" data-q="nada">Ninguno</button></div>
+      <div class="rcbox"><div class="rcseg" id="rtT"></div></div>
+      ${RT.t?`<h2>Deptos que recorres hoy</h2>
+      <div class="rcseg sm"><button data-q="todos">Todos</button><button data-q="n1">Núcleo 1</button><button data-q="n2">Núcleo 2</button><button data-q="nada">Ninguno</button></div>
       <div class="card" style="gap:6px">${pisos.map(pz=>{const fila=L.filter(d=>d.piso===pz).sort((a,b)=>numD(a)-numD(b));return`<div style="display:grid;grid-template-columns:26px 1fr 10px 1fr;gap:6px;align-items:center"><span class="cap2">P${pz}</span><div style="display:grid;grid-template-columns:repeat(4,1fr);gap:4px">${[1,2,3,4].map(n=>{const d=fila.find(x=>numD(x)===n);return d?celda(d):"<span></span>"}).join("")}</div><span></span><div style="display:grid;grid-template-columns:repeat(4,1fr);gap:4px">${[5,6,7,8].map(n=>{const d=fila.find(x=>numD(x)===n);return d?celda(d):"<span></span>"}).join("")}</div></div>`}).join("")}
         <div style="display:grid;grid-template-columns:26px 1fr 10px 1fr;gap:6px"><span></span><span class="cap2" style="text-align:center">Núcleo 1</span><span></span><span class="cap2" style="text-align:center">Núcleo 2</span></div></div>
       <details class="card rtpf" style="padding:12px 14px"${RT.pf.size||RT.pfAb?" open":""}><summary style="list-style:none;cursor:pointer"><div class="fila" style="justify-content:space-between"><span style="font-size:15px">${RT.pf.size?"Solo "+RT.pf.size+(RT.pf.size===1?" partida":" partidas"):"Todas las partidas"}</span><span class="lnk">Revisar solo algunas ▾</span></div></summary>
         <div class="chips"><button class="chip${RT.pf.size?"":" on"}" id="rtPfAll">Todas</button>${cand.slice(0,24).map(o=>`<button class="chip sm${RT.pf.has(o.p.id)?" on":""}" data-pf="${o.p.id}">${esc(o.p.n)}</button>`).join("")}</div></details>
-      <div class="card" style="gap:8px"><div class="fila" style="justify-content:space-between"><span style="font-size:15px">Fecha de lo que marques</span><input type="date" id="rtF" class="txt" style="width:170px" value="${RT.f||h}" max="${h}"></div>
+      <div class="card" style="gap:8px"><div class="avfr"><span class="rcl">Fecha</span><input type="date" id="rtF" class="txt" value="${RT.f||h}" max="${h}"><span class="cap2">de lo que marques</span></div>
 </div>
       <div class="err" id="rtE"></div>
       <button class="go" id="rtGo">${primero?"Partir en "+primero.id.slice(1)+" ›":"Elige al menos un depto"}</button>`:""}`;
-    chips($("rtT"),TORRES.map(t=>({id:t,label:"T"+t})),it=>RT.t===it.id,it=>{if(RT.t!==it.id){RT.t=it.id;RT.sel=null;RT.pf=new Set()}drawRuta()});
+    segRow($("rtT"),"Torre",TORRES.map(t=>({id:t,label:t})),it=>RT.t===it.id,it=>{if(RT.t!==it.id){RT.t=it.id;RT.sel=null;RT.pf=new Set()}drawRuta()});
     box.querySelectorAll(".dp[data-d]").forEach(b=>b.onclick=()=>{const id=b.dataset.d;sel.has(id)?sel.delete(id):sel.add(id);drawRuta()});
     box.querySelectorAll("[data-q]").forEach(b=>b.onclick=()=>{const q=b.dataset.q;RT.sel=new Set(L.filter(d=>q==="todos"||(q==="n1"&&numD(d)<=4)||(q==="n2"&&numD(d)>4)).map(d=>d.id));drawRuta()});
     box.querySelectorAll("[data-pf]").forEach(b=>b.onclick=()=>{RT.pfAb=true;const id=b.dataset.pf;RT.pf.has(id)?RT.pf.delete(id):RT.pf.add(id);drawRuta()});
@@ -1537,10 +1546,11 @@ function _drawRuta(){const box=$("av-ruta"),h=hoy();box.innerHTML="";const ed=pu
 let rgT=null,rgK=0,rgSel=null;
 function avAviso(t){const m=$("avMsg");m.style.color="var(--good)";m.textContent=t}
 function drawAvReg(){const h=hoy();
-  chips($("rgT"),TORRES.map(t=>({id:t,label:"T"+t})),it=>rgT===it.id,it=>{rgT=it.id;rgSel=null;drawAvReg()});
-  chips($("rgK"),[...ETAPAS.map(k=>({id:k,label:"E"+k})),{id:"F",label:"Funcionalidad"}],it=>rgK===it.id,it=>{rgK=it.id;rgSel=null;drawAvReg()});
+  segRow($("rgT"),"Torre",TORRES.map(t=>({id:t,label:t})),it=>rgT===it.id,it=>{rgT=it.id;rgSel=null;drawAvReg()});
+  segRow($("rgK"),"Etapa",[...ETAPAS.map(k=>({id:k,label:"E"+k})),{id:"F",label:"Func"}],it=>rgK===it.id,it=>{rgK=it.id;rgSel=null;drawAvReg()});
+  $("rgRapTx").hidden=!$("rgRap").checked;$("rgRap").onchange=()=>{$("rgRapTx").hidden=!$("rgRap").checked};
   if(!$("avFecha").value)$("avFecha").value=h;$("avFecha").max=h;
-  const m=$("tReg");if(!rgT){m.innerHTML='<tbody><tr><td style="text-align:left">Elige una torre.</td></tr></tbody>';drawSheet();return}
+  const m=$("tReg");if(!rgT){m.innerHTML='<tbody><tr><td style="text-align:left;border:0;color:var(--muted)">Elige una torre arriba para ver la grilla.</td></tr></tbody>';drawSheet();return}
   const ds=DEPTOS.filter(d=>d.t===rgT),ps=partidasEt(rgK),pisos=[...new Set(ds.map(d=>d.piso))];
   m.innerHTML=`<thead><tr><th class="stk"></th>${pisos.map(p=>`<th colspan="${ds.filter(d=>d.piso===p).length}" class="pisoh">Piso ${p}</th>`).join("")}<th></th></tr>
     <tr><th class="stk">Partida</th>${ds.map(d=>`<th class="${d.id.slice(-2)==="01"||d===ds.find(x=>x.piso===d.piso)?"pisol":""}">${d.id.slice(1)}</th>`).join("")}<th>%</th></tr></thead><tbody>${ps.map(p=>{let n=0;
