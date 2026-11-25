@@ -279,6 +279,19 @@ body::before{background:var(--top)}
 .small{border-radius:12px}
 .dp.ms{border-radius:9px}
 
+
+.rcbox{display:flex;flex-direction:column;gap:8px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:10px}
+.rcseg{display:flex;align-items:center;gap:4px;overflow-x:auto;scrollbar-width:none}.rcseg::-webkit-scrollbar{display:none}
+.rcl{font-size:12px;font-weight:700;color:var(--muted);margin-right:4px;text-transform:uppercase;letter-spacing:.04em}
+.rcseg button{flex:1 1 0;min-width:0;height:36px;padding:0 2px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);font:inherit;font-weight:700;cursor:pointer}
+.rcseg button:nth-of-type(1){flex:2.2 1 0;font-size:14px}.rcseg button.on{background:var(--accent);border-color:var(--accent);color:#fff}
+.rcpills{display:flex;flex-wrap:wrap;gap:6px}
+.rcpills button{display:flex;align-items:center;gap:6px;height:34px;padding:0 10px;border:1px solid var(--line);border-radius:17px;background:var(--surface);color:var(--ink);font:inherit;font-size:14px;cursor:pointer}
+.rcpills button i{width:14px;height:14px;border-radius:4px;display:inline-grid;place-items:center;font-style:normal;font-size:10px;color:#fff}
+.rcpills button b{font-variant-numeric:tabular-nums;color:var(--muted);font-weight:700}
+.rcpills button.on{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent) inset;background:var(--accent-soft)}.rcpills button.on b{color:var(--accent)}
+.rcpills i.obl{background:var(--bad)}
+.rcley summary{cursor:pointer;font-size:13px;color:var(--muted);padding:4px 0}.rcley .leyenda{margin-top:6px}
 /* equipo */
 #v-eq{display:flex;flex-direction:column;gap:10px}
 .eqnav{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:4px;position:sticky;top:64px;z-index:5}
@@ -423,7 +436,7 @@ body::before{background:var(--top)}
     </div>
     <button class="admlink" data-go="adm" id="btnAdm" hidden>Administración ⚙</button>
     <div class="cap2" id="quien" style="text-align:center"></div>
-    <div class="cap2" id="verApp" style="opacity:.7;text-align:center">Tepi Control VLV · versión V2 (instalable, base V1.35) · 24 nov 2026</div>
+    <div class="cap2" id="verApp" style="opacity:.7;text-align:center">Tepi Control VLV · versión V2 (instalable, base V1.36) · 25 nov 2026</div>
   </section>
 
   <!-- MATERIALES: selección -->
@@ -488,11 +501,9 @@ body::before{background:var(--top)}
   <!-- RECEPCIÓN DE ETAPA -->
   <section id="v-rec" hidden style="display:flex;flex-direction:column;gap:14px">
     <h2>1. Estado de los deptos</h2>
-    <div class="chips" id="rcFT"></div>
-    <div class="chips" id="rcFE"></div>
-    <div id="rcRes" style="display:flex;flex-direction:column;gap:6px"></div>
+    <div class="rcbox"><div class="rcseg" id="rcFT"></div><div class="rcpills" id="rcFE"></div><div id="rcRes"></div></div>
     <div class="edifs" id="rcGrid"></div>
-    <div class="leyenda" id="rcLey"></div>
+    <details class="rcley"><summary>¿Qué significa cada color?</summary><div class="leyenda" id="rcLey"></div></details>
     <h2>2. Etapa a recibir</h2>
     <div class="chips" id="chRecEt"></div>
     <div id="recHist"></div>
@@ -1777,13 +1788,19 @@ const estD=d=>{const e=S.etapa[d]??-1;return e>=4?"RF":e<0&&!torreLib(d[0])?"OG"
 function pendD(d){const k=(S.etapa[d]??-1)+1;if(k>4)return 0;const rv=revs(d,k),l=rv[rv.length-1];return pendCount(l)}
 let rcT="todo",rcE="todas";
 function drawEdif(){
-  chips($("rcFT"),[{id:"todo",label:"Todas"},...TORRES.map(t=>({id:t,label:"T"+t}))],it=>rcT===it.id,it=>{rcT=it.id;drawRec()});
-  chips($("rcFE"),[{id:"todas",label:"Todas"},...EST.map(k=>({id:k,label:k})),{id:"obs",label:"Con observaciones"},{id:"avi",label:"🔔 Listos para revisar"},{id:"cal",label:"Calidad EC"}],it=>rcE===it.id,it=>{rcE=it.id;drawRec()});
+  $("rcFT").innerHTML=`<span class="rcl">Torre</span>`+[["todo","Todas"],...TORRES.map(t=>[t,t])].map(([id,l])=>`<button class="${rcT===id?"on":""}" data-rt="${id}">${l}</button>`).join("");
+  $("rcFT").querySelectorAll("[data-rt]").forEach(b=>b.onclick=()=>{rcT=b.dataset.rt;drawRec()});
   const ts=rcT==="todo"?TORRES:[rcT],ds=DEPTOS.filter(d=>ts.includes(d.t)),N=ds.length;
   const avD=d=>Object.keys(S.avisos||{}).some(k=>k.split("|")[0]===d),qD=d=>Object.values(REC).some(r=>r.cal&&r.depto===d);
   const ok=d=>rcE==="todas"||(rcE==="obs"?pendD(d.id)>0:rcE==="avi"?avD(d.id):rcE==="cal"?qD(d.id):estD(d.id)===rcE),nOk=ds.filter(ok).length,cnt=EST.map(k=>ds.filter(d=>estD(d.id)===k).length),nObs=ds.filter(d=>pendD(d.id)>0).length;
-  $("rcRes").innerHTML=`<div class="barra">${EST.map((k,i)=>cnt[i]?`<div style="flex:${cnt[i]};background:${ECOL[k]};color:${ETXT[k]}" title="${ENOM[k]}: ${cnt[i]}">${cnt[i]/N>.06?k+" "+cnt[i]:""}</div>`:"").join("")}</div>
-    <div class="cap2">${N} deptos · ${EST.map((k,i)=>k+": "+cnt[i]).join(" · ")} · con observaciones pendientes: ${nObs}${rcE!=="todas"?" · se destacan "+nOk:""}</div>`;
+  const nAvi=ds.filter(d=>avD(d.id)).length,nCal=ds.filter(d=>qD(d.id)).length;
+  $("rcFE").innerHTML=EST.map((k,i)=>cnt[i]||rcE===k?`<button class="${rcE===k?"on":""}" data-re="${k}" title="${ENOM[k]}"><i style="background:${ECOL[k]}"></i>${k}<b>${cnt[i]}</b></button>`:"").join("")+
+    (nObs||rcE==="obs"?`<button class="${rcE==="obs"?"on":""}" data-re="obs" title="Con observaciones pendientes"><i class="obl">!</i>Obs.<b>${nObs}</b></button>`:"")+
+    (nAvi||rcE==="avi"?`<button class="${rcE==="avi"?"on":""}" data-re="avi" title="Listos para revisar">🔔<b>${nAvi}</b></button>`:"")+
+    (nCal||rcE==="cal"?`<button class="${rcE==="cal"?"on":""}" data-re="cal" title="Con revisión de calidad EC">🔍<b>${nCal}</b></button>`:"");
+  $("rcFE").querySelectorAll("[data-re]").forEach(b=>b.onclick=()=>{rcE=rcE===b.dataset.re?"todas":b.dataset.re;drawRec()});
+  $("rcRes").innerHTML=`<div class="cap2">${N} deptos${rcE!=="todas"?` · se destacan ${nOk} · <button class="lnk" id="rcVerT">ver todos</button>`:" · toca un estado para destacarlo"}</div>`;
+  const vt=$("rcVerT");if(vt)vt.onclick=()=>{rcE="todas";drawRec()};
   $("rcGrid").innerHTML=ts.map(t=>{const dt=DEPTOS.filter(d=>d.t===t),pisos=[...new Set(dt.map(d=>d.piso))].sort((a,b)=>b-a);
     return`<div class="edif"><div class="card-h" style="padding-bottom:6px"><b>Torre ${t} · ${dt[0].ed}</b><span class="tag">${dt.filter(d=>estD(d.id)==="RF").length} de ${dt.length} en RF</span></div><div class="eg">${pisos.map(p=>`<span class="pl">P${p}</span>`+[1,2,3,4,5,6,7,8].map(n=>{
       const d=dt.find(x=>x.piso===p&&+x.id.slice(1)===p*100+n);if(!d)return'<span class="emp"></span>';const e=estD(d.id),o=pendD(d.id),pn=pendNR(d.id);
