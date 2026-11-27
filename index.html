@@ -445,7 +445,7 @@ body::before{background:var(--top)}
     </div>
     <button class="admlink" data-go="adm" id="btnAdm" hidden>Administración ⚙</button>
     <div class="cap2" id="quien" style="text-align:center"></div>
-    <div class="cap2" id="verApp" style="opacity:.7;text-align:center">Tepi Control VLV · versión V2 (instalable, base V1.40) · 27 nov 2026</div>
+    <div class="cap2" id="verApp" style="opacity:.7;text-align:center">Tepi Control VLV · versión V2 (instalable, base V1.41) · 27 nov 2026</div>
   </section>
 
   <!-- MATERIALES: selección -->
@@ -850,6 +850,7 @@ const FICHA={"E":{"prf15":3,"prf125":0,"pst15":30,"pst10":4,"prh15":4,"pvg":2,"m
 const REPARTIR={"E":{"puy":1.5,"yeso":40,"pun":1,"niv":38},"C":{"puy":1.5,"yeso":40,"pun":1,"niv":38},"V":{"puy":1.5,"yeso":40,"pun":1,"niv":38},"DV":{"puy":1.5,"yeso":40,"pun":1,"niv":38},"D":{"puy":1.5,"yeso":40,"pun":1,"niv":38}};
 const MOTIVOS=["Necesidad de ejecución","Rotura","Material defectuoso","Mal uso","Robo","Otro"];
 const motBase=m=>m&&/^Otro/.test(m)?"Otro":(m||"");
+const motCausa=(m,sobre)=>m?motBase(m):sobre?"Sin causa registrada":"",motDet=m=>m&&/^Otro: /.test(m)?m.replace(/^Otro: /,""):"";
 const motErr=m=>!m?"Elige un motivo antes de guardar":(motBase(m)==="Otro"&&!/^Otro: \S/.test(m))?"Escribe cuál es la otra razón":"";
 function motivoUI(el,get,set){
   chips(el,MOTIVOS.map(m=>({id:m,label:m})),it=>motBase(get())===it.id,it=>{set(it.id==="Otro"?(motBase(get())==="Otro"?get():"Otro"):it.id);motivoUI(el,get,set);if(it.id==="Otro"){const x=el.nextElementSibling;if(x)x.focus()}});
@@ -1141,12 +1142,12 @@ function filasFichas(){const L=[];DEPTOS.forEach(d=>INS.forEach(i=>{const r=S.re
   return L.sort((a,b)=>+a.d.id-b.d.id||a.i.n.localeCompare(b.i.n))}
 const lisDep=L=>L.map(x=>nomDep(x.d)+" ("+dec(x.q,x.q%1?1:0)+")").join(", ");
 // planilla de fichas en vivo en el Drive: la app manda las filas cuando algo cambia y el servidor las escribe
-function vistaFichas(){const n=v=>v?v:"";return{f:filasFichas().map(({d,i,m,T})=>[+d.t,+d.id.slice(1),d.tipo,i.n,i.u,m.con!=null?"Cerrada":"Abierta",m.ini,n(m.adic),n(m.rec),lisDep(m.recDe),n(m.env),lisDep(m.envA),n(m.vb),n(m.vm),m.con!=null?m.con:"",n(m.rep),n(m.rp),T||"",m.r.f||"",m.r.mot||""]),
+function vistaFichas(){const n=v=>v?v:"";return{f:filasFichas().map(({d,i,m,T})=>[+d.t,+d.id.slice(1),d.tipo,i.n,i.u,m.con!=null?"Cerrada":"Abierta",m.ini,n(m.adic),n(m.rec),lisDep(m.recDe),n(m.env),lisDep(m.envA),n(m.vb),n(m.vm),m.con!=null?m.con:"",n(m.rep),n(m.rp),T||"",m.r.f||"",motCausa(m.r.mot,m.con!=null&&T&&m.con+m.rep>T),motDet(m.r.mot)]),
   m:S.mov.map(x=>{const I=ins(x.ins);return[x.f||"",I?I.n:x.ins,I?I.u:"",x.q,nomDep(x.de),nomDep(x.a)]})}}
 let fichT=null;function publicarFichas(){if(!db||!window.TEPI)return;clearTimeout(fichT);fichT=setTimeout(()=>{try{const V=vistaFichas(),j=JSON.stringify(V);let h=0;for(let i=0;i<j.length;i++)h=(h*31+j.charCodeAt(i))|0;
   if(String(h)===publicarFichas.h)return;publicarFichas.h=String(h);
   db.collection("vista").doc("fichas").set({h:String(h),act:new Date().toISOString(),...V}).catch(()=>{publicarFichas.h=null})}catch(e){}},6000)}
-function xlsFichas(wb){const H=["Torre","Depto","Tipología","Insumo","Unidad","Estado","Distribuido de bodega","Adicional de bodega (ocupó más)","Recibido de otros deptos","Recibido desde","Traspasado a otros deptos","Traspasado hacia","Devuelto a bodega","Devuelto a bodega malo","Consumo final","Repasos después del cierre","Reproceso","Teórico","Desviación %","Queda en el depto o sin registrar","Fecha cierre","Motivo"];
+function xlsFichas(wb){const H=["Torre","Depto","Tipología","Insumo","Unidad","Estado","Distribuido de bodega","Adicional de bodega (ocupó más)","Recibido de otros deptos","Recibido desde","Traspasado a otros deptos","Traspasado hacia","Devuelto a bodega","Devuelto a bodega malo","Consumo final","Repasos después del cierre","Reproceso","Teórico","Desviación %","Queda en el depto o sin registrar","Fecha cierre","Sobreconsumo (unidades)","Causa del sobreconsumo","Detalle (otra razón)"];
   const A=[["Fichas de materiales por depto: movimiento y consumo · Obra 812 Vive La Vara"],["Corte al",fechaHoy()],
     ["Queda en el depto o sin registrar = Distribuido + Adicional + Recibido − Traspasado − Devuelto − Devuelto malo − Consumo final. En una ficha cerrada debe dar 0: si no da 0, falta registrar a dónde fue (o de dónde vino) esa diferencia."],
     ["Desviación % = (Teórico − (Consumo final + Repasos)) / Teórico. Positivo es ahorro, negativo es sobreconsumo. El reproceso va aparte."],[],H];
@@ -1154,9 +1155,9 @@ function xlsFichas(wb){const H=["Torre","Depto","Tipología","Insumo","Unidad","
   const n=v=>v?v:null;L.forEach(({d,i,m,T},k)=>{const R=A.length+1,r=m.r;
     A.push([+d.t,+d.id.slice(1),d.tipo,i.n,i.u,m.con!=null?"Cerrada":"Abierta",m.ini,n(m.adic),n(m.rec),lisDep(m.recDe),n(m.env),lisDep(m.envA),n(m.vb),n(m.vm),m.con,n(m.rep),n(m.rp),T||null,
       {t:"n",f:`IF(AND(R${R}>0,O${R}<>""),(R${R}-(O${R}+P${R}))/R${R},"")`,v:T&&m.con!=null?(T-(m.con+m.rep))/T:"",z:"0.0%"},
-      {t:"n",f:`G${R}+H${R}+I${R}-K${R}-M${R}-N${R}-O${R}`,v:r1(m.ini+m.adic+m.rec-m.env-m.vb-m.vm-(m.con||0))},r.f?fCL(r.f):"",r.mot||""])});
-  const ws=XLSX.utils.aoa_to_sheet(A);for(let R=7;R<=A.length;R++){const c=ws["S"+R];if(c&&c.v==="")c.t="s"}
-  ws["!cols"]=[6,6,9,26,8,9,11,12,11,22,11,22,10,10,10,11,9,9,10,14,11,22].map(w=>({wch:w}));ws["!autofilter"]={ref:"A6:V"+A.length};ws["!merges"]=[{s:{r:2,c:0},e:{r:2,c:12}},{s:{r:3,c:0},e:{r:3,c:12}}];
+      {t:"n",f:`G${R}+H${R}+I${R}-K${R}-M${R}-N${R}-O${R}`,v:r1(m.ini+m.adic+m.rec-m.env-m.vb-m.vm-(m.con||0))},r.f?fCL(r.f):"",{t:"n",z:"0.##",f:`IF(AND(R${R}>0,O${R}<>""),MAX(0,O${R}+N(P${R})-R${R}),"")`,v:T&&m.con!=null?Math.max(0,r1(m.con+m.rep-T)):""},motCausa(r.mot,m.con!=null&&T&&m.con+m.rep>T),motDet(r.mot)])});
+  const ws=XLSX.utils.aoa_to_sheet(A);for(let R=7;R<=A.length;R++)["S","V"].forEach(k=>{const c=ws[k+R];if(c&&c.v==="")c.t="s"})
+  ws["!cols"]=[6,6,9,26,8,9,11,12,11,22,11,22,10,10,10,11,9,9,10,14,11,12,22,26].map(w=>({wch:w}));ws["!autofilter"]={ref:"A6:X"+A.length};ws["!merges"]=[{s:{r:2,c:0},e:{r:2,c:12}},{s:{r:3,c:0},e:{r:3,c:12}}];
   XLSX.utils.book_append_sheet(wb,ws,"Fichas por depto");return L.length}
 function drawCierreRap(box,msg,cab,de){
   const I=ins(RP.i),key=RP.d+"|"+RP.i,r=S.reg[key],T=ficha(RP.d,RP.i),st=PASO(I.u),u=esc(I.u),D=r.dis,nf=v=>dec(v,v%1?(Number.isInteger(Math.round(v*1000)/100)?1:2):0);
@@ -1186,7 +1187,7 @@ function drawCierreRap(box,msg,cab,de){
       persist();registrar("Materiales",I.n+", "+lblD(de)+": "+(pas?nf(q)+" "+I.u+" pasaron al depto "+nomDst(CZ.pa):"se ocuparon "+nf(q)+" "+I.u+" más")+" · sigue en uso ("+nf(r.dis)+")",{k:"cierre",prev,movs});
       RP.msg="Guardado: "+(I.c||I.n)+" del depto "+RP.d.slice(1)+(pas?": "+nf(q)+" pasaron al "+nomDst(CZ.pa):": "+nf(q)+" más")+". Sigue en uso con "+nf(r.dis)+".";back()};
     return}
-  const falt=r1(sob-asig),sobre=inst>T&&inst>D,pN=I.part&&(PROG.find(p=>p.id===I.part)||{}).n,faltaAv=pN&&!hecho(RP.d,I.part)&&puede("avance");
+  const falt=r1(sob-asig),sobre=inst>T,pN=I.part&&(PROG.find(p=>p.id===I.part)||{}).n,faltaAv=pN&&!hecho(RP.d,I.part)&&puede("avance");
   box.innerHTML=`${msg}${cab}<div class="card"><div class="card-h"><b style="font-size:18px">${esc(I.n)}</b><button class="lnk" id="rpCi">Cambiar insumo</button></div>${origen}
     <div class="lbl" style="margin-top:14px;text-align:center">Instalado</div>
     <div class="rpq"><button class="rpm" data-s="-1" aria-label="Menos">−</button><input type="number" id="czI" min="0" step="${st}" data-q4="1" inputmode="decimal" value="${esc(CZ.inst)}"><span class="rpu">${u}</span><button class="rpm" data-s="1" aria-label="Más">+</button></div>
@@ -1196,7 +1197,7 @@ function drawCierreRap(box,msg,cab,de){
       ${Object.keys(CZ.dst).length?Object.entries(CZ.dst).map(([k,v])=>`<div class="fila" style="gap:8px;align-items:center;margin-top:6px"><span style="flex:1">${nomDst(k)}</span><input type="number" class="txt czn" data-k="${k}" min="0" step="${st}" data-q4="1" value="${v}" style="width:90px;text-align:right"></div>`).join(""):""}
       <input class="txt" id="czO" inputmode="numeric" placeholder="Otro depto, ej. 4305" style="margin-top:8px">
       <div class="cap2" style="margin-top:6px">${falt>0?"Toca un destino: se le asigna lo que falta ("+nf(falt)+")":falt<0?'<b style="color:var(--bad)">Asignaste '+nf(-falt)+" de más</b>":"Listo, todo asignado"}</div></div>`:""}
-    ${sobre?`<div class="motivo" style="margin-top:12px"><div class="lbl">Se ocuparon ${nf(r1(inst-D))} más y queda sobre el Teórico: ¿por qué?</div><div class="chips" id="czM"></div></div>`:""}
+    ${sobre?`<div class="motivo" style="margin-top:12px"><div class="lbl">${inst>D?`Se ocuparon ${nf(r1(inst-D))} más y queda`:`Se instalaron ${nf(r1(inst-T))}`} sobre el Teórico (${nf(T)}): ¿por qué?</div><div class="chips" id="czM"></div></div>`:""}
     ${faltaAv?`<label class="ai" style="border:none"><input type="checkbox" id="czAv"${RP.av?" checked":""}><span>Marcar "${esc(pN)}" terminado en Avance</span></label>`:""}
     <div class="err" id="czErr"></div><button class="save" id="czG">Cerrar ficha</button>
     <div style="display:flex;justify-content:center;gap:22px;margin-top:12px"><button class="lnk" id="czMas">Ocupó más</button><button class="lnk" id="czPas">Pasar a otro depto</button></div></div>`;
@@ -1212,14 +1213,14 @@ function drawCierreRap(box,msg,cab,de){
   $("czG").onclick=()=>{CZ.inst=ii.value;const er=t=>$("czErr").textContent=t,X=r1(Math.max(0,+CZ.inst||0)),s2=r1(D-X),a2=r1(Object.values(CZ.dst).reduce((a,v)=>a+(+v||0),0));
     if(!(X>0))return er("Escribe cuánto se instaló");
     if(s2>0&&a2!==s2)return er(a2<s2?"Falta decir a dónde fueron "+nf(r1(s2-a2))+" "+I.u:"Asignaste más de lo que sobró");
-    if(X>T&&X>D&&motErr(CZ.mot))return er(motErr(CZ.mot));
+    if(X>T&&motErr(CZ.mot))return er(motErr(CZ.mot));
     const prev={},movs=[],fe=new Date().toLocaleDateString("es-CL",{day:"2-digit",month:"2-digit"});prev[key]=clon(r);const partes=[];
     if(s2>0)Object.entries(CZ.dst).forEach(([k,v])=>{const n=r1(+v||0);if(!(n>0))return;
       if(k==="bb"){r.vb=r1((r.vb||0)+n);partes.push(nf(n)+" volvieron a bodega")}
       else if(k==="bm"){r.vm=r1((r.vm||0)+n);partes.push(nf(n)+" volvieron a bodega malos")}
       else{const k2=k+"|"+RP.i;if(!(k2 in prev))prev[k2]=S.reg[k2]?clon(S.reg[k2]):null;const R=rec(k,RP.i);R.dis=r1(R.dis+n);R.rec=r1((R.rec||0)+n);if(!R.fd)R.fd=hoy();r.env=r1((r.env||0)+n);const m={f:fe,ins:RP.i,de:RP.d,a:k,q:n};S.mov.unshift(m);movs.push(m);partes.push(nf(n)+" al "+nomDst(k))}});
     if(X>D)r.ent=(r.ent||[]).concat([{f:hoy(),q:r1(X-D),por:quienSoy(),cierre:true}]);
-    r.dis=X;r.con=X;r.f=hoy();r.mot=X>T?(X>D?CZ.mot:(r.mot||"")):"";
+    r.dis=X;r.con=X;r.f=hoy();r.mot=X>T?CZ.mot:"";
     persist();registrar("Materiales",I.n+", "+lblD(de)+": ficha cerrada con "+nf(X)+" "+I.u+" instalados"+(partes.length?" · "+partes.join(", "):"")+(X>D?" · se ocuparon "+nf(r1(X-D))+" más de bodega":""),{k:"cierre",prev,movs});
     if(faltaAv&&RP.av)setHecho(RP.d,I.part,hoy());
     RP.msg="Ficha cerrada: "+(I.c||I.n)+" del depto "+RP.d.slice(1)+", instalado "+nf(X)+" "+I.u+(partes.length?" · "+partes.join(", "):"")+".";back()};
