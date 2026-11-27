@@ -445,13 +445,12 @@ body::before{background:var(--top)}
     </div>
     <button class="admlink" data-go="adm" id="btnAdm" hidden>Administración ⚙</button>
     <div class="cap2" id="quien" style="text-align:center"></div>
-    <div class="cap2" id="verApp" style="opacity:.7;text-align:center">Tepi Control VLV · versión V2 (instalable, base V1.39) · 27 nov 2026</div>
+    <div class="cap2" id="verApp" style="opacity:.7;text-align:center">Tepi Control VLV · versión V2 (instalable, base V1.40) · 27 nov 2026</div>
   </section>
 
   <!-- MATERIALES: selección -->
   <section id="v-mat" hidden style="display:flex;flex-direction:column;gap:16px">
     <div class="seg avtabs" id="matTabs"><button data-t="rap">Rápido</button><button data-t="reg">Varios deptos</button><button data-t="tip">Tipologías</button></div>
-    <div style="display:flex;flex-direction:column;align-items:flex-end;gap:2px;margin-top:-8px"><button class="lnk" id="matXls">📗 Descargar Excel de fichas</button><span class="cap2" id="matXlsMsg" style="align-self:stretch"></span></div>
     <div id="matRap" hidden style="display:flex;flex-direction:column;gap:12px"></div>
     <div id="matTip" hidden style="display:flex;flex-direction:column;gap:12px"></div>
     <div id="matReg" style="display:flex;flex-direction:column;gap:16px">
@@ -935,7 +934,7 @@ function vistaEtapas(){const T={},O=[],avD=d=>Object.keys(S.avisos||{}).some(k=>
 let vistaT=null;function publicarVista(){if(!db||!window.TEPI)return;clearTimeout(vistaT);vistaT=setTimeout(()=>{try{const V=vistaEtapas(),j=JSON.stringify(V);let h=0;for(let i=0;i<j.length;i++)h=(h*31+j.charCodeAt(i))|0;
   if(String(h)===publicarVista.h)return;publicarVista.h=String(h);
   db.collection("vista").doc("etapas").set({h:String(h),act:new Date().toISOString(),...V}).catch(()=>{publicarVista.h=null})}catch(e){}},4000)}
-function refrescar(){syncIns();try{pintarInicio()}catch(e){}publicarVista();$("vacio").hidden=true;if(cur==="fichas"||(cur==="rec"&&draft))return;({mat:drawSel,ava:drawAva,res:drawRes,rec:drawRec,adm:drawAdm})[cur]?.()}
+function refrescar(){syncIns();try{pintarInicio()}catch(e){}publicarVista();publicarFichas();$("vacio").hidden=true;if(cur==="fichas"||(cur==="rec"&&draft))return;({mat:drawSel,ava:drawAva,res:drawRes,rec:drawRec,adm:drawAdm})[cur]?.()}
 async function iniciar(){
   try{db=await window.claude?.use?.("db")}catch(e){db=null}
   try{assets=await window.claude?.use?.("assets")}catch(e){assets=null}
@@ -1138,14 +1137,22 @@ function trazaTxt(d,i,u){const m=movD(d,i),n=v=>dec(v,v%1?1:0),p=[];if(!(m.rec||
   p.push(n(m.ini)+" de bodega");if(m.adic)p.push(n(m.adic)+" más de bodega (ocupó más)");const lis=(L,tot,pre)=>L.length===1&&Math.abs(L[0].q-tot)<.01?" "+pre+" "+nomDep(L[0].d):L.length?": "+L.map(x=>n(x.q)+" "+pre+" "+nomDep(x.d)).join(", "):"";
   if(m.rec)p.push("recibió "+n(m.rec)+lis(m.recDe,m.rec,"del"));
   if(m.env)p.push("traspasó "+n(m.env)+lis(m.envA,m.env,"al"));if(m.vb)p.push(n(m.vb)+" volvieron a bodega");if(m.vm)p.push(n(m.vm)+" a bodega malos");return p.join(" · ")}
+function filasFichas(){const L=[];DEPTOS.forEach(d=>INS.forEach(i=>{const r=S.reg[d.id+"|"+i.id];if(!r||!(r.dis||r.con||r.env||r.rec||r.vb||r.vm))return;L.push({d,i,m:movD(d.id,i.id),T:ficha(d.id,i.id)})}));
+  return L.sort((a,b)=>+a.d.id-b.d.id||a.i.n.localeCompare(b.i.n))}
+const lisDep=L=>L.map(x=>nomDep(x.d)+" ("+dec(x.q,x.q%1?1:0)+")").join(", ");
+// planilla de fichas en vivo en el Drive: la app manda las filas cuando algo cambia y el servidor las escribe
+function vistaFichas(){const n=v=>v?v:"";return{f:filasFichas().map(({d,i,m,T})=>[+d.t,+d.id.slice(1),d.tipo,i.n,i.u,m.con!=null?"Cerrada":"Abierta",m.ini,n(m.adic),n(m.rec),lisDep(m.recDe),n(m.env),lisDep(m.envA),n(m.vb),n(m.vm),m.con!=null?m.con:"",n(m.rep),n(m.rp),T||"",m.r.f||"",m.r.mot||""]),
+  m:S.mov.map(x=>{const I=ins(x.ins);return[x.f||"",I?I.n:x.ins,I?I.u:"",x.q,nomDep(x.de),nomDep(x.a)]})}}
+let fichT=null;function publicarFichas(){if(!db||!window.TEPI)return;clearTimeout(fichT);fichT=setTimeout(()=>{try{const V=vistaFichas(),j=JSON.stringify(V);let h=0;for(let i=0;i<j.length;i++)h=(h*31+j.charCodeAt(i))|0;
+  if(String(h)===publicarFichas.h)return;publicarFichas.h=String(h);
+  db.collection("vista").doc("fichas").set({h:String(h),act:new Date().toISOString(),...V}).catch(()=>{publicarFichas.h=null})}catch(e){}},6000)}
 function xlsFichas(wb){const H=["Torre","Depto","Tipología","Insumo","Unidad","Estado","Distribuido de bodega","Adicional de bodega (ocupó más)","Recibido de otros deptos","Recibido desde","Traspasado a otros deptos","Traspasado hacia","Devuelto a bodega","Devuelto a bodega malo","Consumo final","Repasos después del cierre","Reproceso","Teórico","Desviación %","Queda en el depto o sin registrar","Fecha cierre","Motivo"];
   const A=[["Fichas de materiales por depto: movimiento y consumo · Obra 812 Vive La Vara"],["Corte al",fechaHoy()],
     ["Queda en el depto o sin registrar = Distribuido + Adicional + Recibido − Traspasado − Devuelto − Devuelto malo − Consumo final. En una ficha cerrada debe dar 0: si no da 0, falta registrar a dónde fue (o de dónde vino) esa diferencia."],
     ["Desviación % = (Teórico − (Consumo final + Repasos)) / Teórico. Positivo es ahorro, negativo es sobreconsumo. El reproceso va aparte."],[],H];
-  const L=[];DEPTOS.forEach(d=>INS.forEach(i=>{const r=S.reg[d.id+"|"+i.id];if(!r||!(r.dis||r.con||r.env||r.rec||r.vb||r.vm))return;L.push({d,i,m:movD(d.id,i.id),T:ficha(d.id,i.id)})}));
-  L.sort((a,b)=>+a.d.id-b.d.id||a.i.n.localeCompare(b.i.n));
+  const L=filasFichas();
   const n=v=>v?v:null;L.forEach(({d,i,m,T},k)=>{const R=A.length+1,r=m.r;
-    A.push([+d.t,+d.id.slice(1),d.tipo,i.n,i.u,m.con!=null?"Cerrada":"Abierta",m.ini,n(m.adic),n(m.rec),m.recDe.map(x=>nomDep(x.d)+" ("+dec(x.q,x.q%1?1:0)+")").join(", "),n(m.env),m.envA.map(x=>nomDep(x.d)+" ("+dec(x.q,x.q%1?1:0)+")").join(", "),n(m.vb),n(m.vm),m.con,n(m.rep),n(m.rp),T||null,
+    A.push([+d.t,+d.id.slice(1),d.tipo,i.n,i.u,m.con!=null?"Cerrada":"Abierta",m.ini,n(m.adic),n(m.rec),lisDep(m.recDe),n(m.env),lisDep(m.envA),n(m.vb),n(m.vm),m.con,n(m.rep),n(m.rp),T||null,
       {t:"n",f:`IF(AND(R${R}>0,O${R}<>""),(R${R}-(O${R}+P${R}))/R${R},"")`,v:T&&m.con!=null?(T-(m.con+m.rep))/T:"",z:"0.0%"},
       {t:"n",f:`G${R}+H${R}+I${R}-K${R}-M${R}-N${R}-O${R}`,v:r1(m.ini+m.adic+m.rec-m.env-m.vb-m.vm-(m.con||0))},r.f?fCL(r.f):"",r.mot||""])});
   const ws=XLSX.utils.aoa_to_sheet(A);for(let R=7;R<=A.length;R++){const c=ws["S"+R];if(c&&c.v==="")c.t="s"}
@@ -3077,8 +3084,6 @@ const fechaHoy=()=>new Date().toLocaleDateString("es-CL");
 const nomArch=ext=>"Informe obra 812 "+hoy()+"."+ext;
 const r1=v=>v==null?null:Math.round(v*100)/100,r2=v=>Math.round(v*100)/100;
 
-$("matXls").onclick=async()=>{const e=$("matXlsMsg");e.textContent="Preparando Excel…";try{if(!window.XLSX)await cargar("https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js")}catch(x){e.textContent="No se pudo cargar el generador de Excel. Revisa la conexión.";return}
-  const wb=XLSX.utils.book_new(),n=xlsFichas(wb);if(!n){e.textContent="Aún no hay fichas registradas.";return}e.textContent="";await guardar("Fichas por depto 812 "+hoy()+".xlsx",new Uint8Array(XLSX.write(wb,{type:"array",bookType:"xlsx"})),e)};
 $("btnXls").onclick=async()=>{const e=$("errExp");e.style.color="";if(!RES.mat&&!RES.av&&!RES.et){e.textContent="Elige al menos un área para exportar.";return}e.textContent="Preparando Excel…";
   try{if(!window.XLSX)await cargar("https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js")}catch(x){e.textContent="No se pudo cargar el generador de Excel. Revisa la conexión.";return}
   const g=globales(),A=[["Control de consumo de materiales · Obra 812 Vive La Vara"],["Corte acumulado al",fechaHoy()],[],
