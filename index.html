@@ -445,7 +445,7 @@ body::before{background:var(--top)}
     </div>
     <button class="admlink" data-go="adm" id="btnAdm" hidden>Administración ⚙</button>
     <div class="cap2" id="quien" style="text-align:center"></div>
-    <div class="cap2" id="verApp" style="opacity:.7;text-align:center">Tepi Control VLV · versión V2 (instalable, base V1.42) · 27 nov 2026</div>
+    <div class="cap2" id="verApp" style="opacity:.7;text-align:center">Tepi Control VLV · versión V2 (instalable, base V1.43) · 27 nov 2026</div>
   </section>
 
   <!-- MATERIALES: selección -->
@@ -553,6 +553,9 @@ body::before{background:var(--top)}
     <div class="tw cards"><table class="t1" id="tConc"></table></div>
     <div class="cap2" id="admConcNota"></div>
     <div class="err" id="admErr"></div>
+    <h2>7. Conteo de stock en patio</h2>
+    <div class="cap2">Cuenta lo que hay en patio y anótalo aquí. La app guarda cuánto debería haber en ese momento (llegó por guías − salió de bodega), y la diferencia queda como pérdida en la planilla "Materiales VLV · en vivo".</div>
+    <div class="card" id="admStock"></div>
     <h2>Fichas: Teórico y sugerido a repartir</h2>
     <div class="card" id="admFicCarga"></div>
     <div class="card" id="admFic"></div>
@@ -1144,7 +1147,23 @@ function filasFichas(){const L=[];DEPTOS.forEach(d=>INS.forEach(i=>{const r=S.re
   return L.sort((a,b)=>+a.d.id-b.d.id||a.i.n.localeCompare(b.i.n))}
 const lisDep=L=>L.map(x=>nomDep(x.d)+" ("+dec(x.q,x.q%1?1:0)+")").join(", ");
 // planilla de fichas en vivo en el Drive: la app manda las filas cuando algo cambia y el servidor las escribe
+// control por insumo: fichas, avance, material, OC y conteo de patio
+function salioBod(i){let s=0;DEPTOS.forEach(d=>{const r=S.reg[d.id+"|"+i];if(r)s+=deBodega(r)-(r.vb||0)+extQ(r,"rep")+extQ(r,"rp")});return r1(s)}
+function stockTeo(i){const o=ocIns(i);return o.real?r1(o.rec-salioBod(i)):null}
+function ctrlIns(I){const i=I.id,D=DEPTOS.filter(d=>ficha(d.id,I.id)>0);if(!D.length)return null;
+  const R=d=>S.reg[d.id+"|"+i]||{},cer=D.filter(d=>R(d).con>0),uso=D.filter(d=>!(R(d).con>0)&&R(d).dis>0),pA=I.part&&PROG.find(p=>p.id===I.part);
+  const term=pA?D.filter(d=>hecho(d.id,pA.id)):null,tsf=term?term.filter(d=>!(R(d).con>0)).length:null;
+  const con=r1(cer.reduce((a,d)=>a+conP(R(d)),0)),tCer=cer.reduce((a,d)=>a+ficha(d.id,i),0),acum=r1(uso.reduce((a,d)=>a+(R(d).dis||0),0)),sal=salioBod(i),o=ocIns(i);
+  const tPend=r1(D.filter(d=>!(R(d).con>0)).reduce((a,d)=>a+ficha(d.id,i),0)),rend=tCer?con/tCer:1,proy=con+tPend*rend,porD=D.length-cer.length?tPend/(D.length-cer.length)*rend:0;
+  const st=o.real?r1(o.rec-sal):null,C=((ADM.stock||{}).c||[]).filter(x=>x.i===i).sort((a,b)=>a.f<b.f?1:-1)[0];
+  const al=[];if(tsf)al.push(tsf+(tsf>1?" deptos":" depto")+" con la partida "+pA.n+" terminada y sin ficha cerrada");
+  if(st!=null&&st<0)al.push("Salió de bodega más de lo que llegó por guías: falta una guía o el reporte de OC está atrasado");
+  if(o.real&&proy>o.cant)al.push("La OC no alcanza: faltan ~"+dec(Math.ceil(proy-o.cant),0)+" "+I.u);
+  if(C&&C.teo-C.q>0)al.push("Conteo del "+fCL(C.f)+": faltan "+dec(r1(C.teo-C.q),0)+" "+I.u+" en patio");
+  if(rend>1.05&&cer.length)al.push("Rinde "+Math.round((rend-1)*100)+"% sobre el Teórico");
+  return[I.n,I.u,D.length,cer.length,uso.length,term?term.length:"",tsf??"",con,acum,sal,o.real?o.rec:"",porD&&st!=null?Math.round(st/porD*10)/10:"",o.real?o.cant:"",r1(tPend),Math.round(rend*1000)/1000,r1(proy),C?C.f:"",C?C.q:"",C?C.teo:"",al.join(" · ")]}
 function vistaFichas(){const n=v=>v?v:"";return{f:filasFichas().map(({d,i,m,T})=>[+d.t,+d.id.slice(1),d.tipo,i.n,i.u,m.con!=null?"Cerrada":"Abierta",m.ini,n(m.adic),n(m.rec),lisDep(m.recDe),n(m.env),lisDep(m.envA),n(m.vb),n(m.vm),m.con!=null?m.con:"",n(m.rep),n(m.rp),T||"",m.r.f||"",motCausa(m.r.mot,m.con!=null&&T&&m.con+m.rep>T),motDet(m.r.mot)]),
+  c:INS.map(ctrlIns).filter(Boolean).map((x,k)=>[x,k]).sort((a,b)=>((b[0][3]+b[0][4]>0||b[0][12]!=="")-(a[0][3]+a[0][4]>0||a[0][12]!==""))||a[1]-b[1]).map(x=>x[0]),k:((ADM.stock||{}).c||[]).map(x=>{const I=ins(x.i);return[x.f,I?I.n:x.i,I?I.u:"",x.teo,x.q,x.por||""]}),
   m:S.mov.map(x=>{const I=ins(x.ins);return[x.f||"",I?I.n:x.ins,I?I.u:"",x.q,nomDep(x.de),nomDep(x.a)]})}}
 let fichT=null;function publicarFichas(){if(!db||!window.TEPI)return;clearTimeout(fichT);fichT=setTimeout(()=>{try{const V=vistaFichas(),j=JSON.stringify(V);let h=0;for(let i=0;i<j.length;i++)h=(h*31+j.charCodeAt(i))|0;
   if(String(h)===publicarFichas.h)return;publicarFichas.h=String(h);
@@ -2108,7 +2127,7 @@ async function pdfRevision(r,auto){const e=auto?null:($("recMsg")||$("errExp"));
 /* ---------- administración: OC, guías y vales ---------- */
 let ADM={oc:null,vales:null,prog:null,roles:null,conf:{mapa:{},uf:0}},esAdmin=false;
 const AKEY="adm812prueba";
-function cargarAdmLocal(){try{const a=JSON.parse(localStorage.getItem(AKEY));if(a)ADM={oc:a.oc||null,vales:a.vales||null,prog:a.prog||null,conf:a.conf||{mapa:{},uf:0}};if(ADM.prog)PROG=expProg(ADM.prog)}catch(e){}}
+function cargarAdmLocal(){try{const a=JSON.parse(localStorage.getItem(AKEY));if(a)ADM={oc:a.oc||null,vales:a.vales||null,prog:a.prog||null,stock:a.stock||null,conf:a.conf||{mapa:{},uf:0}};if(ADM.prog)PROG=expProg(ADM.prog)}catch(e){}}
 async function guardarAdm(parte,valor){ADM[parte]=valor;
   if(db){await db.collection("admin").doc(parte).set(JSON.parse(JSON.stringify(valor)))}
   else{try{localStorage.setItem(AKEY,JSON.stringify(ADM))}catch(e){throw{code:"lleno"}}}}
@@ -2252,7 +2271,7 @@ function drawLib(){const box=$("admLib");if(!box)return;const L=ADM.lib&&Array.i
     try{await guardarAdm("lib",{torres:nv});await registrar("Administración",(on?"Torre "+it.id+" vuelve a OG (sin liberar)":"Torre "+it.id+" liberada para etapamiento"),null);drawLib();refrescar()}catch(e){$("libMsg").textContent="No se pudo guardar."}})}
 function drawAdm(){
   if(ME.rol!=="ADM")return;
-  drawPerf();drawLib();drawBit();drawCausasAdm();drawNot();drawCRP();drawAvB();drawFicAdm();drawFicCarga();if(document.activeElement!==$("admRecT"))$("admRecT").value=recList().join("\n");["prog","oc","vales"].forEach(k=>{$("del-"+k).hidden=!ADM[k]});
+  drawPerf();drawLib();drawBit();drawCausasAdm();drawNot();drawCRP();drawAvB();drawFicAdm();drawFicCarga();drawStock();if(document.activeElement!==$("admRecT"))$("admRecT").value=recList().join("\n");["prog","oc","vales"].forEach(k=>{$("del-"+k).hidden=!ADM[k]});
   if(!$("admUf").value&&ADM.conf.uf)$("admUf").value=ufV().toLocaleString("es-CL");
   $("admPrInfo").textContent=ADM.prog?"Programa cargado: "+ADM.prog.archivo+" · el "+fCL(ADM.prog.fecha)+" · "+ADM.prog.partidas.length+" partidas":"La app usa el programa del 30/10 (Programacion Terminaciones, Control diario torres). Sube el Excel para actualizarlo o para importar lo registrado en las hojas de control.";drawRitmos();
   const O=ADM.oc,V=ADM.vales;
@@ -3248,6 +3267,22 @@ $("admValF").onchange=e=>{const f=e.target.files[0];if(f)leerVales(f);e.target.v
 $("admBus").oninput=e=>{admBus=e.target.value;drawAdm()};
 ["prog","oc","vales"].forEach(k=>$("del-"+k).onclick=async()=>{try{await eliminarAdm(k);drawAdm()}catch(e){$("admErr").textContent="No se pudo eliminar."}});
 let FX=null,fxMsg="";const FXA=new Set();
+let STK={i:"",q:""};
+function drawStock(){const box=$("admStock");if(!box)return;const L=INS.filter(i=>ocIns(i.id).real||DEPTOS.some(d=>(S.reg[d.id+"|"+i.id]||{}).dis));
+  if(!L.length){box.innerHTML='<div class="cap2">Carga primero el reporte de OC (sección 3): sin guías no se sabe cuánto debería haber en patio.</div>';return}
+  const I=STK.i&&ins(STK.i),teo=I?stockTeo(I.id):null,q=+STK.q,H=((ADM.stock||{}).c||[]).slice().sort((a,b)=>a.f<b.f?1:-1).slice(0,8);
+  box.innerHTML=`<div class="f" style="border:none"><div class="l"><div>Insumo</div></div><select id="stI" class="txt" style="max-width:220px"><option value="">Elige…</option>${L.map(i=>`<option value="${i.id}"${i.id===STK.i?" selected":""}>${esc(i.n)}</option>`).join("")}</select></div>
+    ${I?(teo==null?`<div class="cap2">Este insumo no tiene OC asociada en el reporte: no se sabe cuánto llegó.</div>`:`<div class="cap2" style="padding:4px 0 8px">Debería haber en patio: <b>${dec(teo,teo%1?1:0)} ${esc(I.u)}</b> (llegó por guías ${dec(ocIns(I.id).rec,0)} − salió de bodega ${dec(salioBod(I.id),0)})</div>
+    <div class="f" style="border:none"><div class="l"><div>Contado en patio</div></div><input type="number" id="stQ" inputmode="decimal" min="0" class="txt" style="width:120px" value="${esc(STK.q)}"></div>
+    ${STK.q!==""?`<div class="cap2" style="padding:4px 0;color:${teo-q>0?"var(--bad)":"var(--good)"}">${teo-q>0?"Faltan "+dec(r1(teo-q),0)+" "+esc(I.u)+": pérdida":teo-q<0?"Sobran "+dec(r1(q-teo),0)+" "+esc(I.u)+": revisa si falta registrar una guía o una devolución":"Cuadra exacto"}</div>`:""}
+    <div class="err" id="stE"></div><button class="small" id="stG" style="align-self:flex-start">Guardar conteo</button>`):""}
+    ${H.length?`<div class="lbl" style="margin-top:12px">Últimos conteos</div>${H.map(x=>{const J=ins(x.i),d=r1(x.teo-x.q);return`<div class="cap2">${fCL(x.f)} · ${esc(J?J.n:x.i)}: contado ${dec(x.q,0)}, debía haber ${dec(x.teo,0)} → <b style="color:${d>0?"var(--bad)":"inherit"}">${d>0?"faltan "+dec(d,0):d<0?"sobran "+dec(-d,0):"cuadra"}</b> <button class="lnk" data-stx="${esc(x.id)}">quitar</button></div>`}).join("")}`:""}`;
+  $("stI").onchange=e=>{STK.i=e.target.value;STK.q="";drawStock()};const qi=$("stQ");if(qi)qi.onchange=()=>{STK.q=qi.value;drawStock()};
+  const g=$("stG");if(g)g.onclick=async()=>{STK.q=qi.value;if(qi.value===""||+qi.value<0)return $("stE").textContent="Escribe lo que contaste";
+    const c=((ADM.stock||{}).c||[]).concat([{id:Date.now().toString(36),f:hoy(),i:I.id,q:r1(+qi.value),teo,por:quienSoy()}]);
+    try{await guardarAdm("stock",{c});registrar("Materiales","Conteo de patio "+I.n+": contado "+dec(+qi.value,0)+", debía haber "+dec(teo,0),null);STK={i:"",q:""};drawStock();publicarFichas()}catch(x){$("stE").textContent="No se pudo guardar. Revisa la conexión."}};
+  box.querySelectorAll("[data-stx]").forEach(b=>b.onclick=async()=>{if(!b.dataset.c){b.dataset.c="1";b.textContent="toca otra vez para quitar";return}
+    try{await guardarAdm("stock",{c:((ADM.stock||{}).c||[]).filter(x=>x.id!==b.dataset.stx)});drawStock();publicarFichas()}catch(x){}})}
 function drawFicAdm(){const box=$("admFic");if(!box)return;const C=admConf();if(!FX)FX={fic:clon(C.fic||{}),rep:clon(C.rep||{})};
   const ae=document.activeElement;if(box.contains(ae)&&ae.tagName==="INPUT")return;const TIPOS=Object.keys(FICHA);
   const base=(k,t,i)=>k==="fic"?ficBase(t,i):(repBase(t,i)==null?ficBase(t,i):repBase(t,i));
