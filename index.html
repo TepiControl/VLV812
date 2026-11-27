@@ -445,7 +445,7 @@ body::before{background:var(--top)}
     </div>
     <button class="admlink" data-go="adm" id="btnAdm" hidden>Administración ⚙</button>
     <div class="cap2" id="quien" style="text-align:center"></div>
-    <div class="cap2" id="verApp" style="opacity:.7;text-align:center">Tepi Control VLV · versión V2 (instalable, base V1.41) · 27 nov 2026</div>
+    <div class="cap2" id="verApp" style="opacity:.7;text-align:center">Tepi Control VLV · versión V2 (instalable, base V1.42) · 27 nov 2026</div>
   </section>
 
   <!-- MATERIALES: selección -->
@@ -1085,7 +1085,7 @@ function drawRap(f){const box=$("matRap");if(!f&&box.contains(document.activeEle
     if(RP.abOpen)chips($("rpFT"),TORRES.map(t=>{const n=nT(t);return{id:t,label:"T"+t+(n?" ("+n+")":"")}}),it=>it.id===RP.ft,it=>{RP.ft=it.id;RP.fd=null;drawRap(1)});
     box.querySelectorAll(".rpd.re").forEach(b=>b.onclick=()=>{RP.d=b.dataset.d;RP.i=null;RP.bus="";RP.msg="";drawRap(1);const s=$("rpBus");if(s)s.focus()});
     box.querySelectorAll(".rpd.rf").forEach(b=>b.onclick=()=>{RP.fd=RP.fd===b.dataset.d?null:b.dataset.d;RP.msg="";drawRap(1);const d=$("rpDet");if(d)d.scrollIntoView({behavior:"smooth",block:"nearest"})});
-    box.querySelectorAll("#rpDet .rpi").forEach(b=>b.onclick=()=>{RP.d=RP.fd;RP.i=b.dataset.i;RP.q="";RP.fin=null;RP.mot="";RP.av=true;RP.desdeAb=true;RP.cz=null;drawRap(1)});return}
+    box.querySelectorAll("#rpDet .rpi").forEach(b=>b.onclick=()=>{RP.d=RP.fd;RP.i=b.dataset.i;RP.corr=false;RP.q="";RP.fin=null;RP.mot="";RP.av=true;RP.desdeAb=true;RP.cz=null;drawRap(1)});return}
   const de=depO(RP.d),esRep=i=>{const o=(admConf().rep||{})[de.tipo];return(o&&o[i]!=null)||repBase(de.tipo,i)!=null},cab=`<div class="card rpcab"><div><b style="font-size:18px">Depto ${RP.d.slice(1)} · Torre ${de.t}</b><div class="cap2">Tipología ${esc(de.tipo)}</div></div><button class="small" id="rpCd">Cambiar depto</button></div>`;
   // paso 3: insumo
   if(!RP.i){const q=nrm(RP.bus||""),enUso=INS.filter(I=>uso(RP.d,I.id)),frec=INS.filter(I=>esRep(I.id)&&!uso(RP.d,I.id)),
@@ -1096,14 +1096,15 @@ function drawRap(f){const box=$("matRap");if(!f&&box.contains(document.activeEle
       `${enUso.length?`<div class="lbl">En uso en este depto</div><div class="card rpl">${enUso.map(fila).join("")}</div>`:""}${frec.length?`<div class="lbl">Frecuentes</div><div class="card rpl">${frec.map(fila).join("")}</div>`:""}`}`;
     const sb=$("rpBus");sb.oninput=()=>{RP.bus=sb.value;clearTimeout(drawRap.t);drawRap.t=setTimeout(()=>{const pos=sb.selectionStart;drawRap(1);const n=$("rpBus");n.focus();try{n.setSelectionRange(pos,pos)}catch(e){}},200)};
     $("rpCd").onclick=()=>{RP.d=null;RP.msg="";drawRap(1)};
-    box.querySelectorAll(".rpi").forEach(b=>b.onclick=()=>{RP.i=b.dataset.i;RP.q="";RP.fin=null;RP.mot="";RP.av=true;RP.msg="";drawRap(1)});return}
+    box.querySelectorAll(".rpi").forEach(b=>b.onclick=()=>{RP.i=b.dataset.i;RP.corr=false;RP.q="";RP.fin=null;RP.mot="";RP.av=true;RP.msg="";drawRap(1)});return}
   // cierre minimalista de una ficha abierta (entrando desde Fichas abiertas)
+  if(RP.corr&&S.reg[RP.d+"|"+RP.i])return drawCorr(box,msg,cab,de);
   {const r0=S.reg[RP.d+"|"+RP.i];if(RP.desdeAb&&r0&&r0.dis>0&&!(r0.con>0))return drawCierreRap(box,msg,cab,de)}
   // paso 4: cantidad y si se terminó
   const I=ins(RP.i),r=S.reg[RP.d+"|"+RP.i]||{dis:0,con:0},T=ficha(RP.d,RP.i),Sg=esRep(RP.i)?repT(de.tipo,RP.i):0,st=PASO(I.u),q=+RP.q||0,tot=r1((r.con>0?0:r.dis)+q),cerr=r.con>0;
   const pN=I.part&&(PROG.find(p=>p.id===I.part)||{}).n,faltaAv=pN&&!hecho(RP.d,I.part)&&puede("avance"),sobre=RP.fin==="si"&&tot>T,dv=desv(T,tot);
   box.innerHTML=`${msg}${cab}<div class="card"><div class="card-h"><b style="font-size:18px">${esc(I.n)}</b><button class="lnk" id="rpCi">Cambiar insumo</button></div>
-    <div class="cap2" style="padding:4px 0 10px">${cerr?`Esta ficha ya está cerrada con ${nf(r.con)} ${esc(I.u)}. Si se usó más, regístralo en "Varios deptos" como consumo extra.`:r.dis>0?`<span class="rpav">Ya hay <b>${nf(r.dis)} ${esc(I.u)}</b> entregados. Lo que escribas <b>se suma</b>. Para cerrar con lo instalado, usa <b>Fichas abiertas</b>.</span>`:"Primera entrega en este depto."} ${Sg?"Sugerido "+nf(Sg)+" · ":""}Teórico ${nf(T)} ${esc(I.u)}</div>
+    <div class="cap2" style="padding:4px 0 10px">${cerr?`Esta ficha ya está cerrada con ${nf(r.con)} ${esc(I.u)}. Si se usó más, regístralo en "Varios deptos" como consumo extra.<br>`:r.dis>0?`<span class="rpav">Ya hay <b>${nf(r.dis)} ${esc(I.u)}</b> entregados. Lo que escribas <b>se suma</b>. Para cerrar con lo instalado, usa <b>Fichas abiertas</b>.</span>`:"Primera entrega en este depto."}${r.dis>0||cerr?` <button class="lnk" id="rpCo">✏ ¿Está mal? Corregir esta ficha</button>`:""} ${Sg?"Sugerido "+nf(Sg)+" · ":""}Teórico ${nf(T)} ${esc(I.u)}</div>
     ${cerr?"":`<div class="lbl">¿Cuánto fue a este depto hoy?</div>
     <div class="rpq"><button class="rpm" data-s="-1" aria-label="Menos">−</button><input type="number" id="rpQ" min="0" step="${st}" data-q4="1" inputmode="decimal" placeholder="0" value="${esc(RP.q)}"><span class="rpu">${esc(I.u)}</span><button class="rpm" data-s="1" aria-label="Más">+</button></div>
     <div class="chips" style="margin-top:8px">${Sg&&!r.dis?`<button class="chip sm" data-v="${Sg}">Sugerido ${nf(Sg)}</button>`:""}${!r.dis?`<button class="chip sm" data-v="${T}">Teórico ${nf(T)}</button>`:""}${r.dis>0&&T>r.dis?`<button class="chip sm" data-v="${r1(T-r.dis)}">Lo que falta para el Teórico: ${nf(r1(T-r.dis))}</button>`:""}</div>
@@ -1113,7 +1114,8 @@ function drawRap(f){const box=$("matRap");if(!f&&box.contains(document.activeEle
     ${sobre?`<div class="motivo" style="margin-top:8px"><div class="lbl">Queda sobre el Teórico: elige el motivo</div><div class="chips" id="rpMot"></div></div>`:""}
     ${RP.fin==="si"&&faltaAv?`<label class="ai" style="border:none"><input type="checkbox" id="rpAv"${RP.av?" checked":""}><span>Marcar también "${esc(pN)}" terminado en Avance</span></label>`:""}
     <div class="err" id="rpErr"></div><button class="save" id="rpG">Guardar</button>`}</div>`;
-  $("rpCd").onclick=()=>{RP.d=null;RP.i=null;RP.msg="";RP.desdeAb=false;drawRap(1)};$("rpCi").onclick=()=>{RP.i=null;RP.bus="";RP.msg="";drawRap(1)};if(cerr)return;
+  $("rpCd").onclick=()=>{RP.d=null;RP.i=null;RP.msg="";RP.desdeAb=false;drawRap(1)};$("rpCi").onclick=()=>{RP.i=null;RP.bus="";RP.msg="";drawRap(1)};
+  if($("rpCo"))$("rpCo").onclick=()=>{RP.corr=true;RP.cq=null;RP.cb=0;drawRap(1)};if(cerr)return;
   const qi=$("rpQ");qi.oninput=()=>{RP.q=qi.value};qi.onchange=()=>{RP.q=qi.value};
   box.querySelectorAll(".rpm").forEach(b=>b.onclick=()=>{RP.q=String(Math.max(0,r1((+RP.q||0)+(+b.dataset.s)*st)));drawRap(1)});
   box.querySelectorAll("[data-v]").forEach(b=>b.onclick=()=>{RP.q=String(redPaso(+b.dataset.v,st));drawRap(1)});
@@ -1131,7 +1133,7 @@ function drawRap(f){const box=$("matRap");if(!f&&box.contains(document.activeEle
     if(RP.desdeAb){RP.abOpen=true;RP.ft=de.t;RP.fd=abiertas(RP.d).length?RP.d:null}RP.d=null;RP.i=null;RP.bus="";RP.q="";RP.fin=null;RP.desdeAb=false;drawRap(1);try{window.scrollTo({top:0,behavior:"smooth"})}catch(e){}}}
 const quienSoy=()=>(ME&&ME.nombre||ROLN[rol()]||"").trim();
 const deBodega=r=>r1((r.dis||0)+(r.env||0)+(r.vb||0)+(r.vm||0)-(r.rec||0));
-function movD(d,i){const r=S.reg[d+"|"+i]||{},adic=r1((r.ent||[]).reduce((a,x)=>a+(+x.q||0),0)),bod=deBodega(r),grp=(L,k)=>{const o={};L.forEach(m=>o[m[k]]=r1((o[m[k]]||0)+m.q));return Object.entries(o).map(([x,q])=>({d:x,q}))};
+function movD(d,i){const r=S.reg[d+"|"+i]||{},adic=r1((r.ent||[]).filter(x=>x.mas||x.cierre).reduce((a,x)=>a+(+x.q||0),0)),bod=deBodega(r),grp=(L,k)=>{const o={};L.forEach(m=>o[m[k]]=r1((o[m[k]]||0)+m.q));return Object.entries(o).map(([x,q])=>({d:x,q}))};
   const M=S.mov.filter(m=>m.ins===i);return{r,ini:r1(bod-adic),adic,rec:r1(r.rec||0),recDe:grp(M.filter(m=>m.a===d),"de"),env:r1(r.env||0),envA:grp(M.filter(m=>m.de===d),"a"),vb:r1(r.vb||0),vm:r1(r.vm||0),con:r.con>0?r1(r.con):null,rep:extQ(r,"rep"),rp:extQ(r,"rp")}}
 const nomDep=(x,de)=>"T"+x[0]+" "+x.slice(1);
 function trazaTxt(d,i,u){const m=movD(d,i),n=v=>dec(v,v%1?1:0),p=[];if(!(m.rec||m.env||m.vb||m.vm||m.adic))return"";
@@ -1159,6 +1161,32 @@ function xlsFichas(wb){const H=["Torre","Depto","Tipología","Insumo","Unidad","
   const ws=XLSX.utils.aoa_to_sheet(A);for(let R=7;R<=A.length;R++)["S","V"].forEach(k=>{const c=ws[k+R];if(c&&c.v==="")c.t="s"})
   ws["!cols"]=[6,6,9,26,8,9,11,12,11,22,11,22,10,10,10,11,9,9,10,14,11,12,22,26].map(w=>({wch:w}));ws["!autofilter"]={ref:"A6:X"+A.length};ws["!merges"]=[{s:{r:2,c:0},e:{r:2,c:12}},{s:{r:3,c:0},e:{r:3,c:12}}];
   XLSX.utils.book_append_sheet(wb,ws,"Fichas por depto");return L.length}
+// corregir una ficha mal registrada: total entregado, reabrir o borrar
+function drawCorr(box,msg,cab,de){
+  const I=ins(RP.i),key=RP.d+"|"+RP.i,r=S.reg[key],u=esc(I.u),nf=v=>dec(v,v%1?1:0),bod=deBodega(r),cerr=r.con>0,mov=(r.rec||0)>0||(r.env||0)>0,
+    cq=RP.cq==null?String(bod):RP.cq,nv=r1(+cq||0),dif=r1(nv-bod);
+  const salir=t=>{RP.corr=false;RP.cq=null;RP.cb=0;if(t)RP.msg=t;if(t){if(RP.desdeAb){RP.abOpen=true;RP.ft=de.t;RP.fd=abiertas(RP.d).length?RP.d:null}RP.d=null;RP.i=null;RP.desdeAb=false;RP.cz=null}drawRap(1)};
+  box.innerHTML=`${msg}${cab}<div class="card"><div class="card-h"><b style="font-size:18px">✏ Corregir ficha</b><button class="lnk" id="coX">Volver</button></div>
+    <div class="cap2" style="padding:4px 0 10px">${esc(I.n)} · depto ${RP.d.slice(1)} T${de.t}. Corrige un número mal escrito: no crea traspasos ni se suma a lo anterior.</div>
+    ${cerr?"":`<div class="lbl">¿Cuánto se entregó en total desde bodega?</div>
+    <div class="rpq"><button class="rpm" data-s="-1" aria-label="Menos">−</button><input type="number" id="coQ" min="0" step="${PASO(I.u)}" inputmode="decimal" value="${esc(cq)}"><span class="rpu">${u}</span><button class="rpm" data-s="1" aria-label="Más">+</button></div>
+    <div class="cap2" style="padding-top:6px">Antes decía <b>${nf(bod)} ${u}</b>${dif?` → queda en <b>${nf(nv)}</b> (${dif>0?"+":""}${nf(dif)})`:""}${r.rec>0?` · además recibió ${nf(r.rec)} de otros deptos (eso no cambia)`:""}</div>
+    <div class="err" id="coE"></div><button class="save" id="coG">Guardar corrección</button>`}
+    ${cerr?`<div class="lbl">La ficha está cerrada con ${nf(r.con)} ${u}</div><div class="cap2" style="padding:4px 0 8px">Reábrela para corregir lo entregado o volver a cerrarla con otro consumo.</div><button class="save" id="coR">Reabrir ficha</button>`:""}
+    <div style="border-top:1px solid var(--line);margin-top:16px;padding-top:12px">
+      <div class="lbl">¿Se registró en el depto o insumo equivocado?</div>
+      ${mov?`<div class="cap2" style="padding-top:4px">No se puede borrar: tiene traspasos con otros deptos. Deshaz primero el traspaso desde la Bitácora.</div>`:`<button class="lnk" id="coB" style="margin-top:8px;color:var(--bad)">${RP.cb?"Toca otra vez para confirmar el borrado":"🗑 Borrar la ficha y registrarla de nuevo"}</button>`}</div></div>`;
+  $("rpCd").onclick=()=>{RP.d=null;RP.i=null;RP.msg="";RP.desdeAb=false;salir()};$("coX").onclick=()=>salir();
+  const qi=$("coQ");if(qi){qi.oninput=()=>{RP.cq=qi.value};qi.onchange=()=>{RP.cq=qi.value;drawRap(1)};
+    box.querySelectorAll(".rpm").forEach(b=>b.onclick=()=>{RP.cq=String(Math.max(0,r1((+(RP.cq??bod)||0)+(+b.dataset.s)*PASO(I.u))));drawRap(1)});
+    $("coG").onclick=()=>{RP.cq=qi.value;const n=r1(+qi.value),d2=r1(n-bod);if(!(n>=0)||qi.value==="")return $("coE").textContent="Escribe el total entregado";
+      if(!d2)return salir();if(r1(r.dis+d2)<0)return $("coE").textContent="No alcanza: ya salieron "+nf(r1((r.env||0)+(r.vb||0)+(r.vm||0)))+" "+I.u+" a otros deptos o a bodega";
+      const prev=clon(r);r.dis=r1(r.dis+d2);r.ent=(r.ent||[]).concat([{f:hoy(),q:d2,por:quienSoy(),corr:true}]);if(!(r.dis>0)&&!(r.con>0)&&!r.rec&&!r.env)delete S.reg[key];
+      persist();registrar("Materiales",I.n+", "+lblD(de)+": entregado corregido de "+nf(bod)+" a "+nf(n)+" "+I.u,{k:"reg",key,prev});
+      salir("Corregido: "+(I.c||I.n)+" del depto "+RP.d.slice(1)+" ahora tiene "+nf(n)+" "+I.u+" entregados.")}}
+  const ro=$("coR");if(ro)ro.onclick=()=>{const prev=clon(r);r.con=0;r.f="";r.mot="";delete r.est;persist();registrar("Materiales",I.n+", "+lblD(de)+": ficha reabierta (estaba cerrada con "+nf(prev.con)+")",{k:"reg",key,prev});RP.cq=null;drawRap(1)};
+  const bo=$("coB");if(bo)bo.onclick=()=>{if(!RP.cb){RP.cb=1;drawRap(1);return}const prev=clon(r);delete S.reg[key];persist();
+    registrar("Materiales",I.n+", "+lblD(de)+": ficha borrada (tenía "+nf(prev.dis)+" "+I.u+")",{k:"reg",key,prev});salir("Ficha borrada: "+(I.c||I.n)+" del depto "+RP.d.slice(1)+". Puedes registrarla de nuevo.")}}
 function drawCierreRap(box,msg,cab,de){
   const I=ins(RP.i),key=RP.d+"|"+RP.i,r=S.reg[key],T=ficha(RP.d,RP.i),st=PASO(I.u),u=esc(I.u),D=r.dis,nf=v=>dec(v,v%1?(Number.isInteger(Math.round(v*1000)/100)?1:2):0);
   const CZ=RP.cz||(RP.cz={inst:String(D),dst:{},mot:"",modo:"",q:"",pa:""}),inst=Math.max(0,+CZ.inst||0),sob=r1(D-inst),asig=r1(Object.values(CZ.dst).reduce((a,v)=>a+(+v||0),0)),dv=desv(T,inst);
@@ -1183,7 +1211,7 @@ function drawCierreRap(box,msg,cab,de){
       const prev={};prev[key]=clon(r);const movs=[];
       if(pas){const k2=CZ.pa+"|"+RP.i;prev[k2]=S.reg[k2]?clon(S.reg[k2]):null;const R=rec(CZ.pa,RP.i);R.dis=r1(R.dis+q);R.rec=r1((R.rec||0)+q);if(!R.fd)R.fd=hoy();
         r.dis=r1(r.dis-q);r.env=r1((r.env||0)+q);const m={f:new Date().toLocaleDateString("es-CL",{day:"2-digit",month:"2-digit"}),ins:RP.i,de:RP.d,a:CZ.pa,q};S.mov.unshift(m);movs.push(m)}
-      else{r.dis=r1(r.dis+q);r.ent=(r.ent||[]).concat([{f:hoy(),q,por:quienSoy()}])}
+      else{r.dis=r1(r.dis+q);r.ent=(r.ent||[]).concat([{f:hoy(),q,por:quienSoy(),mas:true}])}
       persist();registrar("Materiales",I.n+", "+lblD(de)+": "+(pas?nf(q)+" "+I.u+" pasaron al depto "+nomDst(CZ.pa):"se ocuparon "+nf(q)+" "+I.u+" más")+" · sigue en uso ("+nf(r.dis)+")",{k:"cierre",prev,movs});
       RP.msg="Guardado: "+(I.c||I.n)+" del depto "+RP.d.slice(1)+(pas?": "+nf(q)+" pasaron al "+nomDst(CZ.pa):": "+nf(q)+" más")+". Sigue en uso con "+nf(r.dis)+".";back()};
     return}
@@ -1200,7 +1228,8 @@ function drawCierreRap(box,msg,cab,de){
     ${sobre?`<div class="motivo" style="margin-top:12px"><div class="lbl">${inst>D?`Se ocuparon ${nf(r1(inst-D))} más y queda`:`Se instalaron ${nf(r1(inst-T))}`} sobre el Teórico (${nf(T)}): ¿por qué?</div><div class="chips" id="czM"></div></div>`:""}
     ${faltaAv?`<label class="ai" style="border:none"><input type="checkbox" id="czAv"${RP.av?" checked":""}><span>Marcar "${esc(pN)}" terminado en Avance</span></label>`:""}
     <div class="err" id="czErr"></div><button class="save" id="czG">Cerrar ficha</button>
-    <div style="display:flex;justify-content:center;gap:22px;margin-top:12px"><button class="lnk" id="czMas">Ocupó más</button><button class="lnk" id="czPas">Pasar a otro depto</button></div></div>`;
+    <div style="display:flex;justify-content:center;gap:22px;margin-top:12px"><button class="lnk" id="czMas">Ocupó más</button><button class="lnk" id="czPas">Pasar a otro depto</button></div>
+    <button class="lnk" id="czCo" style="display:block;margin:12px auto 0">✏ Corregir lo entregado</button></div>`;
   $("rpCd").onclick=back;$("rpCi").onclick=()=>{RP.cz=null;RP.i=null;RP.desdeAb=false;RP.bus="";drawRap(1)};
   const ii=$("czI");ii.oninput=()=>{CZ.inst=ii.value};ii.onchange=()=>{CZ.inst=String(Math.max(0,+ii.value||0));CZ.dst={};drawRap(1)};
   box.querySelectorAll(".rpm").forEach(b=>b.onclick=()=>{CZ.inst=String(Math.max(0,r1((+CZ.inst||0)+(+b.dataset.s)*st)));CZ.dst={};drawRap(1)});
@@ -1209,6 +1238,7 @@ function drawCierreRap(box,msg,cab,de){
   box.querySelectorAll(".czn").forEach(n=>n.onchange=()=>{CZ.dst[n.dataset.k]=String(Math.max(0,+n.value||0));drawRap(1)});
   const co=$("czO");if(co)co.onchange=()=>{const v=co.value.replace(/\D/g,"");if(DEPTOS.some(d=>d.id===v)&&v!==RP.d&&!cerr(v))tog(v);else $("czErr").textContent="No encuentro el depto "+v+" o su ficha ya está cerrada"};
   if($("czM"))motivoUI($("czM"),()=>CZ.mot,v=>{CZ.mot=v});if($("czAv"))$("czAv").onchange=e=>RP.av=e.target.checked;
+  $("czCo").onclick=()=>{RP.corr=true;RP.cq=null;RP.cb=0;drawRap(1)};
   $("czMas").onclick=()=>{CZ.modo="mas";CZ.q="";drawRap(1)};$("czPas").onclick=()=>{CZ.modo="pasar";CZ.q="";CZ.pa="";drawRap(1)};
   $("czG").onclick=()=>{CZ.inst=ii.value;const er=t=>$("czErr").textContent=t,X=r1(Math.max(0,+CZ.inst||0)),s2=r1(D-X),a2=r1(Object.values(CZ.dst).reduce((a,v)=>a+(+v||0),0));
     if(!(X>0))return er("Escribe cuánto se instaló");
