@@ -299,6 +299,7 @@ body::before{background:var(--top)}
 .avfr{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.avfr input[type=date]{width:136px;font-size:14px;height:36px;padding:0 8px}
 .avrap{display:flex;align-items:center;gap:6px;height:36px;padding:0 8px;white-space:nowrap;border:1px solid var(--line);border-radius:10px;cursor:pointer;font-size:14px;margin-left:auto}
 .avrap input{margin:0}.avrap:has(input:checked){border-color:var(--accent);background:var(--accent-soft);color:var(--accent);font-weight:700}
+.traza{padding:0 0 8px;color:var(--ink)}
 .rcley summary{cursor:pointer;font-size:13px;color:var(--muted);padding:4px 0}.rcley .leyenda{margin-top:6px}
 /* equipo */
 #v-eq{display:flex;flex-direction:column;gap:10px}
@@ -444,12 +445,13 @@ body::before{background:var(--top)}
     </div>
     <button class="admlink" data-go="adm" id="btnAdm" hidden>Administración ⚙</button>
     <div class="cap2" id="quien" style="text-align:center"></div>
-    <div class="cap2" id="verApp" style="opacity:.7;text-align:center">Tepi Control VLV · versión V2 (instalable, base V1.38) · 25 nov 2026</div>
+    <div class="cap2" id="verApp" style="opacity:.7;text-align:center">Tepi Control VLV · versión V2 (instalable, base V1.39) · 27 nov 2026</div>
   </section>
 
   <!-- MATERIALES: selección -->
   <section id="v-mat" hidden style="display:flex;flex-direction:column;gap:16px">
-    <div class="seg" id="matTabs"><button data-t="rap">Rápido</button><button data-t="reg">Varios deptos</button><button data-t="tip">Tipologías</button></div>
+    <div class="seg avtabs" id="matTabs"><button data-t="rap">Rápido</button><button data-t="reg">Varios deptos</button><button data-t="tip">Tipologías</button></div>
+    <div style="display:flex;flex-direction:column;align-items:flex-end;gap:2px;margin-top:-8px"><button class="lnk" id="matXls">📗 Descargar Excel de fichas</button><span class="cap2" id="matXlsMsg" style="align-self:stretch"></span></div>
     <div id="matRap" hidden style="display:flex;flex-direction:column;gap:12px"></div>
     <div id="matTip" hidden style="display:flex;flex-direction:column;gap:12px"></div>
     <div id="matReg" style="display:flex;flex-direction:column;gap:16px">
@@ -1129,6 +1131,26 @@ function drawRap(f){const box=$("matRap");if(!f&&box.contains(document.activeEle
     if(RP.desdeAb){RP.abOpen=true;RP.ft=de.t;RP.fd=abiertas(RP.d).length?RP.d:null}RP.d=null;RP.i=null;RP.bus="";RP.q="";RP.fin=null;RP.desdeAb=false;drawRap(1);try{window.scrollTo({top:0,behavior:"smooth"})}catch(e){}}}
 const quienSoy=()=>(ME&&ME.nombre||ROLN[rol()]||"").trim();
 const deBodega=r=>r1((r.dis||0)+(r.env||0)+(r.vb||0)+(r.vm||0)-(r.rec||0));
+function movD(d,i){const r=S.reg[d+"|"+i]||{},adic=r1((r.ent||[]).reduce((a,x)=>a+(+x.q||0),0)),bod=deBodega(r),grp=(L,k)=>{const o={};L.forEach(m=>o[m[k]]=r1((o[m[k]]||0)+m.q));return Object.entries(o).map(([x,q])=>({d:x,q}))};
+  const M=S.mov.filter(m=>m.ins===i);return{r,ini:r1(bod-adic),adic,rec:r1(r.rec||0),recDe:grp(M.filter(m=>m.a===d),"de"),env:r1(r.env||0),envA:grp(M.filter(m=>m.de===d),"a"),vb:r1(r.vb||0),vm:r1(r.vm||0),con:r.con>0?r1(r.con):null,rep:extQ(r,"rep"),rp:extQ(r,"rp")}}
+const nomDep=(x,de)=>"T"+x[0]+" "+x.slice(1);
+function trazaTxt(d,i,u){const m=movD(d,i),n=v=>dec(v,v%1?1:0),p=[];if(!(m.rec||m.env||m.vb||m.vm||m.adic))return"";
+  p.push(n(m.ini)+" de bodega");if(m.adic)p.push(n(m.adic)+" más de bodega (ocupó más)");const lis=(L,tot,pre)=>L.length===1&&Math.abs(L[0].q-tot)<.01?" "+pre+" "+nomDep(L[0].d):L.length?": "+L.map(x=>n(x.q)+" "+pre+" "+nomDep(x.d)).join(", "):"";
+  if(m.rec)p.push("recibió "+n(m.rec)+lis(m.recDe,m.rec,"del"));
+  if(m.env)p.push("traspasó "+n(m.env)+lis(m.envA,m.env,"al"));if(m.vb)p.push(n(m.vb)+" volvieron a bodega");if(m.vm)p.push(n(m.vm)+" a bodega malos");return p.join(" · ")}
+function xlsFichas(wb){const H=["Torre","Depto","Tipología","Insumo","Unidad","Estado","Distribuido de bodega","Adicional de bodega (ocupó más)","Recibido de otros deptos","Recibido desde","Traspasado a otros deptos","Traspasado hacia","Devuelto a bodega","Devuelto a bodega malo","Consumo final","Repasos después del cierre","Reproceso","Teórico","Desviación %","Queda en el depto o sin registrar","Fecha cierre","Motivo"];
+  const A=[["Fichas de materiales por depto: movimiento y consumo · Obra 812 Vive La Vara"],["Corte al",fechaHoy()],
+    ["Queda en el depto o sin registrar = Distribuido + Adicional + Recibido − Traspasado − Devuelto − Devuelto malo − Consumo final. En una ficha cerrada debe dar 0: si no da 0, falta registrar a dónde fue (o de dónde vino) esa diferencia."],
+    ["Desviación % = (Teórico − (Consumo final + Repasos)) / Teórico. Positivo es ahorro, negativo es sobreconsumo. El reproceso va aparte."],[],H];
+  const L=[];DEPTOS.forEach(d=>INS.forEach(i=>{const r=S.reg[d.id+"|"+i.id];if(!r||!(r.dis||r.con||r.env||r.rec||r.vb||r.vm))return;L.push({d,i,m:movD(d.id,i.id),T:ficha(d.id,i.id)})}));
+  L.sort((a,b)=>+a.d.id-b.d.id||a.i.n.localeCompare(b.i.n));
+  const n=v=>v?v:null;L.forEach(({d,i,m,T},k)=>{const R=A.length+1,r=m.r;
+    A.push([+d.t,+d.id.slice(1),d.tipo,i.n,i.u,m.con!=null?"Cerrada":"Abierta",m.ini,n(m.adic),n(m.rec),m.recDe.map(x=>nomDep(x.d)+" ("+dec(x.q,x.q%1?1:0)+")").join(", "),n(m.env),m.envA.map(x=>nomDep(x.d)+" ("+dec(x.q,x.q%1?1:0)+")").join(", "),n(m.vb),n(m.vm),m.con,n(m.rep),n(m.rp),T||null,
+      {t:"n",f:`IF(AND(R${R}>0,O${R}<>""),(R${R}-(O${R}+P${R}))/R${R},"")`,v:T&&m.con!=null?(T-(m.con+m.rep))/T:"",z:"0.0%"},
+      {t:"n",f:`G${R}+H${R}+I${R}-K${R}-M${R}-N${R}-O${R}`,v:r1(m.ini+m.adic+m.rec-m.env-m.vb-m.vm-(m.con||0))},r.f?fCL(r.f):"",r.mot||""])});
+  const ws=XLSX.utils.aoa_to_sheet(A);for(let R=7;R<=A.length;R++){const c=ws["S"+R];if(c&&c.v==="")c.t="s"}
+  ws["!cols"]=[6,6,9,26,8,9,11,12,11,22,11,22,10,10,10,11,9,9,10,14,11,22].map(w=>({wch:w}));ws["!autofilter"]={ref:"A6:V"+A.length};ws["!merges"]=[{s:{r:2,c:0},e:{r:2,c:12}},{s:{r:3,c:0},e:{r:3,c:12}}];
+  XLSX.utils.book_append_sheet(wb,ws,"Fichas por depto");return L.length}
 function drawCierreRap(box,msg,cab,de){
   const I=ins(RP.i),key=RP.d+"|"+RP.i,r=S.reg[key],T=ficha(RP.d,RP.i),st=PASO(I.u),u=esc(I.u),D=r.dis,nf=v=>dec(v,v%1?(Number.isInteger(Math.round(v*1000)/100)?1:2):0);
   const CZ=RP.cz||(RP.cz={inst:String(D),dst:{},mot:"",modo:"",q:"",pa:""}),inst=Math.max(0,+CZ.inst||0),sob=r1(D-inst),asig=r1(Object.values(CZ.dst).reduce((a,v)=>a+(+v||0),0)),dv=desv(T,inst);
@@ -1306,6 +1328,7 @@ function card(d,i){
   <div class="f"><div class="l"><div>Teórico</div><div>Ficha tipo ${dep.tipo}, con buen uso del material y sin merma</div></div><span class="num">${dec(T,T%1?1:0)}</span></div>
   ${repartir(d,i)!==T?`<div class="f"><div class="l"><div>Sugerido a repartir</div><div>Consumo real de terreno por depto</div></div><span class="num">${dec(repartir(d,i),repartir(d,i)%1?1:0)}</span></div>`:""}
   <div class="f"><div class="l"><div>Distribuido</div><div>Entregado al depto</div></div><input type="number" min="0" step="${PASO(I.u)}" data-q4="1" inputmode="decimal" id="dis-${d}-${i}" value="${r.dis}"></div>
+  ${trazaTxt(d,i)?`<div class="cap2 traza">🔁 ${esc(trazaTxt(d,i))}</div>`:""}
   <div class="cap2" id="vl-${d}-${i}" style="padding:0 0 8px" hidden></div>
   <details class="trd" id="tr-${d}-${i}"><summary class="lnk">Traspasar sobrante a otros deptos</summary>
     <div class="cap2" style="padding:6px 0">Resta aquí y suma a cada depto que elijas.</div><div id="tl-${d}-${i}"></div>
@@ -3054,6 +3077,8 @@ const fechaHoy=()=>new Date().toLocaleDateString("es-CL");
 const nomArch=ext=>"Informe obra 812 "+hoy()+"."+ext;
 const r1=v=>v==null?null:Math.round(v*100)/100,r2=v=>Math.round(v*100)/100;
 
+$("matXls").onclick=async()=>{const e=$("matXlsMsg");e.textContent="Preparando Excel…";try{if(!window.XLSX)await cargar("https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js")}catch(x){e.textContent="No se pudo cargar el generador de Excel. Revisa la conexión.";return}
+  const wb=XLSX.utils.book_new(),n=xlsFichas(wb);if(!n){e.textContent="Aún no hay fichas registradas.";return}e.textContent="";await guardar("Fichas por depto 812 "+hoy()+".xlsx",new Uint8Array(XLSX.write(wb,{type:"array",bookType:"xlsx"})),e)};
 $("btnXls").onclick=async()=>{const e=$("errExp");e.style.color="";if(!RES.mat&&!RES.av&&!RES.et){e.textContent="Elige al menos un área para exportar.";return}e.textContent="Preparando Excel…";
   try{if(!window.XLSX)await cargar("https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js")}catch(x){e.textContent="No se pudo cargar el generador de Excel. Revisa la conexión.";return}
   const g=globales(),A=[["Control de consumo de materiales · Obra 812 Vive La Vara"],["Corte acumulado al",fechaHoy()],[],
@@ -3068,8 +3093,7 @@ $("btnXls").onclick=async()=>{const e=$("errExp");e.style.color="";if(!RES.mat&&
   A.push([],["4. Proyección y compras"],["Insumo","Unidad","Deptos pendientes","Factor sin merma","Factor con merma","Cantidad OC","Disponible OC","Requerimiento de obra sin merma","Requerimiento de obra con merma","Saldo sin usar de OC","Valor saldo sin usar (UF)","Merma proyectada (UF)"]);
   g.pi.forEach(x=>A.push([x.i.n,x.i.u,x.pend,r2(x.fSin),r2(x.fCon),x.cant,x.disp,x.reqSin,x.reqCon,x.saldo,r2(x.ufSaldo),r2(x.ufMerProy)]));
   A.push(["Total sobra de OC","","","","","","","","","",r2(g.ufSobra),r2(g.ufMerProy)],["Total falta comprar","","","","","","","","","",r2(g.ufFalta),""]);
-  A.push([],["Detalle por depto"],["Torre","Depto","Insumo","Unidad","Etapa","Teórico","Distribuido","Consumido","Desviación %","Fecha consumo","Motivo"]);
-  filas().forEach(({d,i,r,T,v})=>A.push([d.t,d.id.slice(1),i.n,i.u,etL(d.id),T,r.dis,r.con||null,r1(v),r.f?r.f.split("-").reverse().join("/"):"",r.mot||""]));
+  A.push([],["Detalle por depto: ver la hoja \"Fichas por depto\" (movimiento, traspasos, consumo final y desviación de cada ficha)."]);
   A.push([],["Traspasos"],["Fecha","Insumo","Cantidad","Desde depto","Hacia depto"]);
   S.mov.forEach(m=>A.push([m.f,ins(m.ins).n,m.q,"T"+m.de[0]+" "+m.de.slice(1),"T"+m.a[0]+" "+m.a.slice(1)]));
   A.push([],["Desviación % = (Teórico − Consumido) / Teórico. Positivo es ahorro, negativo es sobreconsumo."],
@@ -3078,7 +3102,7 @@ $("btnXls").onclick=async()=>{const e=$("errExp");e.style.color="";if(!RES.mat&&
     ["Requerimiento de obra = Teórico deptos pendientes × factor − stock bodega − material distribuido en esos deptos."],
     ["Saldo sin usar de OC = Disponible OC − Requerimiento de obra con merma. Negativo: falta comprar."]);
   const ws=XLSX.utils.aoa_to_sheet(A);ws["!cols"]=[24,10,14,14,14,14,16,18,18,14,16,16].map(w=>({wch:w}));
-  const wb=XLSX.utils.book_new();if(RES.mat){XLSX.utils.book_append_sheet(wb,ws,"Materiales");xlsRend(wb)}xlsAvEt(wb);
+  const wb=XLSX.utils.book_new();if(RES.mat){XLSX.utils.book_append_sheet(wb,ws,"Materiales");xlsFichas(wb);xlsRend(wb)}xlsAvEt(wb);
   const buf=XLSX.write(wb,{type:"array",bookType:"xlsx"});e.textContent="";await guardar(nomArch("xlsx"),new Uint8Array(buf));};
 
 $("btnPdf").onclick=async()=>{const e=$("errExp");e.style.color="";if(!RES.mat&&!RES.av&&!RES.et){e.textContent="Elige al menos un área para exportar.";return}e.textContent="Preparando PDF…";
